@@ -19,21 +19,9 @@
     <!-- This is where you would add any app specific styling -->
     <link rel="stylesheet" href="css/app.css" type="text/css"/>
 
-    <script>
-      updated = function() {
-       let fieldA = document.getElementById('A');
-       let fieldB = document.getElementById('B');
-       let fieldC = document.getElementById('C');
-
-       fieldC.value = Number(fieldA.value) + Number(fieldB.value);
-
-       console.log(`Updated ${fieldA.value} + ${fieldB.value} = ${fieldC.value}`);
-     }
-   </script>
-
-   
   </head>
   <body class="oj-web-applayout-body">
+
     <!-- Template for rendering navigation items shared between nav bar and nav list -->
     <script type="text/html" id="navTemplate">
       <li><a href="#">
@@ -44,19 +32,7 @@
 
     <div id="globalBody" class="oj-offcanvas-outer-wrapper oj-offcanvas-page">
 
-      <div id="announce" tabindex="-1" class="sendOffScreen" :aria-live="[[manner]]" aria-atomic="true">
-          <p id="ariaLiveMessage"><oj-bind-text value="[[message]]"></oj-bind-text></p>
-      </div>
-      
-      <!--
-         ** Oracle JET V8.2.0 web application navigation drawer pattern.
-         ** Please see the demos under Cookbook/Patterns/App Shell: Web
-         ** and the CSS documentation under Support/API Docs/Non-Component Styling
-         ** on the JET website for more information on how to use this pattern. 
-         ** The off-canvas section is used when the browser is resized to a smaller media
-         ** query size for a phone format and hidden until a user clicks on
-         ** the header hamburger icon.
-      -->
+      <!-- Nav Drawer: Menu shown when in small screens -->
       <div id="navDrawer" role="navigation" class="oj-contrast-marker oj-web-applayout-offcanvas oj-offcanvas-start">
         <oj-navigation-list id="navDrawerList" data="[[navDataProvider]]"
                             edge="start"
@@ -65,15 +41,12 @@
                             selection="{{router.stateId}}">
         </oj-navigation-list>
       </div>
+
       <div id="pageContent" class="oj-web-applayout-page">
-        <!--
-           ** Oracle JET V8.2.0 web application header pattern.
-           ** Please see the demos under Cookbook/Patterns/App Shell: Web
-           ** and the CSS documentation under Support/API Docs/Non-Component Styling
-           ** on the JET website for more information on how to use this pattern.
-        -->
+        
         <header role="banner" class="oj-web-applayout-header">
           <div class="oj-web-applayout-max-width oj-flex-bar oj-sm-align-items-center">
+
             <!-- Offcanvas toggle button -->
             <div class="oj-flex-bar-start oj-md-hide">
               <oj-button id="drawerToggleButton" class="oj-button-lg" on-oj-action="[[toggleDrawer]]" chroming="half" display="icons">
@@ -81,15 +54,17 @@
                 <span>Application Navigation</span>
               </oj-button>
             </div>
+
             <div class="oj-flex-bar-middle oj-sm-align-items-baseline">
               <span role="img" class="oj-icon demo-oracle-icon" title="Oracle Logo" alt="Oracle Logo"></span>
               <h1 class="oj-sm-only-hide oj-web-applayout-header-title" title="Application Name"><oj-bind-text value="[[appName]]"></oj-bind-text></h1>
             </div>
+
             <div class="oj-flex-bar-end">
               <!-- Responsive Toolbar -->
               <oj-toolbar>
                 <oj-menu-button id="userMenu" display="[[smScreen() ? 'icons' : 'all']]" chroming="half">
-                  <span><oj-bind-text value="[[userLogin]]"></oj-bind-text></span>
+                  <span><oj-bind-text value="[[ userLogin ]]"></oj-bind-text></span>
                   <span slot="endIcon" :class="[[{'oj-icon demo-appheader-avatar': smScreen(), 'oj-component-icon oj-button-menu-dropdown-icon': !smScreen()}]]"></span>
                   <oj-menu id="menu1" slot="menu" style="display:none">
                     <oj-option id="pref" value="pref">Preferences</oj-option>
@@ -100,6 +75,7 @@
                 </oj-menu-button>
               </oj-toolbar>
             </div>
+
           </div>
           <div role="navigation" class="oj-web-applayout-max-width oj-web-applayout-navbar">
             <oj-navigation-list id="navTabBar" class="oj-sm-only-hide oj-md-condense oj-md-justify-content-flex-end"
@@ -110,8 +86,12 @@
             </oj-navigation-list>
           </div>
         </header>
+
+        <!-- Module: This is where the actual modules are inserted at runtime -->
         <oj-module role="main" class="oj-web-applayout-max-width oj-web-applayout-content" config="[[moduleConfig]]">
         </oj-module>
+        
+        <!-- footer -->
         <footer class="oj-web-applayout-footer" role="contentinfo">
           <div class="oj-web-applayout-footer-item oj-web-applayout-max-width">
             <ul>
@@ -126,6 +106,7 @@
             Copyright © 2014, 2020 Oracle and/or its affiliates All rights reserved.
           </div>
         </footer>
+
       </div>
     </div>
     

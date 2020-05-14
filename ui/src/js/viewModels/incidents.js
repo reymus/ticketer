@@ -7,8 +7,8 @@
 /*
  * Your incidents ViewModel code goes here
  */
-define(['accUtils'],
- function(accUtils) {
+define([],
+ function() {
 
     function IncidentsViewModel() {
       var self = this;
@@ -24,7 +24,6 @@ define(['accUtils'],
        * after being disconnected.
        */
       self.connected = function() {
-        accUtils.announce('Incidents page loaded.', 'assertive');
         document.title = "Incidents";
         // Implement further logic if needed
       };

@@ -7,7 +7,7 @@
 /*
  * Your about ViewModel code goes here
  */
-define(['accUtils'], function(accUtils) {
+define([], function() {
 
     function AboutViewModel() {
       var self = this;
@@ -23,7 +23,6 @@ define(['accUtils'], function(accUtils) {
        * after being disconnected.
        */
       self.connected = function() {
-        accUtils.announce('About page loaded.', 'assertive');
         document.title = "About";
         // Implement further logic if needed
       };

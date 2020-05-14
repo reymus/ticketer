@@ -7,32 +7,11 @@
 /*
  * Your dashboard ViewModel code goes here
  */
-define(['accUtils', 'knockout'],
- function(accUtils, ko) {
+define(['knockout'],
+ function(ko) {
 
     function DashboardViewModel() {
       var self = this;
-
-      self.valueA = ko.observable(0);
-      self.valueB = ko.observable(5);
-
-      self.valueC = ko.computed(function() {
-        let a = self.valueA();
-        let b = self.valueB();
-        return Number(a) + Number(b);
-      }); 
-/*
-      let handler = function() {
-        let a = self.valueA();
-        let b = self.valueB();
-        self.valueC(Number(a) + Number(b));
-      };
-
-      self.valueA.subscribe(handler);
-      self.valueB.subscribe(handler);
-*/
-
-
 
       // Below are a set of the ViewModel methods invoked by the oj-module component.
       // Please reference the oj-module jsDoc for additional information.
@@ -46,7 +25,6 @@ define(['accUtils', 'knockout'],
        * after being disconnected.
        */
       self.connected = function() {
-        accUtils.announce('Dashboard page loaded.', 'assertive');
         document.title = "Dashboard";
         // Implement further logic if needed
       };

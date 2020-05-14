@@ -7,8 +7,8 @@
 /*
  * Your customer ViewModel code goes here
  */
-define(['accUtils'],
- function(accUtils) {
+define([],
+ function() {
 
     function CustomerViewModel() {
       var self = this;
@@ -24,7 +24,6 @@ define(['accUtils'],
        * after being disconnected.
        */
       self.connected = function() {
-        accUtils.announce('Customers page loaded.', 'assertive');
         document.title = "Customers";
         // Implement further logic if needed
       };
