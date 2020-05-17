@@ -7,6 +7,7 @@ define([
     'ojs/ojknockouttemplateutils',
     'ojs/ojresponsiveutils', 
     'ojs/ojresponsiveknockoututils', 
+    'ojs/ojoffcanvas', 
     'ojs/ojknockout',
     'ojs/ojbutton',
     'ojs/ojtoolbar',
@@ -14,7 +15,7 @@ define([
     'ojs/ojdialog',
     'ojs/ojselectcombobox',
     'ojs/ojbutton'
-], function (oj, ko, $, appViewModel, KnockoutTemplateUtils, ResponsiveUtils, ResponsiveKnockoutUtils) {
+], function (oj, ko, $, appViewModel, KnockoutTemplateUtils, ResponsiveUtils, ResponsiveKnockoutUtils, OffcanvasUtils) {
     "use strict";
 
     /**
