@@ -1,0 +1,8 @@
+{
+  "output": "seed_db_output.sql",
+  "tickets_to_generate": 100,
+  "comments_per_ticket": {
+    "min": 5,
+    "max": 15
+  }
+}

@@ -1,0 +1,18 @@
+[
+    {
+        "id": 1,
+        "first_name": "Paco",
+        "last_name": "Perez",
+        "email": "pakeperez@gmail.com"
+    }, {
+        "id": 2,
+        "first_name": "Edgar",
+        "last_name": "Magana",
+        "email": "edgarmaganaglez@hotmail.com"
+    }, {
+        "id": 3,
+        "first_name": "Marcelo",
+        "last_name": "Ramos",
+        "email": "proof_el4@hotmail.com"
+    }
+]
