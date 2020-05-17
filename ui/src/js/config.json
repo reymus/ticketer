@@ -1,0 +1,9 @@
+{
+    "authenticatedUser": {
+        "first_name": "Marcelo",
+        "last_name": "Ramos",
+        "email": "march.reymus@gmail.com"
+    },
+
+    "applicationName": "Ticketer"
+}

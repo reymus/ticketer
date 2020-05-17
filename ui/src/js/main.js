@@ -40,7 +40,7 @@
 require([
   'ojs/ojbootstrap', 
   'knockout', 
-  'appController', 
+  'appViewModel', 
   'ojs/ojrouter', 
   'ojs/ojlogger', 
   'ojs/ojknockout',
