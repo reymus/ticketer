@@ -1,7 +1,16 @@
 
+const path = require('path');
 const express = require('express');
+
 const app = express();
 
-app.use(express.static(__dirname + '/public'));
+const routes = require('./routes');
 
-app.listen(8080);
+app.use('/api', routes);
+
+app.use(express.static(path.resolve(__dirname, 'public')));
+
+const port = 8000;
+app.listen(port, () => {
+    console.log(`Server started listening port ${port}`);
+});
