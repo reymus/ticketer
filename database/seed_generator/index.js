@@ -39,7 +39,7 @@ const emmitTicket = (id, summary, description, owner, type, severity,
 
   // emmit the insert
   emmit(
-    `INSERT INTO tickets (id_ticket, summary, description, owner, ticket_type, severity, created_at, created_by, updated_at, updated_by, resolved_at, resolved_by, status, resolution)
+    `INSERT INTO tickets (id, summary, description, owner, type, severity, created_at, created_by, updated_at, updated_by, resolved_at, resolved_by, status, resolution)
     VALUES(${id}, '${summary}', '${description}', ${owner}, ${type}, ${severity}, ${createdAt}, ${createdBy}, ${updatedAt}, ${updatedBy}, ${resolvedAt}, ${resolvedBy}, ${status}, ${resolution});`);
 };
 
@@ -51,39 +51,6 @@ emmit(`--- This is a generated script. Do not edit directly.`);
 emmit(`--- If you need this file updated, you can do it by`);
 emmit(`--- editing the seed_generator/index.js file directly.`);
 emmit(`--- `);
-emmit(``);
-
-// emmit databse "constant" data
-
-emmit(`--- Users`);
-emmit(`INSERT INTO users VALUES(null, "Pake", "Perez", "pakeperez@gmail.com");`);
-emmit(`INSERT INTO users VALUES(null, "Edgar", "Magana", "edgarmaganaglez@hotmail.com");`);
-emmit(`INSERT INTO users VALUES(null, "Marcelo", "Ramos", "march.reymus@gmail.com");`);
-emmit(``);
-
-emmit(`--- Severities`);
-emmit(`INSERT INTO severity VALUES(null, 'Low');`);
-emmit(`INSERT INTO severity VALUES(null, 'Medium');`);
-emmit(`INSERT INTO severity VALUES(null, 'High');`);
-emmit(``);
-
-emmit(`--- Ticket Types`);
-emmit(`INSERT INTO ticket_types VALUES(null, "Bug");`);
-emmit(`INSERT INTO ticket_types VALUES(null, "Development Item");`);
-emmit(`INSERT INTO ticket_types VALUES(null, "Enhancement");`);
-emmit(``);
-
-emmit(`--- Resolutions`);
-emmit(`INSERT INTO resolutions VALUES(null, "Fixed");`);
-emmit(`INSERT INTO resolutions VALUES(null, "Working as Designed");`);
-emmit(`INSERT INTO resolutions VALUES(null, "Won't Fix");`);
-emmit(``);
-
-emmit(`--- Status`);
-emmit(`INSERT INTO status VALUES(null, 'New');`);
-emmit(`INSERT INTO status VALUES(null ,'In Progress');`);
-emmit(`INSERT INTO status VALUES(null, 'Under Review');`);
-emmit(`INSERT INTO status VALUES(null, 'Closed');`);
 emmit(``);
 
 // Get a (pseudo) random integer [min, max]
