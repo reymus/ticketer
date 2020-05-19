@@ -7,8 +7,8 @@
 /*
  * Your dashboard ViewModel code goes here
  */
-define(['knockout'],
- function(ko) {
+define(['knockout', './../services/client'],
+ function(ko, client) {
 
     function DashboardViewModel() {
       var self = this;
@@ -24,9 +24,26 @@ define(['knockout'],
        * and inserted into the DOM and after the View is reconnected
        * after being disconnected.
        */
-      self.connected = function() {
+      self.connected = async function() {
         document.title = "Dashboard";
         // Implement further logic if needed
+
+        let tickets = await client.invoke('Tickets.GetAllTickets', {
+          sortBy: 'owner'
+        });
+
+        console.log(`Tickets: `);
+        console.table(tickets);
+
+        try {
+          let invalid = await client.invoke('SampleInvalidPath.SampleInvalidEndpoint', {
+            sortBy: 'owner'
+          });
+          // We don't expect to get this far...
+        } catch (err) {
+          console.log(`InvalidEndpoint produced error: `);
+          console.log(err);
+        }
       };
 
       /**
