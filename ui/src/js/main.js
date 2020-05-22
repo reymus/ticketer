@@ -17,7 +17,7 @@
     // injector:mainReleasePaths
     {
       'knockout': 'libs/knockout/knockout-3.5.0.debug',
-      'jquery': 'libs/jquery/jquery-3.4.1',
+      'jquery': 'libs/jquery/jquery-3.5.1',
       'jqueryui-amd': 'libs/jquery/jqueryui-amd-1.12.1',
       'hammerjs': 'libs/hammer/hammer-2.0.8',
       'ojdnd': 'libs/dnd-polyfill/dnd-polyfill-1.0.1',

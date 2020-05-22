@@ -1,4 +1,7 @@
 
+# public is a symlink created post install
+public
+
 # Dependency directories
 node_modules/
 jspm_packages/

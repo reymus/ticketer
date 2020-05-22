@@ -1,3 +1,9 @@
+
+# src/js/libs and src/css/alta are symlinks to the staging directory
+src/js/libs
+src/css/alta
+
+
 /jet_components
 /node_modules
 /bower_components
