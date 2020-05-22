@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "A learning project to learn and improve skills on Node.js and JavaScript related technologies.",
   "scripts": {
-    "build": "node build/build.js"
+    "build": "node build/build.js",
+    "start": "nodemon server/server.js"
   },
   "repository": {
     "type": "git",
@@ -18,5 +19,8 @@
   "dependencies": {
     "ticketer-server": "file:server",
     "ticketer-ui": "file:ui"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
   }
 }
