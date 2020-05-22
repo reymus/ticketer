@@ -1,0 +1,22 @@
+{
+  "name": "ticketer",
+  "version": "1.0.0",
+  "description": "A learning project to learn and improve skills on Node.js and JavaScript related technologies.",
+  "scripts": {
+    "build": "node build/build.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reymus/ticketer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/reymus/ticketer/issues"
+  },
+  "homepage": "https://github.com/reymus/ticketer#readme",
+  "dependencies": {
+    "ticketer-server": "file:server",
+    "ticketer-ui": "file:ui"
+  }
+}
