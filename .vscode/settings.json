@@ -1,0 +1,17 @@
+{
+    "editor.tabSize": 2,
+    "editor.wordWrapColumn": 120,
+    
+    "files.exclude": {
+        "**/.git": true,
+        
+        // Exclude node_modules from the VSCode side bar
+        "**/node_modules": true,
+        "node_modules": true,
+
+        // Hide symlink contents
+        "server/public/*": true,
+        "ui/src/js/libs/*": true,
+        "ui/src/css/alta/*": true
+    }
+}
