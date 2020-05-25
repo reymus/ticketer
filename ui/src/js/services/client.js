@@ -47,7 +47,7 @@ define(['jquery', './../appViewModel', './services', 'promise'], function($, app
         let endpointParams = endpoint.params || [];
         for (let i = 0; i < endpointParams.length; i++) {
             let paramDef = endpointParams[i];
-            if (paramDef.paramType === ParamTypes.Query) {
+            if (paramDef.paramType === ParamTypes.Query && (typeof params[paramDef.name] !== 'undefined')) {
                 queryString.push(`${paramDef.name}=${params[paramDef.name]}`)
             }
         }

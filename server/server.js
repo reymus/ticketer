@@ -6,7 +6,6 @@ const app = express();
 
 const config = require('./config');
 const routes = require('./routes');
-const db = require('./database');
 
 app.use('/api', routes);
 

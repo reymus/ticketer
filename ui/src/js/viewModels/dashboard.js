@@ -29,7 +29,11 @@ define(['knockout', './../services/client'],
         // Implement further logic if needed
 
         let tickets = await client.invoke('Tickets.GetAllTickets', {
-          sortBy: 'owner'
+          fields: ['id', 'owner', 'summary', 'type', 'created_by', 'status', 'severity'],
+          sortBy: ['owner.email', 'id:DESC'],
+          limit: 25,
+          // We want to be able to show the results in a table nicely
+          flatten: true
         });
 
         console.log(`Tickets: `);
