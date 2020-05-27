@@ -1,7 +1,8 @@
 const express = require('express');
 
 const controller = require('./../controllers/tickets');
-const { fromQuery, fromParam } = require('./../util');
+const { fromQuery, fromParam, fromBody } = require('./../util');
+const messages = require('./../config/errorMessages');
 
 const app = express();
 
@@ -39,10 +40,32 @@ app.get('/:id', async(req, res) => {
     let id = fromParam(req, 'id');
     try {
         let result = await controller.getTicket(id);
+        if (result == null) {
+            res.status('404').json({
+                message: messages.NOT_FOUND
+            });
+        }
         res.send(result);
     } catch (err) {
-        res.send(err)
+        res.send(err);
     }
 });
+
+app.post('/', async(req, res) => {
+    let body = fromBody(req);
+    try {
+        let result = await controller.createTicket(body);
+
+        if (result.affectedRows > 0) {
+            res.status('204').send();
+
+        } else {
+            res.status('400').send();
+        }
+
+    } catch (err) {
+        res.send(err);
+    }
+})
 
 module.exports = app;

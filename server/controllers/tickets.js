@@ -51,8 +51,25 @@ const getTicket = async(id) => {
     let results = await db.query(query);
     return results[0];
 };
+const createTicket = async(body) => {
+    let model = Tickets;
+    let values = [];
+    let fields = Object.keys(model.fields);
+
+    for (let i = 0; i < fields.length; i++) {
+        if (fields[i] != 'id' && fields[i] in body) {
+            values.push(`'${body[fields[i]]}'`);
+        } else {
+            values.push('null');
+        }
+    }
+    let sql = `INSERT INTO ${model.table} VALUES(${values.join(', ')})`;
+    let result = await db.query(sql);
+    return result;
+}
 
 module.exports = {
     getTickets,
-    getTicket
+    getTicket,
+    createTicket
 };
