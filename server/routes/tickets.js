@@ -2,7 +2,7 @@ const express = require('express');
 
 const controller = require('./../controllers/tickets');
 const { fromQuery, fromParam, fromBody } = require('./../util');
-const messages = require('./../config/errorMessages');
+const messages = require('../messages/errorMessages');
 
 const app = express();
 
@@ -47,7 +47,12 @@ app.get('/:id', async(req, res) => {
         }
         res.send(result);
     } catch (err) {
-        res.send(err);
+        //maybe create error log file instead of send error
+        let message = messages.errors(err.errno);
+        res.status('500').json({
+            message: message,
+        });
+
     }
 });
 
@@ -56,16 +61,42 @@ app.post('/', async(req, res) => {
     try {
         let result = await controller.createTicket(body);
 
-        if (result.affectedRows > 0) {
-            res.status('204').send();
+        if (result == null) {
+            res.status('404').json({
+                message: messages.NOT_FOUND
+            });
 
-        } else {
-            res.status('400').send();
         }
 
-    } catch (err) {
-        res.send(err);
-    }
-})
+        res.status(201).send(result);
 
+    } catch (err) {
+        //maybe create error log file instead of send error
+        let message = messages.errors(err.errno);
+        res.status('500').json({
+            message: message,
+        });
+    }
+});
+
+app.patch('/:id', async(req, res) => {
+    let body = fromBody(req);
+    try {
+        let result = await controller.updateTicket(body, req.params.id);
+        if (result == null) {
+            res.status('404').json({
+                message: messages.NOT_FOUND
+            });
+
+        }
+
+        res.status(201).send(result);
+    } catch (err) {
+        //maybe create error log file instead of send error
+        let message = messages.errors(err.errno);
+        res.status('500').json({
+            message: message,
+        });
+    }
+});
 module.exports = app;
