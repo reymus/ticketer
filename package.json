@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/reymus/ticketer#readme",
   "dependencies": {
+    "body-parser": "^1.19.0",
     "ticketer-server": "file:server",
     "ticketer-ui": "file:ui"
   },

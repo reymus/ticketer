@@ -13,7 +13,17 @@ const fromParam = (req, param) => {
         return null
     }
 };
+
+const fromBody = (req) => {
+    if (req.body) {
+        return req.body;
+    } else {
+        return null
+    }
+}
+
 module.exports = {
     fromQuery,
-    fromParam
+    fromParam,
+    fromBody
 };

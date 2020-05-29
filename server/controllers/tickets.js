@@ -52,7 +52,50 @@ const getTicket = async(id) => {
     return results[0];
 };
 
+const createTicket = async(body) => {
+    let model = Tickets;
+    let values = [];
+    let fields = Object.keys(model.fields);
+
+    for (let i = 0; i < fields.length; i++) {
+        if (fields[i] != 'id' && fields[i] in body) {
+            values.push(`'${body[fields[i]]}'`);
+        } else {
+            values.push('null');
+        }
+    }
+    let sql = `INSERT INTO ${model.table} VALUES(${values.join(', ')})`;
+    let result = await db.query(sql);
+
+    if (result.insertId != null) {
+        let res = await getTicket(result.insertId);
+        return res;
+    }
+    return result;
+}
+
+const updateTicket = async(body, id) => {
+    let model = Tickets;
+    let fields = Object.keys(body);
+
+    let values = fields.map((key) => {
+        return `${model.table}.${key} = '${body[key]}'`;
+    });
+
+    let sql = `UPDATE ${model.table} SET ${values} WHERE ${model.table}.${model.primaryKey}=${id}`;
+    let result = await db.query(sql);
+
+    if (result.affectedRows != null) {
+        let res = await getTicket(id);
+
+        return res;
+    }
+    return result;
+};
+
 module.exports = {
     getTickets,
-    getTicket
+    getTicket,
+    createTicket,
+    updateTicket
 };
