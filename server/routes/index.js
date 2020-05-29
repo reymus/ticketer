@@ -4,6 +4,7 @@ const app = express();
 
 app.use('/users', require('./users'));
 app.use('/tickets', require('./tickets'));
+app.use('/process', require('./process'));
 
 app.all('*', (req, res) => {
     res.status(404).send({

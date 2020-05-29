@@ -2,25 +2,13 @@ const express = require('express');
 
 const app = express();
 
-app.get('/', (req, res) => {
-    res.send([
-        {
-            "id": 1,
-            "first_name": "Paco",
-            "last_name": "Perez",
-            "email": "pakeperez@gmail.com"
-        }, {
-            "id": 2,
-            "first_name": "Edgar",
-            "last_name": "Magana",
-            "email": "edgarmaganaglez@hotmail.com"
-        }, {
-            "id": 3,
-            "first_name": "Marcelo",
-            "last_name": "Ramos",
-            "email": "proof_el4@hotmail.com"
-        }
-    ]);
+app.get('/', async (req, res) => {
+  try {
+    let users = await controller.getUsers();
+    res.send(users);
+  } catch (err) {
+    res.send(err);
+  }
 });
 
 module.exports = app;

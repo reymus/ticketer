@@ -7,8 +7,8 @@
 /*
  * Your dashboard ViewModel code goes here
  */
-define(['knockout', './../services/client'],
- function(ko, client) {
+define(['knockout', './../services/client', './../process'],
+ function(ko, client, process) {
 
     function DashboardViewModel() {
       var self = this;
@@ -27,6 +27,18 @@ define(['knockout', './../services/client'],
       self.connected = async function() {
         document.title = "Dashboard";
         // Implement further logic if needed
+
+        let processData = await process.getProcess();
+        console.log(`Process: `);
+        
+        console.log(`Status: `);
+        console.table(processData.status);
+        console.log(`Resolutions: `);
+        console.table(processData.resolutions);
+        console.log(`Severities: `);
+        console.table(processData.severities);
+        console.log(`Ticket Types: `);
+        console.table(processData.ticket_types);
 
         let tickets = await client.invoke('Tickets.GetAllTickets', {
           fields: ['id', 'owner', 'summary', 'type', 'created_by', 'status', 'severity'],
