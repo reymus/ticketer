@@ -22,5 +22,5 @@ const getProcessData = async () => {
 };
 
 module.exports = {
-  getMetadata
+  getProcessData
 };
