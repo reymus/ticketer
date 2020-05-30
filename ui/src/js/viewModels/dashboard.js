@@ -7,23 +7,108 @@
 /*
  * Your dashboard ViewModel code goes here
  */
-define(['knockout', './../services/client', './../process'],
- function(ko, client, process) {
 
-    function DashboardViewModel() {
-      var self = this;
+define(['knockout', './../services/client','./../process' ,'ojs/ojarraydataprovider', 'ojs/ojdatacollection-utils',
+'ojs/ojbutton', 'ojs/ojinputtext','ojs/ojlabelvalue', 'ojs/ojlabel', 'ojs/ojdatetimepicker', 
+'ojs/ojtable', 'ojs/ojradioset', 'ojs/ojknockout', 'ojs/ojselectcombobox', 'ojs/ojswitch' ,'ojs/ojformlayout'],
+function(ko, client, process, ArrayDataProvider, DataCollectionEditUtils) {
 
-      // Below are a set of the ViewModel methods invoked by the oj-module component.
-      // Please reference the oj-module jsDoc for additional information.
+   function DashboardViewModel() {
+     let self = this;
+     self.modeViews = [
+       {id: 'create', label: 'Crear'},
+       {id: 'edit',    label: 'Editar'},
+       {id: 'read',   label: 'Ver'}
+     ];
+     self.formMode = ko.observable('create');
+     self.summary = ko.observable('');
+     self.description = ko.observable('');
+     self.ownerOpts = ([
+       {label: 'Jesús', value: 'jesus'}, 
+       {label: 'Marcelo', value: 'marcelo'}, 
+       {label: 'Pake', value: 'pake'}
+     ]);
+     self.owner = ko.observable('');
+     self.ownerLabel = function(){
+       for(var i=0; i<self.ownerOpts.length; i++){
+         if(self.ownerOpts[i].value == self.owner()){
+           return self.ownerOpts[i].label
+         }
+       }
+       return '';
+     }
+     
+     self.ticketTypeOpts = ([
+       {label: 'Bug', value: 'bug'}, 
+       {label: 'Nueva herramienta', value: 'newFeature'}, 
+       {label: 'Soporte al cliente', value: 'customerSupport'}
+     ]);
+     self.ticketType = ko.observable('');
+     self.ticketTypeLabel = function(){
+       for(var i=0; i<self.ticketTypeOpts.length; i++){
+         if(self.ticketTypeOpts[i].value == self.ticketType()){
+           return self.ticketTypeOpts[i].label
+         }
+       }
+       return ''
+     }
 
-      /**
-       * Optional ViewModel method invoked after the View is inserted into the
-       * document DOM.  The application can put logic that requires the DOM being
-       * attached here.
-       * This method might be called multiple times - after the View is created
-       * and inserted into the DOM and after the View is reconnected
-       * after being disconnected.
-       */
+     self.ticketSeverityOpts = ([
+       {label: 'Baja', value: 'low'}, 
+       {label: 'Media', value: 'medium'}, 
+       {label: 'Alta', value: 'high'},
+       {label: 'Urgente', value: 'urgent'}
+     ]);
+     self.ticketSeverity = ko.observable('');  
+     self.ticketSeverityLabel = function(){
+       for(var i=0; i<self.ticketSeverityOpts.length; i++){
+         if(self.ticketSeverityOpts[i].value == self.ticketSeverity()){
+           return self.ticketSeverityOpts[i].label
+         }
+       }
+       return '';
+     }
+
+     self.ticketStatusOpts = ([
+       {label: 'Nuevo', value: 'new'}, 
+       {label: 'En progreso', value: 'onprogress'}, 
+       {label: 'Esperando información', value: 'waiting'},
+       {label: 'Resuelto', value: 'solved'},
+       {label: 'Cerrado', value: 'closed'},
+     ]);
+     self.ticketStatus = ko.observable('');  
+     self.ticketStatusLabel = function(){
+       for(var i=0; i<self.ticketStatusOpts.length; i++){
+         if(self.ticketStatusOpts[i].value == self.ticketStatus()){
+           return self.ticketStatusOpts[i].label
+         }
+       }
+       return '';
+     }
+     self.creationDate = '30/05/2020';
+     let sendMode = self.formMode()=='create' ? 'Crear' : 'Actualizar';
+     self.sendForm = ko.observable(sendMode);
+
+     self.submitForm = function(){
+       let info = {
+         title: self.summary(),
+         description: self.description(),
+         owner: self.owner(),
+         ticketType: self.ticketType(),
+         ticketSeverity: self.ticketSeverity(),
+         ticketStatus: self.ticketStatus()
+       }
+       console.log(info);
+     }
+
+     self.clearForm = function(){
+       self.summary('');
+       self.description('');
+       self.owner('');
+       self.ticketSeverity('');
+       self.ticketStatus('');
+     }
+
       self.connected = async function() {
         document.title = "Dashboard";
         // Implement further logic if needed

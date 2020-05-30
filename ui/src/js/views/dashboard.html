@@ -2,11 +2,122 @@
  Copyright (c) 2014, 2020, Oracle and/or its affiliates.
  The Universal Permissive License (UPL), Version 1.0
  -->
-<div class="oj-hybrid-padding">
-  <h1>Dashboard Content Area</h1>
+ <div class="oj-hybrid-padding">
+  <h1>Crear ticket</h1>
   
   <hr />
-  <div>
-    Some content to prove we can update UI when running from Node.
+  <div id="formContainer">
+    <oj-form-layout max-columns=2 class="oj-form-control-full-width">  
+    <oj-buttonset-one id="formMode" value="{{formMode}}" aria-label="Elija el modo de la forma">
+      <oj-bind-for-each data="[[modeViews]]">
+        <template>
+          <oj-option value="[[$current.data.id]]">
+            <span>
+              <oj-bind-text value="[[$current.data.label]]"></oj-bind-text>
+            </span>              
+          </oj-option>
+        </template>
+      </oj-bind-for-each>
+    </oj-buttonset-one>
+    <div id="actionButtons" style="text-align: right;">   
+      
+        <oj-button on-oj-action='[[submitForm]]' disabled='[[formMode()=="read"]]'>
+          <oj-bind-text value='{{sendForm}}'></oj-bind-text>
+        </oj-button>
+          
+        </oj-button>
+      </oj-bind-if>
+        <oj-button on-oj-action = '[[clearForm]]' disabled='[[formMode()=="read"]]'>
+         <span>Limpiar datos</span>
+        </oj-button>
+      
+    </div>
+    </oj-form-layout>
+    <br>
+    <oj-form-layout max-columns=2 class="oj-form-control-full-width">  
+      <oj-label for='summary' help.definition='Resumen'
+        show-required=true >Resumen 
+      </oj-label>
+      <oj-input-text id="summary" readonly='[[formMode()=="read"]]'
+      value='{{summary}}'></oj-input-text>
+
+      <oj-label for='owner' show-required=true 
+      help.definition='Selecciona a quién le corresponde el ticket'>Asignar ticket a
+      </oj-label>
+      <oj-combobox-one id='owner' value='{{owner}}' readonly='[[formMode()=="read"]]'>
+        <oj-bind-for-each data='[[ownerOpts]]'>
+          <template>
+            <oj-option value='[[$current.data.value]]'>
+              <span>
+                <oj-bind-text value='[[$current.data.label]]'></oj-bind-text>
+              </span>
+            </oj-option>
+          </template>
+        </oj-bind-for-each>
+      </oj-combobox-one>
+
+    
+      <oj-label for='ticketType' show-required=true
+      help.definition='Selecciona el tipo de ticket'>Tipo de ticket
+      </oj-label>
+      <oj-combobox-one id='ticketType' value='{{ticketType}}' readonly='[[formMode()=="read"]]'>
+        <oj-bind-for-each data='[[ticketTypeOpts]]' style="max-width:20em">
+          <template>
+            <oj-option value='[[$current.data.value]]'>
+              <span>
+                <oj-bind-text value='[[$current.data.label]]'></oj-bind-text>
+              </span>
+            </oj-option>
+          </template>
+        </oj-bind-for-each>
+      </oj-combobox-one>
+    
+      <oj-label for='ticketSeverity' show-required=true
+      help.definition='Selecciona el nivel de urgencia del ticket'>Urgencia del ticket
+      </oj-label>
+      <oj-combobox-one id='ticketSeverity' value='{{ticketSeverity}}' readonly='[[formMode()=="read"]]'>
+        <oj-bind-for-each data='[[ticketSeverityOpts]]' style="max-width:20em">
+          <template>
+            <oj-option value='[[$current.data.value]]'>
+              <span>
+                <oj-bind-text value='[[$current.data.label]]'></oj-bind-text>
+              </span>
+            </oj-option>
+          </template>
+        </oj-bind-for-each>
+      </oj-combobox-one>
+
+      <oj-label for='ticketStatus' show-required=true
+      help.definition='Selecciona el status del ticket'>Estatus del ticket
+      </oj-label>
+      <oj-combobox-one id='ticketStatus' value='{{ticketStatus}}' readonly='[[formMode()=="read"]]'>
+        <oj-bind-for-each data='[[ticketStatusOpts]]' style="max-width:20em">
+          <template>
+            <oj-option value='[[$current.data.value]]'>
+              <span>
+                <oj-bind-text value='[[$current.data.label]]'></oj-bind-text>
+              </span>
+            </oj-option>
+          </template>
+        </oj-bind-for-each>
+      </oj-combobox-one>
+
+      <oj-label for='creationDate' help.definition='La fecha en que se creó el ticket'>
+        Fecha de creación
+      </oj-label>
+      <oj-input-text id='creationDate' value='[[creationDate]]' readonly=true >
+      </oj-input-text>
+    
+    </oj-form-layout>
+
+    
+
+    <oj-label for='description' 
+    help.definition='La descripción completa del asunto'>Descripción
+    </oj-label>
+    <oj-text-area id='description' help.instruction="Por favor describe el asunto" 
+    required=true label-edge="provided" value='{{description}}' readonly='[[formMode()=="read"]]'
+    class="oj-form-control-full-width">
+    </oj-text-area>
   </div>
 </div>
