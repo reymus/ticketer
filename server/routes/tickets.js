@@ -34,7 +34,7 @@ app.get('/:id', async(req, res) => {
     } catch (err) {
         logger.error(err);
         //maybe create error log file instead of send error
-        
+
         // TODO: DO NOT assume err.errno is defined.
         let message = messages.errors(err.errno);
         res.status('500').json({
@@ -75,8 +75,9 @@ app.patch('/:id', async(req, res) => {
         if (result == null) {
             res.status('404').json({
                 message: messages.NOT_FOUND
-            });
 
+            });
+            return;
         }
 
         res.status(201).send(result);
@@ -87,6 +88,7 @@ app.patch('/:id', async(req, res) => {
         res.status('500').json({
             message: message,
         });
+        return;
     }
 });
 module.exports = app;
