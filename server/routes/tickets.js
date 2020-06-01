@@ -1,34 +1,18 @@
 const express = require('express');
 
 const controller = require('./../controllers/tickets');
-const { fromQuery, fromParam, fromBody } = require('./../util');
+const { fromPath, fromBody, getCommonParams } = require('./../util');
 const messages = require('../messages/errorMessages');
+
+const logger = require('./../logger').getLogger("tickets");
 
 const app = express();
 
 app.get('/', async(req, res) => {
-
+    logger.info("GET /tickets/?", req.query);
     try {
-        // TODO: Make the extraction of these params available for reuse
-        let fields = fromQuery(req, 'fields');
-        if (fields != null) {
-            fields = fields.split(',');
-        }
-        let sortBy = fromQuery(req, 'sortBy');
-        if (sortBy != null) {
-            sortBy = sortBy.split(',');
-        }
-        let offset = fromQuery(req, 'offset') || 0;
-        let limit = fromQuery(req, 'limit') || 100;
-        let flatten = fromQuery(req, 'flatten') || false;
-
-        let results = await controller.getTickets({
-            fields,
-            sortBy,
-            offset,
-            limit,
-            flatten
-        });
+        let params = getCommonParams(req);
+        let results = await controller.getTickets(params);
 
         res.send(results);
     } catch (err) {
@@ -37,9 +21,10 @@ app.get('/', async(req, res) => {
 })
 
 app.get('/:id', async(req, res) => {
-    let id = fromParam(req, 'id');
+    let id = fromPath(req, 'id');
     try {
-        let result = await controller.getTicket(id);
+        let params = getCommonParams(req);
+        let result = await controller.getTicket(id, params);
         if (result == null) {
             res.status('404').json({
                 message: messages.NOT_FOUND
@@ -47,7 +32,10 @@ app.get('/:id', async(req, res) => {
         }
         res.send(result);
     } catch (err) {
+        logger.error(err);
         //maybe create error log file instead of send error
+        
+        // TODO: DO NOT assume err.errno is defined.
         let message = messages.errors(err.errno);
         res.status('500').json({
             message: message,
@@ -71,6 +59,7 @@ app.post('/', async(req, res) => {
         res.status(201).send(result);
 
     } catch (err) {
+        logger.error(err);
         //maybe create error log file instead of send error
         let message = messages.errors(err.errno);
         res.status('500').json({
@@ -92,6 +81,7 @@ app.patch('/:id', async(req, res) => {
 
         res.status(201).send(result);
     } catch (err) {
+        logger.error(err);
         //maybe create error log file instead of send error
         let message = messages.errors(err.errno);
         res.status('500').json({

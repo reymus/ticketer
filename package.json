@@ -4,7 +4,7 @@
   "description": "A learning project to learn and improve skills on Node.js and JavaScript related technologies.",
   "scripts": {
     "build": "node build/build.js",
-    "start": "nodemon server/server.js  --inspect "
+    "start": "nodemon server/server.js"
   },
   "repository": {
     "type": "git",

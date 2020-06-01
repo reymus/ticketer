@@ -3,6 +3,16 @@
     "port": 8000
   },
 
+  "logging": {
+    "filename": "./logs/server.log",
+
+    "console": {
+      "database.queryModel": true,
+      "tickets": true
+    }
+    
+  },
+
   "database": {
     "host": "localhost",
     "port": 3306,

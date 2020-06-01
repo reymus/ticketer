@@ -3,27 +3,33 @@ const { Tickets } = require('./../database/model');
 
 const db = require('./../database');
 
-const processResults = (tickets) => {
-    return tickets.map(ticket => {
-        let newTicket = {};
-        Object.keys(ticket).forEach(key => {
-            if (key.indexOf(".") !== -1) {
-                let segments = key.split(".");
-                let newKey = segments[0];
-                let subKey = segments[1];
-                if (!newTicket[newKey]) {
-                    newTicket[newKey] = {};
-                }
-                newTicket[newKey][subKey] = ticket[key];
-            } else {
-                newTicket[key] = ticket[key];
+const processSingleResult = (ticket) => {
+    let newTicket = {};
+    Object.keys(ticket).forEach(key => {
+        if (key.indexOf(".") !== -1) {
+            let segments = key.split(".");
+            let newKey = segments[0];
+            let subKey = segments[1];
+            if (!newTicket[newKey]) {
+                newTicket[newKey] = {};
             }
-        });
-        return newTicket;
+            newTicket[newKey][subKey] = ticket[key];
+        } else {
+            newTicket[key] = ticket[key];
+        }
     });
+    return newTicket;
 };
 
+const processResults = (tickets) => {
+    return tickets.map(processSingleResult);
+};
+
+let logger = require('./../logger').getLogger('tickets');
+
 const getTickets = async(params) => {
+    
+    logger.info(`params: ${JSON.stringify(params)}`);
     let queryModel = new QueryModel(Tickets);
     queryModel.select(params.fields);
 
@@ -35,8 +41,39 @@ const getTickets = async(params) => {
         queryModel.orderBy(field, sortOrder);
     });
 
+    Object.keys(params.filters).forEach(filter => {
+        let field = filter;
+        let operator = "eq";
+        let value = params.filters[field];
+
+        if (!queryModel.fields[field]) {
+            if (field.indexOf(":") !== -1) {
+                let segments = field.split(":");
+                if (segments.length > 2) {
+                    // throw exception
+                }
+                field = segments[0];
+                operator = segments[1];
+            }
+        }
+        switch (operator) {
+            case 'eq': {
+                queryModel.where(field).equals(value);
+                break;
+            }
+            case 'neq':
+            case '<>': {
+                queryModel.where(field).notEquals(value);
+                break;
+            }
+            case 'like': {
+                queryModel.where(field).like(value);
+                break;
+            }
+        }
+    });
+
     let query = queryModel.limit(params.limit).offset(params.offset).build();
-    console.log(query);
 
     let tickets = await db.query(query);
     if (!params.flatten) {
@@ -45,11 +82,15 @@ const getTickets = async(params) => {
     return tickets;
 };
 
-const getTicket = async(id) => {
+const getTicket = async(id, params = { flatten: false }) => {
     let queryModel = new QueryModel(Tickets);
     let query = queryModel.select('*').byPrimaryKey(id).build();
     let results = await db.query(query);
-    return results[0];
+    let ticket = results[0];
+    if (!params.flatten) {
+       ticket = processSingleResult(ticket);
+    }
+    return ticket;
 };
 
 const createTicket = async(body) => {
@@ -82,7 +123,8 @@ const updateTicket = async(body, id) => {
         return `${model.table}.${key} = '${body[key]}'`;
     });
 
-    let sql = `UPDATE ${model.table} SET ${values} WHERE ${model.table}.${model.primaryKey}=${id}`;
+    let sql = `UPDATE ${model.table} SET ${values} WHERE ${model.table}.${model.primaryKey}='${id}'`;
+    logger.info(`Updating ticket with SQL: ${sql}`);
     let result = await db.query(sql);
 
     if (result.affectedRows != null) {
