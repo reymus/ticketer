@@ -1,5 +1,6 @@
 const QueryModel = require('./../database/querymodel');
 const { Tickets } = require('./../database/model');
+const messages = require('../messages/errorMessages');
 
 const db = require('./../database');
 
@@ -28,7 +29,7 @@ const processResults = (tickets) => {
 let logger = require('./../logger').getLogger('tickets');
 
 const getTickets = async(params) => {
-    
+
     logger.info(`params: ${JSON.stringify(params)}`);
     let queryModel = new QueryModel(Tickets);
     queryModel.select(params.fields);
@@ -57,19 +58,22 @@ const getTickets = async(params) => {
             }
         }
         switch (operator) {
-            case 'eq': {
-                queryModel.where(field).equals(value);
-                break;
-            }
+            case 'eq':
+                {
+                    queryModel.where(field).equals(value);
+                    break;
+                }
             case 'neq':
-            case '<>': {
-                queryModel.where(field).notEquals(value);
-                break;
-            }
-            case 'like': {
-                queryModel.where(field).like(value);
-                break;
-            }
+            case '<>':
+                {
+                    queryModel.where(field).notEquals(value);
+                    break;
+                }
+            case 'like':
+                {
+                    queryModel.where(field).like(value);
+                    break;
+                }
         }
     });
 
@@ -86,28 +90,38 @@ const getTicket = async(id, params = { flatten: false }) => {
     let queryModel = new QueryModel(Tickets);
     let query = queryModel.select('*').byPrimaryKey(id).build();
     let results = await db.query(query);
-    let ticket = results[0];
-    if (!params.flatten) {
-       ticket = processSingleResult(ticket);
+    if (results.length > 0) {
+        let ticket = results[0];
+        if (!params.flatten) {
+            ticket = processSingleResult(ticket);
+        }
+
+        return ticket;
+    } else {
+        return null
     }
-    return ticket;
 };
 
-const createTicket = async(body) => {
+const createTicket = async(ticket) => {
     let model = Tickets;
     let values = [];
     let fields = Object.keys(model.fields);
 
     for (let i = 0; i < fields.length; i++) {
-        if (fields[i] != 'id' && fields[i] in body) {
-            values.push(`'${body[fields[i]]}'`);
+        if (fields[i] != 'id' && fields[i] in ticket) {
+            values.push(`'${ticket[fields[i]]}'`);
         } else {
             values.push('null');
         }
     }
     let sql = `INSERT INTO ${model.table} VALUES(${values.join(', ')})`;
-    let result = await db.query(sql);
-
+    let result;
+    try {
+        result = await db.query(sql);
+    } catch (e) {
+        let message = messages.errors(e.errno);
+        throw new Error(message);
+    }
     if (result.insertId != null) {
         let res = await getTicket(result.insertId);
         return res;
@@ -115,24 +129,27 @@ const createTicket = async(body) => {
     return result;
 }
 
-const updateTicket = async(body, id) => {
+const updateTicket = async(ticket, id) => {
     let model = Tickets;
-    let fields = Object.keys(body);
+    let fields = Object.keys(ticket);
 
     let values = fields.map((key) => {
-        return `${model.table}.${key} = '${body[key]}'`;
+        return `${model.table}.${key} = '${ticket[key]}'`;
     });
 
     let sql = `UPDATE ${model.table} SET ${values} WHERE ${model.table}.${model.primaryKey}='${id}'`;
     logger.info(`Updating ticket with SQL: ${sql}`);
-    let result = await db.query(sql);
 
-    if (result.affectedRows != null) {
-        let res = await getTicket(id);
-
-        return res;
+    let result;
+    try {
+        result = await db.query(sql);
+    } catch (e) {
+        let message = messages.errors(e.errno);
+        throw new Error(message);
     }
-    return result;
+
+    let res = await getTicket(id);
+    return res;
 };
 
 module.exports = {

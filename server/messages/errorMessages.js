@@ -10,7 +10,8 @@ const errors = (code) => {
         case 1054:
             message = WRONG_PROPERTY;
             break;
-        case 1292, 1366:
+        case 1292:
+        case 1366:
             message = WRONG_VALUE;
             break;
         case 1452:
