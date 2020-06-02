@@ -32,7 +32,6 @@ app.get('/:id', async(req, res) => {
         }
         res.send(result);
     } catch (err) {
-        logger.error(err);
         //maybe create error log file instead of send error
 
         // TODO: DO NOT assume err.errno is defined.
@@ -45,34 +44,28 @@ app.get('/:id', async(req, res) => {
 });
 
 app.post('/', async(req, res) => {
-    let body = fromBody(req);
+    let body = req.body;
+    //to do: validate body types values
     try {
         let result = await controller.createTicket(body);
-
-        if (result == null) {
-            res.status('404').json({
-                message: messages.NOT_FOUND
-            });
-
-        }
-
         res.status(201).send(result);
 
     } catch (err) {
         logger.error(err);
         //maybe create error log file instead of send error
-        let message = messages.errors(err.errno);
         res.status('500').json({
-            message: message,
+            message: err.message
         });
     }
 });
 
 app.patch('/:id', async(req, res) => {
-    let body = fromBody(req);
+    let body = req.body;
+    // to do validate body types values
     try {
-        let result = await controller.updateTicket(body, req.params.id);
-        if (result == null) {
+        let exists = await controller.getTicket(req.params.id);
+        logger.info(exists);
+        if (exists == null) {
             res.status('404').json({
                 message: messages.NOT_FOUND
 
@@ -80,13 +73,14 @@ app.patch('/:id', async(req, res) => {
             return;
         }
 
+        let result = await controller.updateTicket(body, req.params.id);
         res.status(201).send(result);
     } catch (err) {
         logger.error(err);
         //maybe create error log file instead of send error
-        let message = messages.errors(err.errno);
+
         res.status('500').json({
-            message: message,
+            message: err.message,
         });
         return;
     }

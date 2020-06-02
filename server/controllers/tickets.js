@@ -1,5 +1,6 @@
 const QueryModel = require('./../database/querymodel');
 const { Tickets } = require('./../database/model');
+const messages = require('../messages/errorMessages');
 
 const db = require('./../database');
 
@@ -89,11 +90,16 @@ const getTicket = async(id, params = { flatten: false }) => {
     let queryModel = new QueryModel(Tickets);
     let query = queryModel.select('*').byPrimaryKey(id).build();
     let results = await db.query(query);
-    let ticket = results[0];
-    if (!params.flatten) {
-        ticket = processSingleResult(ticket);
+    if (results.length > 0) {
+        let ticket = results[0];
+        if (!params.flatten) {
+            ticket = processSingleResult(ticket);
+        }
+
+        return ticket;
+    } else {
+        return null
     }
-    return ticket;
 };
 
 const createTicket = async(ticket) => {
@@ -109,8 +115,13 @@ const createTicket = async(ticket) => {
         }
     }
     let sql = `INSERT INTO ${model.table} VALUES(${values.join(', ')})`;
-    let result = await db.query(sql);
-
+    let result;
+    try {
+        result = await db.query(sql);
+    } catch (e) {
+        let message = messages.errors(e.errno);
+        throw new Error(message);
+    }
     if (result.insertId != null) {
         let res = await getTicket(result.insertId);
         return res;
@@ -128,14 +139,17 @@ const updateTicket = async(ticket, id) => {
 
     let sql = `UPDATE ${model.table} SET ${values} WHERE ${model.table}.${model.primaryKey}='${id}'`;
     logger.info(`Updating ticket with SQL: ${sql}`);
-    let result = await db.query(sql);
 
-    if (result.affectedRows != 0) {
-        let res = await getTicket(id);
-
-        return res;
+    let result;
+    try {
+        result = await db.query(sql);
+    } catch (e) {
+        let message = messages.errors(e.errno);
+        throw new Error(message);
     }
-    return result;
+
+    let res = await getTicket(id);
+    return res;
 };
 
 module.exports = {
