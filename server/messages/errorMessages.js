@@ -1,6 +1,7 @@
 const NOT_FOUND = 'Reosurce not found';
 const WRONG_PROPERTY = 'Incorrect property name in request';
 const WRONG_VALUE = 'Incorrect property value in request';
+const PASSWORD_REQUIRED = 'Password is required';
 const UNKNOWN_ERROR = 'Unknown error';
 const VALUE_NOT_EXIST = 'Value used  is not valid in request';
 
@@ -25,5 +26,6 @@ const errors = (code) => {
 }
 module.exports = {
     NOT_FOUND,
+    PASSWORD_REQUIRED,
     errors
 }

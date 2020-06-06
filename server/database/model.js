@@ -12,7 +12,8 @@ const Users = {
         "id": { type: Types.INT },
         "first_name": { type: Types.VARCHAR },
         "last_name": { type: Types.VARCHAR },
-        "email": { type: Types.VARCHAR }
+        "email": { type: Types.VARCHAR },
+        "password": { type: Types.VARCHAR }
     },
     primaryKey: "id"
 };
