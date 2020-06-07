@@ -3,8 +3,9 @@ const { encryptData } = require('./../util');
 const messages = require('./../messages/errorMessages');
 const app = express();
 const controller = require('./../controllers/users');
+const { authorization } = require('./../middlewares/authenticathion');
 
-app.get('/', async(req, res) => {
+app.get('/', authorization, async(req, res) => {
     try {
         let users = await controller.getUsers();
         res.send(users);

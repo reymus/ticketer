@@ -12,12 +12,15 @@ const createToken = async(userData) => {
         let match = await bcrypt.compare(password, user.password);
 
         if (!match) {
-            return false;
+            return {
+                token: false,
+                message: messages.WRONG_USER_PASSWOR,
+            };
         }
-        let token = jwt.sign({ user: user.first_name }, 'secret', { expiresIn: 60 * 60 });
+        let token = jwt.sign({ user: user.first_name }, 'qwerty', { expiresIn: 60 * 60 });
         return token;
     } catch (e) {
-        let message = messages.errors(e.errno);
+        let message = messages.WRONG_USER_PASSWOR;
         throw new Error(message);
     }
 
