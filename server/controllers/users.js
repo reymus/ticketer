@@ -10,6 +10,13 @@ const getUsers = async() => {
     return results;
 };
 
+const getUserByEmail = async(email) => {
+    let queryModel = new QueryModel(Users);
+    let query = queryModel.select("*").where('email').equals(email).build();
+    let result = await db.query(query);
+    return result[0];
+};
+
 const createUser = async(user) => {
     let model = Users;
     let values = [];
@@ -38,5 +45,6 @@ const createUser = async(user) => {
 }
 
 module.exports = {
-    createUser
+    createUser,
+    getUserByEmail
 };

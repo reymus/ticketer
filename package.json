@@ -19,6 +19,7 @@
   "dependencies": {
     "bcrypt": "^4.0.1",
     "body-parser": "^1.19.0",
+    "jsonwebtoken": "^8.5.1",
     "ticketer-server": "file:server",
     "ticketer-ui": "file:ui"
   },
