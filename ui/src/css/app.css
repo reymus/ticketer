@@ -14,3 +14,17 @@
   height: 1px;
   overflow: hidden;
 }
+
+.application-logo-container {
+  margin-top: 10px;
+}
+
+.ticketer-logo {
+  background: url(./../images/ticketer-logo.png);
+  width: 160px;
+  height: 36px;
+}
+
+.oj-web-applayout-navbar {
+  margin-top: 15px;
+}
