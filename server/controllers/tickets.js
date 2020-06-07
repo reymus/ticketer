@@ -70,6 +70,10 @@ const getTickets = async(params) => {
                 queryModel.where(field).like(value);
                 break;
             }
+            case 'in': {
+                queryModel.where(field).in(value);
+                break;
+            }
         }
     });
 

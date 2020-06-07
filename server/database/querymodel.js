@@ -112,6 +112,19 @@ QueryModel.prototype.like = function(value) {
   return this._defineExpression('LIKE', `%${value}%`);
 };
 
+QueryModel.prototype.in = function(value) {
+  let values = [];
+  if (Array.isArray(value)) {
+    values = value;
+  } else if (typeof value === 'string') {
+    values = value.split(",");
+  } else if (value) {
+    values = [value];
+  }
+  values.map(value => `'${value}'`).join(', ');
+  return this._defineExpression('IN', `(${values})`);
+};
+
 QueryModel.prototype._newExpression = function(operator, field) {
   if (this.whereList.length === 0) {
     throw new Error(`'${QueryModel.Operators[operator]}' called on query model before starting a predicate. Use 'where' to define a field to create a new predicate`);
@@ -205,10 +218,12 @@ QueryModel.prototype.build = function() {
         if (Object.keys(this.model.fields).includes(field)) {
           field = `${this.model.table}.${field}`;
         }
-        if (where.operator !== 'LIKE') {
-          sql += `${field} ${where.operator} '${where.value}' `;
-        } else {
+        if (where.operator === 'LIKE') {
           sql += `LOWER(${field}) ${where.operator} LOWER('${where.value}') `;
+        } else if (where.operator === 'IN') {
+          sql += `${field} IN ${where.value} `;
+        } else {
+          sql += `${field} ${where.operator} '${where.value}' `;
         }
       }
     }
