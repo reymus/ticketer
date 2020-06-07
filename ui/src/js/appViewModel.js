@@ -27,10 +27,11 @@ define([
     // Router setup
     self.router = Router.rootInstance;
     self.router.configure({
-      dashboard: { label: 'Dashboard', isDefault: true },
-      incidents: { label: 'Incidents' },
-      customers: { label: 'Customers' },
-      about: { label: 'About' }
+      tickets:   { label: 'Tickets', isDefault: true, title: "Ticketer | Tickets" },
+      dashboard: { label: 'Dashboard', title: "Ticketer | Dashboard"  },
+      incidents: { label: 'Incidents', title: "Ticketer | Incidents"  },
+      customers: { label: 'Customers', title: "Ticketer | Customers"  },
+      about:     { label: 'About', title: "Ticketer | About"  }
     });
     Router.defaults['urlAdapter'] = new Router.urlParamAdapter();
 
@@ -57,6 +58,10 @@ define([
     // Navigation setup
     var navData = [
       {
+          name: 'Tickets',
+          id: 'tickets',
+          iconClass: 'oj-navigationlist-item-icon demo-icon-font-24 fas fa-ticket-alt'
+      },{
           name: 'Dashboard',
           id: 'dashboard',
           iconClass: 'oj-navigationlist-item-icon demo-icon-font-24 demo-chart-icon-24'
