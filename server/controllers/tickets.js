@@ -45,10 +45,15 @@ const getTickets = async(params) => {
     return tickets;
 };
 
-const getTicket = async(id) => {
+const getTicket = async(id, flatten) => {
     let queryModel = new QueryModel(Tickets);
     let query = queryModel.select('*').byPrimaryKey(id).build();
     let results = await db.query(query);
+    
+    let isFlattenSet = (flatten === 'true');
+    if (!isFlattenSet) {
+        results = processResults(results);
+    }
     return results[0];
 };
 

@@ -32,6 +32,9 @@ define(["./paramtypes"], function(ParamTypes) {
           name: 'id',
           paramType: ParamTypes.Path,
           required: true
+        }, {
+          name: 'flatten',
+          paramType: ParamTypes.Query
         }
       ]
     },

@@ -13,117 +13,143 @@ define(['knockout', './../services/client','./../process' ,'ojs/ojarraydataprovi
 'ojs/ojtable', 'ojs/ojradioset', 'ojs/ojknockout', 'ojs/ojselectcombobox', 'ojs/ojswitch' ,'ojs/ojformlayout'],
 function(ko, client, process, ArrayDataProvider, DataCollectionEditUtils) {
 
-   function DashboardViewModel() {
-     let self = this;
-     self.modeViews = [
-       {id: 'create', label: 'Crear'},
-       {id: 'edit',    label: 'Editar'},
-       {id: 'read',   label: 'Ver'}
-     ];
-     self.formMode = ko.observable('create');
-     self.summary = ko.observable('');
-     self.description = ko.observable('');
-     self.ownerOpts = ([
-       {label: 'Jesús', value: 'jesus'}, 
-       {label: 'Marcelo', value: 'marcelo'}, 
-       {label: 'Pake', value: 'pake'}
-     ]);
-     self.owner = ko.observable('');
-     self.ownerLabel = function(){
-       for(var i=0; i<self.ownerOpts.length; i++){
-         if(self.ownerOpts[i].value == self.owner()){
-           return self.ownerOpts[i].label
-         }
-       }
-       return '';
-     }
-     
-     self.ticketTypeOpts = ([
-       {label: 'Bug', value: 'bug'}, 
-       {label: 'Nueva herramienta', value: 'newFeature'}, 
-       {label: 'Soporte al cliente', value: 'customerSupport'}
-     ]);
-     self.ticketType = ko.observable('');
-     self.ticketTypeLabel = function(){
-       for(var i=0; i<self.ticketTypeOpts.length; i++){
-         if(self.ticketTypeOpts[i].value == self.ticketType()){
-           return self.ticketTypeOpts[i].label
-         }
-       }
-       return ''
-     }
+  function DashboardViewModel() {
+    let self = this;
+    process.getProcess().then((processData)=>{
 
-     self.ticketSeverityOpts = ([
-       {label: 'Baja', value: 'low'}, 
-       {label: 'Media', value: 'medium'}, 
-       {label: 'Alta', value: 'high'},
-       {label: 'Urgente', value: 'urgent'}
-     ]);
-     self.ticketSeverity = ko.observable('');  
-     self.ticketSeverityLabel = function(){
-       for(var i=0; i<self.ticketSeverityOpts.length; i++){
-         if(self.ticketSeverityOpts[i].value == self.ticketSeverity()){
-           return self.ticketSeverityOpts[i].label
-         }
-       }
-       return '';
-     }
+    });
+    
+    self.modeViews = [
+      {id: 'create', label: 'Crear'},
+      {id: 'edit',    label: 'Editar'},
+      {id: 'read',   label: 'Ver'}
+    ];
+    self.formMode = ko.observable('create');
+    self.summary = ko.observable('');
+    self.description = ko.observable('');
+    self.creationDate = ko.observable();
+    self.ticketTypeOpts = ko.observableArray([{value:'', id:0}]);
+    self.ticketType = ko.observable('');
+    self.ticketTypeLabel = function(){
+      for(var i=0; i<self.ticketTypeOpts.length; i++){
+        if(self.ticketTypeOpts[i].value == self.ticketType()){
+          return self.ticketTypeOpts[i].label
+        }
+      }
+      return ''
+    }
 
-     self.ticketStatusOpts = ([
-       {label: 'Nuevo', value: 'new'}, 
-       {label: 'En progreso', value: 'onprogress'}, 
-       {label: 'Esperando información', value: 'waiting'},
-       {label: 'Resuelto', value: 'solved'},
-       {label: 'Cerrado', value: 'closed'},
-     ]);
-     self.ticketStatus = ko.observable('');  
-     self.ticketStatusLabel = function(){
-       for(var i=0; i<self.ticketStatusOpts.length; i++){
-         if(self.ticketStatusOpts[i].value == self.ticketStatus()){
-           return self.ticketStatusOpts[i].label
-         }
-       }
-       return '';
-     }
-     self.creationDate = '30/05/2020';
-     let sendMode = self.formMode()=='create' ? 'Crear' : 'Actualizar';
-     self.sendForm = ko.observable(sendMode);
+    self.ticketSeverityOpts = ko.observableArray([{value: '', id:0}]);
+    self.ticketSeverity = ko.observable('');  
+    self.ticketSeverityLabel = function(){
+      for(var i=0; i<self.ticketSeverityOpts.length; i++){
+        if(self.ticketSeverityOpts[i].value == self.ticketSeverity()){
+          return self.ticketSeverityOpts[i].label
+        }
+      }
+      return '';
+    }
 
-     self.submitForm = function(){
-       let info = {
-         title: self.summary(),
-         description: self.description(),
-         owner: self.owner(),
-         ticketType: self.ticketType(),
-         ticketSeverity: self.ticketSeverity(),
-         ticketStatus: self.ticketStatus()
-       }
-       console.log(info);
-     }
+    self.ticketStatusOpts = ko.observableArray([{value: '', id:0}]);
+    self.ticketStatus = ko.observable('');   
+    self.ticketStatusLabel = function(){
+      for(var i=0; i<self.ticketStatusOpts.length; i++){
+        if(self.ticketStatusOpts[i].value == self.ticketStatus()){
+          return self.ticketStatusOpts[i].label
+        }
+      }
+      return '';
+    }
 
-     self.clearForm = function(){
-       self.summary('');
-       self.description('');
-       self.owner('');
-       self.ticketSeverity('');
-       self.ticketStatus('');
-     }
+    self.ownerOpts = ko.observableArray([]);
+    self.owner = ko.observable('');
+    self.ownerLabel = function(){
+      for(var i=0; i<self.ownerOpts.length; i++){
+        if(self.ownerOpts[i].value == self.owner()){
+          return self.ownerOpts[i].label
+        }
+      }
+      return '';
+    }
 
-      self.connected = async function() {
-        document.title = "Dashboard";
+    self.submitTicket = function(){
+      let info = {
+        title: self.summary(),
+        description: self.description(),
+        owner: self.owner(),
+        ticketType: self.ticketType(),
+        ticketSeverity: self.ticketSeverity(),
+        ticketStatus: self.ticketStatus()
+      }
+      if(self.formMode() == "create"){
+        //create ticket method from client should be invoked here
+      }else if(self.formMode() == "edit"){
+        //update ticket method from client should be invoked here
+      }
+      console.log(info);
+    }
+
+
+    self.clearForm = function(){
+      self.summary('');
+      self.description('');
+      self.owner('');
+      self.ticketSeverity('');
+      self.ticketStatus('');
+    }
+
+    self.getTicket = async function(){
+      let answer = prompt('Por favor ingresa el número de ticket');
+      console.log(answer);
+      let ticket = await client.invoke('Tickets.GetTicket', {
+        id: answer,
+        flatten: false
+      });
+      console.log(ticket);
+      self.formMode('read')
+      self.summary(ticket.summary);
+      self.description(ticket.description);
+      self.ticketSeverity(ticket["severity.id"]);
+      self.ticketStatus(ticket["status.id"]);
+      self.ticketType(ticket["type.id"]);
+      self.owner(ticket["owner.id"]);
+      self.creationDate(ticket["created_at"])
+      
+
+      
+    }
+
+    self.connected = async function() {
+      document.title = "Dashboard";
         // Implement further logic if needed
 
-        let processData = await process.getProcess();
-        console.log(`Process: `);
-        
-        console.log(`Status: `);
-        console.table(processData.status);
-        console.log(`Resolutions: `);
-        console.table(processData.resolutions);
-        console.log(`Severities: `);
-        console.table(processData.severities);
-        console.log(`Ticket Types: `);
-        console.table(processData.ticket_types);
+      let processData = await process.getProcess();
+      console.log(`Process: `);
+              
+      processData.status.forEach((row)=>{
+        self.ticketStatusOpts.push({value: row.id, label: row.name});
+      });
+      
+      processData.severities.forEach((row)=>{
+        self.ticketSeverityOpts.push({value: row.id, label: row.name});
+      });
+
+      processData.ticket_types.forEach((row)=>{
+        self.ticketTypeOpts.push({value: row.id, label: row.name});
+      });
+
+      processData.users.forEach((row)=>{
+        self.ownerOpts.push({value: row.id, label: (row.first_name+' '+row.last_name)});
+      });
+
+        // console.log(`Status: `);
+        // console.table(processData.status);
+        // console.log(`Resolutions: `);
+        // console.table(processData.resolutions);
+        // console.log(`Severities: `);
+        // console.table(processData.severities);
+        // console.log(`Ticket Types: `);
+        // console.table(processData.ticket_types);
 
         let tickets = await client.invoke('Tickets.GetAllTickets', {
           fields: ['id', 'owner', 'summary', 'type', 'created_by', 'status', 'severity'],
@@ -133,8 +159,8 @@ function(ko, client, process, ArrayDataProvider, DataCollectionEditUtils) {
           flatten: true
         });
 
-        console.log(`Tickets: `);
-        console.table(tickets);
+        // console.log(`Tickets: `);
+        // console.table(tickets);
 
         try {
           let invalid = await client.invoke('SampleInvalidPath.SampleInvalidEndpoint', {

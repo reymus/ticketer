@@ -38,8 +38,9 @@ app.get('/', async(req, res) => {
 
 app.get('/:id', async(req, res) => {
     let id = fromParam(req, 'id');
+    let flatten = fromQuery(req, 'flatten') || false;
     try {
-        let result = await controller.getTicket(id);
+        let result = await controller.getTicket(id,flatten);
         if (result == null) {
             res.status('404').json({
                 message: messages.NOT_FOUND
