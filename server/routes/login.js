@@ -7,11 +7,7 @@ const controller = require('./../controllers/login');
 app.post('/', async(req, res) => {
 
     try {
-        let token = await controller.createToken(req.body);
-        if (token.token == false) {
-            res.status('400').json({ message: token.message });
-            return;
-        }
+        let token = await controller.authenticate(req.body);
         res.json({ token });
 
     } catch (err) {

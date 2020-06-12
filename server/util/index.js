@@ -67,7 +67,7 @@ const getCommonParams = (req) => {
         filters
     };
 }
-const encryptData = (data) => {
+const encrypt = (data) => {
     if (data != "" && data != undefined && data != null) {
         return bcrypt.hashSync(data, 10);
     } else {
@@ -81,5 +81,5 @@ module.exports = {
     fromBody,
     getFilterParams,
     getCommonParams,
-    encryptData
+    encrypt
 };

@@ -1,11 +1,11 @@
 const express = require('express');
-const { encryptData } = require('./../util');
+const { encrypt } = require('./../util');
 const messages = require('./../messages/errorMessages');
 const app = express();
 const controller = require('./../controllers/users');
-const { authorization } = require('./../middlewares/authenticathion');
+const { authenticate } = require('../middleware/auth');
 
-app.get('/', authorization, async(req, res) => {
+app.get('/', authenticate, async(req, res) => {
     try {
         let users = await controller.getUsers();
         res.send(users);
@@ -14,12 +14,12 @@ app.get('/', authorization, async(req, res) => {
     }
 });
 
-app.post('/', async(req, res) => {
+app.post('/', authenticate, async(req, res) => {
 
     try {
-        let encrypted = encryptData(req.body.password);
+        let encrypted = encrypt(req.body.password);
         //validate email is missing
-        console.log(encrypted);
+
         if (encrypted == null) {
             res.status(400).json({
                 message: messages.PASSWORD_REQUIRED
