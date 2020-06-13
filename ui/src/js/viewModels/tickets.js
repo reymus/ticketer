@@ -1,10 +1,10 @@
 define([
   'knockout',
+  './../appViewModel',
   './../model/ticket',
   './../process',
-  'ojs/ojbootstrap', 
   'ojs/ojarraydataprovider', 
-  'ojs/ojdeferreddataprovider', 
+  'ojs/ojbootstrap', 
   'ojs/ojknockout', 
   'ojs/ojlistview',
   'ojs/ojavatar',
@@ -15,15 +15,26 @@ define([
   'ojs/ojinputtext', 
   'ojs/ojlabel',
   'ojs/ojselectsingle',
-  'ojs/ojmenu', 'ojs/ojoption', 'ojs/ojmenuselectmany',
-  
+  'ojs/ojmenu', 
+  'ojs/ojoption', 
+  'ojs/ojmenuselectmany',
   'ojs/ojcollapsible'
-
-  
-], function (ko, Ticket, process, Bootstrap, ArrayDataProvider, DeferredDataProvider) {
+], function (ko, app, Ticket, process, ArrayDataProvider) {
  
-  return function() {
+  const ViewModel = function() {
     let self = this;
+    
+    self.connected = function() {
+      self.refreshDataSource();
+    };
+
+    self.handleNewTicketClick = function() {
+      app.navigate('ticket');
+    };
+
+    self.handleTicketNavigation = function(ticket) {
+      app.navigate('ticket', ticket);
+    };
 
     // The ids for the table columns to display (with defaults)
     self.selectedColumns = ko.observableArray(['id', 'summary', 'type', 'severity', 'owner', 'status']);
@@ -49,7 +60,7 @@ define([
     // All possible table columns
     let columnsDef = {
       id:       { "headerText": "ID",       "field": "id", "style": "width: 10%" }, 
-      summary:  { "headerText": "Summary",  "field": "summary", "style": "width: 70%" }, 
+      summary:  { "headerText": "Summary",  "field": "summary", "template": "summaryTemplate", "style": "width: 70%" }, 
       severity: { "headerText": "Severity", "field": "severity.name", "style": "width: 10%" }, 
       status:   { "headerText": "Status",   "field": "status.name", "style": "width: 10%" },
       owner:    { "headerText": "Owner",    "field": "owner", "template": "ownerTemplate", "style": "width: 10%" },
@@ -163,16 +174,14 @@ define([
         type: self.selectedType,
         'summary:like': self.filterText
       })));
-    }
+    };
 
     // Used to render the name correctly in the table cell
     self.getOwner = function(data) {
       return data.first_name + " " + data.last_name;
-    }
+    };
 
-    self.connected = function() {
-      self.refreshDataSource();
-    }
   };
-  
+
+  return ViewModel;
 });

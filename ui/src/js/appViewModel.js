@@ -28,31 +28,63 @@ define([
     self.router = Router.rootInstance;
     self.router.configure({
       tickets:   { label: 'Tickets', isDefault: true, title: "Ticketer | Tickets" },
+      ticket:    { label: 'Ticket', title: "Ticketer | Ticket" },
       dashboard: { label: 'Dashboard', title: "Ticketer | Dashboard"  },
       incidents: { label: 'Incidents', title: "Ticketer | Incidents"  },
       customers: { label: 'Customers', title: "Ticketer | Customers"  },
-      about:     { label: 'About', title: "Ticketer | About"  }
+      about:     { label: 'About',     title: "Ticketer | About"  }
     });
     Router.defaults['urlAdapter'] = new Router.urlParamAdapter();
 
+    self.navigate = function(page, params) {
+      self.pageParams = params || {};
+      Router.rootInstance.go(page);
+    }
+
+    self.getNavigationParameters = function(routerParams) {
+      let params = self.pageParams || {};
+      return Object.assign({}, params, routerParams);
+    };
 
     self.loadModule = function () {
-      // moduleConfig is used in the 'main' oj-module defined in
-      // index.html. It maps the router module to a real module
-      // descriptor.
-      self.moduleConfig = ko.pureComputed(function () {
-        var name = self.router.moduleConfig.name();
-        var viewPath = 'views/' + name + '.html';
-        var modelPath = 'viewModels/' + name;
 
-        return moduleUtils.createConfig({ 
-          viewPath: viewPath,
-          viewModelPath: modelPath, 
-          params: { 
-            parentRouter: self.router 
-          } 
-        });
-      });
+      self.moduleConfig = ko.observable({ view: [], viewModel: null });
+    
+      // A computed observable which listens to the router's state change and
+      // creates a module config Promise.
+      var moduleConfigPromise = ko.pureComputed(
+        function() {
+          let router = Router.rootInstance;
+          let value = router.stateId();
+          return moduleUtils.createConfig({
+            name: value,
+            params: self.getNavigationParameters({
+              parentRouter: router
+            })
+          });
+        }.bind(this)
+      );
+  
+      // When the given module config Promise is resolved, pass it to our own
+      // this.moduleConfig observable.
+      var updateConfig = function(currentConfigPromise) {
+        currentConfigPromise.then(
+          function(moduleConfig) {
+            // Guard against multiple router state changes causing modules to load
+            // out-of-order by comparing the returned config Promise against the
+            // latest in the view model.
+            if (currentConfigPromise === moduleConfigPromise.peek()) {
+              this.moduleConfig(moduleConfig);
+            }
+          }.bind(this)
+        );
+      }.bind(this);
+
+      // Update our moduleConfig with the initial value from the module config Promise
+      updateConfig(moduleConfigPromise.peek());
+      // When moduleConfigPromise udpates (due to router state change), tell it to
+      // update our module config.
+      moduleConfigPromise.subscribe(updateConfig.bind(this));
     };
 
     // Navigation setup
@@ -61,7 +93,7 @@ define([
           name: 'Tickets',
           id: 'tickets',
           iconClass: 'oj-navigationlist-item-icon demo-icon-font-24 fas fa-ticket-alt'
-      },{
+      }, {
           name: 'Dashboard',
           id: 'dashboard',
           iconClass: 'oj-navigationlist-item-icon demo-icon-font-24 demo-chart-icon-24'

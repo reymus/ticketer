@@ -83,12 +83,16 @@
     height: 40px;
   }
 
+  .tickets-link {
+    cursor: pointer;
+  }
+
 </style>
 
 <div class="tickets-page-content">
   <div class="tickets-side-panel">
     <div>
-      <oj-button chroming="callToAction" class="tickets-create-button oj-button-lg">
+      <oj-button chroming="callToAction" class="tickets-create-button oj-button-lg" on-click="[[ handleNewTicketClick ]]">
         <span class="fas fa-ticket-alt" slot="startIcon"></span>
         <span>New Ticket</span>
       </oj-button>
@@ -153,8 +157,13 @@
       class="tickets-table"
       columns="[[viewColumns]]"
       selectionMode='{"row": "none", "column": "none"}'>
+      
       <template slot="ownerTemplate" data-oj-as="cell">
         <oj-bind-text value="[[getOwner(cell.data)]]"></oj-bind-text>
+      </template>
+
+      <template slot="summaryTemplate" data-oj-as="cell">
+        <a class="tickets-link" on-click="[[ handleTicketNavigation.bind(null, cell.row) ]]"><oj-bind-text value="[[ cell.data ]]"></oj-bind-text></a>
       </template>
       
     </oj-table>
