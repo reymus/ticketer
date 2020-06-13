@@ -8,26 +8,28 @@ const jwt = require('jsonwebtoken');
 const config = require('./../config');
 
 const authenticate = async(userData) => {
-    let user = await validateCredentials(userData);
-    let token = await createToken(user);
-    return token;
+    let user = await usersController.getUserByEmail(userData.email);
+    let valid = await validateCredentials(user, userData.password);
+    if (valid) {
+        let token = await createToken(user);
+        return token;
+    } else {
+        let message = messages.WRONG_USER_PASSWOR;
+        throw new Error(message);
+    }
+
+
 };
 
-const validateCredentials = async(data) => {
-    let data_password = data.password;
-    let email = data.email;
+const validateCredentials = async(user, dataPassword) => {
+    //let data_password = data.password;
+    //let email = data.email;
 
     try {
-        let user = await usersController.getUserByEmail(email);
+        //
         let password = await getPassword(user.id);
-        let match = await bcrypt.compare(data_password, password);
-
-        if (match === false) {
-            let message = messages.WRONG_USER_PASSWOR;
-            throw new Error(message);
-        }
-
-        return user;
+        let match = await bcrypt.compare(dataPassword, password);
+        return match;
     } catch (e) {
         let message = messages.WRONG_USER_PASSWOR;
         throw new Error(message);
@@ -45,12 +47,14 @@ const createToken = (user) => {
     }
 };
 
-const getPassword = async(id) => {
+const getPassword = async(userId) => {
     try {
         let queryModel = new QueryModel(Passwords);
-        let query = queryModel.select("password").where('id_user').equals(id).build();
+        let query = queryModel.select("password").where('user_id').equals(userId).build();
         let result = await db.query(query);
-        return result[0].password;
+        if (result.length === 1) {
+            return result[0].password;
+        }
     } catch (error) {
         let message = messages.errors(e.errno);
         throw new Error(message);

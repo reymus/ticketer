@@ -18,7 +18,7 @@ app.post('/', authenticate, async(req, res) => {
 
     try {
         let encrypted = encrypt(req.body.password);
-        //validate email is missing
+        //validate email is needed
 
         if (encrypted == null) {
             res.status(400).json({

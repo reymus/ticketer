@@ -13,12 +13,16 @@ let authenticate = (req, res, next) => {
                 res.status('401').json({
                     message: messages.INVALID_TOKEN
                 });
+            } else {
+                req.user = decoded.user;
+                next();
             }
-            req.user = decoded.user;
-            next();
+
         });
+    } else {
+        next();
     }
-    next();
+
 }
 
 module.exports = {

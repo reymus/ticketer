@@ -20,11 +20,10 @@ const Users = {
 const Passwords = {
     table: "passwords",
     fields: {
-        "id": { type: Types.INT },
-        "id_user": { type: Types.INT },
+        "user_id": { type: Types.INT },
         "password": { type: Types.VARCHAR }
     },
-    primaryKey: "id"
+    primaryKey: "user_id"
 };
 
 const TicketTypes = {

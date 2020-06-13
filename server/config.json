@@ -27,7 +27,7 @@
     },
 
     "validation": {
-        "off": true
+        "off": false
     }
 
 }
