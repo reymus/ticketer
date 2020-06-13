@@ -11,7 +11,7 @@ let authenticate = (req, res, next) => {
         jwt.verify(token, config.jwt.secret, (err, decoded) => {
             if (err) {
                 res.status('401').json({
-                    message: messages.INVALID_TOKEN
+                    message
                 });
             } else {
                 req.user = decoded.user;

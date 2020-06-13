@@ -22,11 +22,7 @@ const authenticate = async(userData) => {
 };
 
 const validateCredentials = async(user, dataPassword) => {
-    //let data_password = data.password;
-    //let email = data.email;
-
     try {
-        //
         let password = await getPassword(user.id);
         let match = await bcrypt.compare(dataPassword, password);
         return match;

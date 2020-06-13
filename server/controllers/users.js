@@ -24,7 +24,7 @@ const createUser = async(user) => {
     let fields = Object.keys(model.fields);
 
     if ("password" in user) {
-        password = "\'" + user.password + "\'";
+        password = "'" + user.password + "'";
     } else {
         let message = messages.PASSWORD_REQUIRED;
         throw new Error(message);
