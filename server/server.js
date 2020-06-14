@@ -18,9 +18,9 @@ app.listen(config.server.port, () => {
 });
 
 process.on('uncaughtException', function(error) {
-  logger.error(error);
+    logger.error(error);
 });
 
 process.on('unhandledRejection', function(reason, p) {
-  logger.error(reason);
+    logger.error(reason);
 });

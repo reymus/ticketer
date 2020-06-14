@@ -12,9 +12,18 @@ const Users = {
         "id": { type: Types.INT },
         "first_name": { type: Types.VARCHAR },
         "last_name": { type: Types.VARCHAR },
-        "email": { type: Types.VARCHAR }
+        "email": { type: Types.VARCHAR },
     },
     primaryKey: "id"
+};
+
+const Passwords = {
+    table: "passwords",
+    fields: {
+        "user_id": { type: Types.INT },
+        "password": { type: Types.VARCHAR }
+    },
+    primaryKey: "user_id"
 };
 
 const TicketTypes = {
@@ -80,6 +89,7 @@ module.exports = {
     Resolutions,
     TicketTypes,
     Users,
+    Passwords,
     Severities,
     Tickets
 }
