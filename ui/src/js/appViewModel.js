@@ -11,6 +11,7 @@ define([
   'ojs/ojmodule-element', 
   'ojs/ojknockout'
 ], function(config, ko, moduleUtils, KnockoutTemplateUtils, Router, ResponsiveUtils, ResponsiveKnockoutUtils, ArrayDataProvider, OffcanvasUtils) {
+  "use strict";
 
   function AppViewModel() {
     var self = this;
@@ -34,12 +35,12 @@ define([
       customers: { label: 'Customers', title: "Ticketer | Customers"  },
       about:     { label: 'About',     title: "Ticketer | About"  }
     });
-    Router.defaults['urlAdapter'] = new Router.urlParamAdapter();
+    Router.defaults.urlAdapter = new Router.urlParamAdapter();
 
     self.navigate = function(page, params) {
       self.pageParams = params || {};
       Router.rootInstance.go(page);
-    }
+    };
 
     self.getNavigationParameters = function(routerParams) {
       let params = self.pageParams || {};
@@ -119,7 +120,7 @@ define([
     };
 
     // Add a close listener so we can move focus back to the toggle button when the drawer closes
-    document.getElementById('navDrawer').addEventListener("ojclose", function(event) {
+    document.getElementById('navDrawer').addEventListener("ojclose", function() {
       document.getElementById('drawerToggleButton').focus();
     });
   }

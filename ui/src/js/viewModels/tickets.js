@@ -20,7 +20,8 @@ define([
   'ojs/ojmenuselectmany',
   'ojs/ojcollapsible'
 ], function (ko, app, Ticket, process, ArrayDataProvider) {
- 
+  "use strict";
+
   const ViewModel = function() {
     let self = this;
     
@@ -98,9 +99,9 @@ define([
       let columns = self.columns();
       let findIndex = function(field) {
         field = field.split('.')[0];
-        return columns.findIndex(column => field);
+        return columns.findIndex(column => field === column.value);
       };
-      return findIndex(a.field, b.field);
+      return findIndex(a.field) - findIndex(b.field);
     };
 
     let findInOptions = (id, options) => {

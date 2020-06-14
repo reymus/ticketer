@@ -1,0 +1,9 @@
+node_modules
+
+ui/src/node_modules
+ui/src/staged-themes
+ui/src/web
+ui/src/js/libs
+
+server/node_modules
+server/public

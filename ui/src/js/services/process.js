@@ -1,6 +1,6 @@
-define(["./paramtypes"], function(ParamTypes) {
-
-  return {
+define(["./paramtypes"], function() {
+  "use strict";
+  return { 
     GetProcessData: {
       method: 'GET',
       path: '/api/process/',

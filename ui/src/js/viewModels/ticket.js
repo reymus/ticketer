@@ -1,12 +1,8 @@
 define([
-  'knockout',
-  './../appViewModel',
-  './../model/ticket',
-  './../process',
-  'ojs/ojarraydataprovider'
-  
-], function (ko, app, Ticket, process, ArrayDataProvider) {
- 
+  'knockout'
+], function (ko) {
+  "use strict";
+
   const TicketViewModel = function(viewParams) {
 
     let self = this;
@@ -31,7 +27,8 @@ define([
     
     self.connected = function() {
       
-    }
+    };
+    
   };
   
   return TicketViewModel;

@@ -1,5 +1,5 @@
 define(["./paramtypes", "./tickets", "./process"], function(ParamTypes, Tickets, Process) {
-
+    "use strict";
     const Services = {
 
         Tickets,

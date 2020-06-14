@@ -1,4 +1,6 @@
 define(["./paramtypes"], function(ParamTypes) {
+  "use strict";
+
   return {
 
     GetAllTickets: {
@@ -57,4 +59,4 @@ define(["./paramtypes"], function(ParamTypes) {
       ]
     }
   };
-})
+});
