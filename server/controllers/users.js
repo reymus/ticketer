@@ -28,8 +28,9 @@ const createUserWithPassword = async(user) => {
             //return user created is needed
             return 'success';
         } else {
-            let message = messages.errors(e.errno);
-            throw new Error(message);
+            let message = messages.UNABLE_TO_CREATE;
+            throw new Error(message);;
+
         }
 
     } catch (e) {
@@ -65,7 +66,7 @@ const createUser = async(user) => {
         //return the object created
         return result.insertId;
     } else {
-        let message = messages.errors(e.errno);
+        let message = messages.UNABLE_TO_CREATE;
         throw new Error(message);
     }
 }
@@ -83,6 +84,9 @@ const createPassword = async(password, userId) => {
     }
     if (result.insertId != null) {
         return result;
+    } else {
+        let message = messages.UNABLE_TO_CREATE;
+        throw new Error(message);
     }
 };
 module.exports = {

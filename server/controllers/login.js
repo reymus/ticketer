@@ -51,7 +51,7 @@ const getPassword = async(userId) => {
         if (result.length === 1) {
             return result[0].password;
         } else {
-            let message = messages.errors(e.errno);
+            let message = messages.UNABLE_TO_OBTAIN;
             throw new Error(message);
         }
     } catch (error) {

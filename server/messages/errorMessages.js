@@ -7,6 +7,8 @@ const VALUE_NOT_EXIST = 'Value used  is not valid in request';
 const WRONG_USER_PASSWORD = 'Invalid User or Password ';
 const TOKEN_UNAVAILABLE = 'Can\'t create token';
 const INVALID_TOKEN = 'Invalid token ';
+const UNABLE_TO_CREATE = 'Unable to create';
+const UNABLE_TO_OBTAIN = 'Unable to obtain';
 
 const errors = (code) => {
     let message = '';
@@ -33,5 +35,7 @@ module.exports = {
     WRONG_USER_PASSWORD,
     INVALID_TOKEN,
     TOKEN_UNAVAILABLE,
+    UNABLE_TO_CREATE,
+    UNABLE_TO_OBTAIN,
     errors
 }
