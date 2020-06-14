@@ -14,7 +14,7 @@ const authenticate = async(userData) => {
         let token = await createToken(user);
         return token;
     } else {
-        let message = messages.WRONG_USER_PASSWOR;
+        let message = messages.WRONG_USER_PASSWORD;
         throw new Error(message);
     }
 
@@ -27,7 +27,7 @@ const validateCredentials = async(user, dataPassword) => {
         let match = await bcrypt.compare(dataPassword, password);
         return match;
     } catch (e) {
-        let message = messages.WRONG_USER_PASSWOR;
+        let message = messages.WRONG_USER_PASSWORD;
         throw new Error(message);
     }
 
@@ -50,6 +50,9 @@ const getPassword = async(userId) => {
         let result = await db.query(query);
         if (result.length === 1) {
             return result[0].password;
+        } else {
+            let message = messages.errors(e.errno);
+            throw new Error(message);
         }
     } catch (error) {
         let message = messages.errors(e.errno);

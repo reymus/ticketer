@@ -4,7 +4,7 @@ const WRONG_VALUE = 'Incorrect property value in request';
 const PASSWORD_REQUIRED = 'Password is required';
 const UNKNOWN_ERROR = 'Unknown error';
 const VALUE_NOT_EXIST = 'Value used  is not valid in request';
-const WRONG_USER_PASSWOR = 'Invalid User or Password ';
+const WRONG_USER_PASSWORD = 'Invalid User or Password ';
 const TOKEN_UNAVAILABLE = 'Can\'t create token';
 const INVALID_TOKEN = 'Invalid token ';
 
@@ -30,7 +30,7 @@ const errors = (code) => {
 module.exports = {
     NOT_FOUND,
     PASSWORD_REQUIRED,
-    WRONG_USER_PASSWOR,
+    WRONG_USER_PASSWORD,
     INVALID_TOKEN,
     TOKEN_UNAVAILABLE,
     errors

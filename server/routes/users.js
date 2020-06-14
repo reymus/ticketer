@@ -30,6 +30,10 @@ app.post('/', authenticate, async(req, res) => {
         let user = await controller.createUserWithPassword(req.body);
         if (user === 'success') {
             res.status(201).send(user);
+        } else {
+            res.status('500').json({
+                message: err.message,
+            });
         }
 
 
