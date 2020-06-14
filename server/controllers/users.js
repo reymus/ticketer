@@ -19,17 +19,17 @@ const getUserByEmail = async(email) => {
 
 
 const createUserWithPassword = async(user) => {
-    let password;
-    let userId;
+
     try {
-        password = "'" + user.password + "'";
+        let password = "'" + user.password + "'";
         let userResult = await createUser(user);
-        userId = userResult.insertId;
+        let userId = userResult.insertId;
         let passwordResult = await createPassword(password, userId);
         if (passwordResult.affectedRows === 1) {
             //return user created is needed
             return 'success';
         }
+
     } catch (e) {
         let message = messages.errors(e.errno);
         throw new Error(message);
@@ -62,6 +62,9 @@ const createUser = async(user) => {
     if (result.insertId != null) {
         //return the object created
         return result;
+    } else {
+        let message = messages.errors(e.errno);
+        throw new Error(message);
     }
 }
 
