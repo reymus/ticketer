@@ -10,9 +10,8 @@ let authenticate = (req, res, next) => {
         let token = req.get('Authorization');
         jwt.verify(token, config.jwt.secret, (err, decoded) => {
             if (err) {
-                res.status('401').json({
-                    message
-                });
+                console.log(err);
+                res.status('401').json(err);
             } else {
                 req.user = decoded.user;
                 next();

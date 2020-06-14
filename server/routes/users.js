@@ -27,7 +27,7 @@ app.post('/', authenticate, async(req, res) => {
             return;
         }
         req.body.password = encrypted;
-        let user = await controller.createUser(req.body);
+        let user = await controller.createUserWithPassword(req.body);
         if (user === 'success') {
             res.status(201).send(user);
         }

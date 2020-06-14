@@ -17,19 +17,30 @@ const getUserByEmail = async(email) => {
     return result[0];
 };
 
+
+const createUserWithPassword = async(user) => {
+    let password;
+    let userId;
+    try {
+        password = "'" + user.password + "'";
+        let userResult = await createUser(user);
+        userId = userResult.insertId;
+        let passwordResult = await createPassword(password, userId);
+        if (passwordResult.affectedRows === 1) {
+            //return user created is needed
+            return 'success';
+        }
+    } catch (e) {
+        let message = messages.errors(e.errno);
+        throw new Error(message);
+    }
+}
+
 const createUser = async(user) => {
     let model = Users;
     let values = [];
-    let password;
+
     let fields = Object.keys(model.fields);
-
-    if ("password" in user) {
-        password = "'" + user.password + "'";
-    } else {
-        let message = messages.PASSWORD_REQUIRED;
-        throw new Error(message);
-    }
-
     for (let i = 0; i < fields.length; i++) {
         if (fields[i] != 'id' && fields[i] in user) {
             values.push(`'${user[fields[i]]}'`);
@@ -38,14 +49,11 @@ const createUser = async(user) => {
         }
     }
 
-
     let query = `INSERT INTO ${model.table} VALUES(${values.join(', ')})`;
     let result;
     let userId;
     try {
         result = await db.query(query);
-        userId = result.insertId;
-        passordResult = await createPassword(password, userId);
     } catch (e) {
         let message = messages.errors(e.errno);
         throw new Error(message);
@@ -53,7 +61,7 @@ const createUser = async(user) => {
 
     if (result.insertId != null) {
         //return the object created
-        return 'success';
+        return result;
     }
 }
 
@@ -73,7 +81,7 @@ const createPassword = async(password, userId) => {
     }
 };
 module.exports = {
-    createUser,
+    createUserWithPassword,
     getUserByEmail,
     getUsers
 };
