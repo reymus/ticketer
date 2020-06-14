@@ -1,23 +1,33 @@
 {
-  "server": {
-    "port": 8000
-  },
+    "server": {
+        "port": 8000
+    },
 
-  "logging": {
-    "filename": "./logs/server.log",
+    "logging": {
+        "filename": "./logs/server.log",
 
-    "console": {
-      "database.queryModel": true,
-      "tickets": true
+        "console": {
+            "database.queryModel": true,
+            "tickets": true
+        }
+
+    },
+
+    "database": {
+        "host": "localhost",
+        "port": 3306,
+        "user": "root",
+        "password": "admin",
+        "database": "ticketer"
+    },
+
+    "jwt": {
+        "expire": "4h",
+        "secret": "qwerty"
+    },
+
+    "validation": {
+        "off": true
     }
-    
-  },
 
-  "database": {
-    "host": "localhost",
-    "port": 3306,
-    "user": "root",
-    "password": "admin",
-    "database": "ticketer"
-  }
 }

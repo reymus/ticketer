@@ -2,13 +2,14 @@ const express = require('express');
 
 const controller = require('./../controllers/tickets');
 const { fromPath, fromBody, getCommonParams } = require('./../util');
+const { authenticate } = require('../middleware/auth');
 const messages = require('../messages/errorMessages');
 
 const logger = require('./../logger').getLogger("tickets");
 
 const app = express();
 
-app.get('/', async(req, res) => {
+app.get('/', authenticate, async(req, res) => {
     logger.info("GET /tickets/?", req.query);
     try {
         let params = getCommonParams(req);
@@ -20,7 +21,7 @@ app.get('/', async(req, res) => {
     }
 })
 
-app.get('/:id', async(req, res) => {
+app.get('/:id', authenticate, async(req, res) => {
     let id = fromPath(req, 'id');
     try {
         let params = getCommonParams(req);
@@ -43,7 +44,7 @@ app.get('/:id', async(req, res) => {
     }
 });
 
-app.post('/', async(req, res) => {
+app.post('/', authenticate, async(req, res) => {
     let body = req.body;
     //to do: validate body types values
     try {
@@ -59,7 +60,7 @@ app.post('/', async(req, res) => {
     }
 });
 
-app.patch('/:id', async(req, res) => {
+app.patch('/:id', authenticate, async(req, res) => {
     let body = req.body;
     // to do validate body types values
     try {

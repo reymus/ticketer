@@ -1,3 +1,4 @@
+const bcrypt = require('bcrypt');
 const fromQuery = (req, param) => {
     if (req.query) {
         return req.query[param];
@@ -66,11 +67,19 @@ const getCommonParams = (req) => {
         filters
     };
 }
+const encrypt = (data) => {
+    if (data != "" && data != undefined && data != null) {
+        return bcrypt.hashSync(data, 10);
+    } else {
+        return null;
+    }
 
+}
 module.exports = {
     fromQuery,
     fromPath,
     fromBody,
     getFilterParams,
-    getCommonParams
+    getCommonParams,
+    encrypt
 };
