@@ -120,7 +120,7 @@ CREATE TABLE `comments` (
   CONSTRAINT `fk_comments_id_user` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-DROP TABLE IF EXISTS `comments`;
+DROP TABLE IF EXISTS `passwords`;
 CREATE TABLE `passwords` (
   `user_id` int NOT NULL,
   `password` text NOT NULL,
