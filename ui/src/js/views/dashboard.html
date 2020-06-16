@@ -50,28 +50,28 @@
       help.definition='Selecciona a quién le corresponde el ticket'>Asignar ticket a
       </oj-label>
       <oj-select-one id='owner' value='{{owner}}' options='[[ownerOpts]]' 
-      readonly='[[formMode()=="read"]]'>
+      placeholder="" readonly='[[formMode()=="read"]]'>
       </oj-select-one>
     
       <oj-label for='ticketType' show-required=true
       help.definition='Selecciona el tipo de ticket'>Tipo de ticket
       </oj-label>
       <oj-select-one id='ticketType' value='{{ticketType}}'  options='[[ticketTypeOpts]]' 
-      readonly='[[formMode()=="read"]]'>
+      placeholder="" readonly='[[formMode()=="read"]]'>
       </oj-select-one>
     
       <oj-label for='ticketSeverity' show-required=true
       help.definition='Selecciona el nivel de urgencia del ticket'>Urgencia del ticket
       </oj-label>
       <oj-select-one id='ticketSeverity' value='{{ticketSeverity}}' options='[[ticketSeverityOpts]]' 
-      readonly='[[formMode()=="read"]]'>
+      placeholder="" readonly='[[formMode()=="read"]]'>
       </oj-select-one>
 
       <oj-label for='ticketStatus' show-required=true
       help.definition='Selecciona el status del ticket'>Estatus del ticket
       </oj-label>
       <oj-select-one id='ticketStatus' value='{{ticketStatus}}' options='[[ticketStatusOpts]]' 
-      readonly='[[formMode()=="read"]]'>
+      placeholder="" readonly='[[formMode()=="read"]]'>
       </oj-select-one>
       <oj-bind-if test='[[!(formMode()=="create")]]'>
         <oj-label for='creationDate' help.definition='La fecha en que se creó el ticket'>Fecha de creación

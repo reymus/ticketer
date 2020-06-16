@@ -28,8 +28,8 @@ function(ko, client, process, ArrayDataProvider, DataCollectionEditUtils) {
     self.summary = ko.observable('');
     self.description = ko.observable('');
     self.creationDate = ko.observable();
-    self.ticketTypeOpts = ko.observableArray([{value:'', id:0}]);
-    self.ticketType = ko.observable('');
+    self.ticketTypeOpts = ko.observableArray();
+    self.ticketType = ko.observable();
     self.ticketTypeLabel = function(){
       for(var i=0; i<self.ticketTypeOpts.length; i++){
         if(self.ticketTypeOpts[i].value == self.ticketType()){
@@ -39,8 +39,8 @@ function(ko, client, process, ArrayDataProvider, DataCollectionEditUtils) {
       return ''
     }
 
-    self.ticketSeverityOpts = ko.observableArray([{value: '', id:0}]);
-    self.ticketSeverity = ko.observable('');  
+    self.ticketSeverityOpts = ko.observableArray();
+    self.ticketSeverity = ko.observable();  
     self.ticketSeverityLabel = function(){
       for(var i=0; i<self.ticketSeverityOpts.length; i++){
         if(self.ticketSeverityOpts[i].value == self.ticketSeverity()){
@@ -50,8 +50,8 @@ function(ko, client, process, ArrayDataProvider, DataCollectionEditUtils) {
       return '';
     }
 
-    self.ticketStatusOpts = ko.observableArray([{value: '', id:0}]);
-    self.ticketStatus = ko.observable('');   
+    self.ticketStatusOpts = ko.observableArray();
+    self.ticketStatus = ko.observable();   
     self.ticketStatusLabel = function(){
       for(var i=0; i<self.ticketStatusOpts.length; i++){
         if(self.ticketStatusOpts[i].value == self.ticketStatus()){
@@ -61,8 +61,8 @@ function(ko, client, process, ArrayDataProvider, DataCollectionEditUtils) {
       return '';
     }
 
-    self.ownerOpts = ko.observableArray([]);
-    self.owner = ko.observable('');
+    self.ownerOpts = ko.observableArray();
+    self.owner = ko.observable();
     self.ownerLabel = function(){
       for(var i=0; i<self.ownerOpts.length; i++){
         if(self.ownerOpts[i].value == self.owner()){
@@ -119,7 +119,7 @@ function(ko, client, process, ArrayDataProvider, DataCollectionEditUtils) {
         // Implement further logic if needed
 
       let processData = await process.getProcess();
-      console.log(`Process: `);
+      console.log(processData);
               
       processData.status.forEach((row)=>{
         self.ticketStatusOpts.push({value: row.id, label: row.name});
@@ -133,9 +133,9 @@ function(ko, client, process, ArrayDataProvider, DataCollectionEditUtils) {
         self.ticketTypeOpts.push({value: row.id, label: row.name});
       });
 
-      processData.users.forEach((row)=>{
+      {{processData.users.forEach((row)=>{
         self.ownerOpts.push({value: row.id, label: (row.first_name+' '+row.last_name)});
-      });
+      });}}
 
         // console.log(`Status: `);
         // console.table(processData.status);
