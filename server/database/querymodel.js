@@ -84,15 +84,15 @@ QueryModel.prototype.where = function(field) {
 QueryModel.Operators = {
   '=': 'equals',
   '<>': 'equals',
-}
+};
 
 QueryModel.prototype._defineExpression = function(operator, value) {
   if (this.whereList.length === 0) {
-    throw new Error(`'${QueryMode.Operators[operator]}' called on query model before starting a predicate. Use 'where' to define a field to create a new predicate`);
+    throw new Error(`'${QueryModel.Operators[operator]}' called on query model before starting a predicate. Use 'where' to define a field to create a new predicate`);
   }
   let currentExpression = this.whereList[this.whereList.length - 1];
   if (currentExpression.operator) {
-    throw new Error(`'${QueryMode.Operators[operator]}' called on query model after an operator was already defined. Use 'and' or 'or' to further refine your predicate`);
+    throw new Error(`'${QueryModel.Operators[operator]}' called on query model after an operator was already defined. Use 'and' or 'or' to further refine your predicate`);
   }
   currentExpression.operator = operator;
   currentExpression.value = value;
@@ -163,7 +163,7 @@ QueryModel.prototype.build = function() {
       if (!fields.includes(field)) {
         fields.push(field);
       }
-    })
+    });
 
     let selectFields = [];
     for (let i = 0; i < fields.length; i++) {
@@ -177,7 +177,7 @@ QueryModel.prototype.build = function() {
 
                 selectFields.push(`${fieldName}.${refFieldName} AS '${fieldName}.${refFieldName}'`);
             }
-            let join = field.nullable ? 'LEFT JOIN' : 'INNER JOIN'
+            let join = field.nullable ? 'LEFT JOIN' : 'INNER JOIN';
             froms.push(`${join} ${field.reference.table} AS ${fieldName} ON ${this.model.table}.${fieldName} = ${fieldName}.${field.reference.primaryKey}`);
         } else {
             selectFields.push(`${this.model.table}.${fieldName}`);
@@ -246,7 +246,7 @@ QueryModel.prototype.build = function() {
         sql += `OFFSET ${this._offset}
     `;
     }
-    sql += ";"
+    sql += ";";
     sql = this.formatSQL(sql);
     logger.info(`Emiting SQL: ${sql}`);
     return sql;

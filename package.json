@@ -17,11 +17,14 @@
   },
   "homepage": "https://github.com/reymus/ticketer#readme",
   "dependencies": {
+    "bcrypt": "^4.0.1",
     "body-parser": "^1.19.0",
+    "jsonwebtoken": "^8.5.1",
     "ticketer-server": "file:server",
     "ticketer-ui": "file:ui"
   },
   "devDependencies": {
+    "jshint": "^2.11.1",
     "nodemon": "^2.0.4"
   }
 }

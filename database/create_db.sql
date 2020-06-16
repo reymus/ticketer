@@ -120,6 +120,14 @@ CREATE TABLE `comments` (
   CONSTRAINT `fk_comments_id_user` FOREIGN KEY (`created_by`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+DROP TABLE IF EXISTS `passwords`;
+CREATE TABLE `passwords` (
+  `user_id` int NOT NULL,
+  `password` text NOT NULL,
+  PRIMARY KEY (`user_id`),
+  KEY `fk_user_id_idx` (`user_id`),
+  CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --- Severities
 INSERT INTO `severities` VALUES(null, 'Low');

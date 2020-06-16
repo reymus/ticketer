@@ -8,7 +8,7 @@
  * Your about ViewModel code goes here
  */
 define([], function() {
-
+  "use strict";
     function AboutViewModel() {
       var self = this;
       // Below are a set of the ViewModel methods invoked by the oj-module component.

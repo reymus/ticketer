@@ -1,12 +1,5 @@
-'use strict';
-
 (function () {
-  
-  function _ojIsIE11() {
-    var nAgt = navigator.userAgent;
-    return nAgt.indexOf('MSIE') !== -1 || !!nAgt.match(/Trident.*rv:11./);
-  };
-  var _ojNeedsES5 = _ojIsIE11();
+  "use strict";
 
   requirejs.config({
 
@@ -21,7 +14,7 @@
       'jqueryui-amd': 'libs/jquery/jqueryui-amd-1.12.1',
       'hammerjs': 'libs/hammer/hammer-2.0.8',
       'ojdnd': 'libs/dnd-polyfill/dnd-polyfill-1.0.1',
-      'ojs': 'libs/oj/v8.3.0/debug' + (_ojNeedsES5 ? '_es5' : ''),
+      'ojs': 'libs/oj/v8.3.0/debug',
       'ojL10n': 'libs/oj/v8.3.0/ojL10n',
       'ojtranslations': 'libs/oj/v8.3.0/resources',
       'text': 'libs/require/text',
@@ -51,20 +44,21 @@ require([
   'ojs/ojbutton', 
   'ojs/ojtoolbar'
 ], function (Bootstrap, ko, app, Router, Logger) {
-  
-    Bootstrap.whenDocumentReady().then(function() {
-        
-        Router.sync().then(
-          function () {
-            app.loadModule();
-            // Bind your ViewModel for the content of the whole page body.
-            ko.applyBindings(app, document.getElementById('globalBody'));
-          },
-          function (error) {
-            Logger.error('Error in root start: ' + error.message);
-          }
-        );
-        
+    "use strict";
+
+    Bootstrap.whenDocumentReady().then(function () {
+
+      Router.sync().then(
+        function () {
+          app.loadModule();
+          // Bind your ViewModel for the content of the whole page body.
+          ko.applyBindings(app, document.getElementById('globalBody'));
+        },
+        function (error) {
+          Logger.error('Error in root start: ' + error.message);
+        }
+      );
+
     });
   }
 );

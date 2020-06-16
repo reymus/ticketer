@@ -1,14 +1,47 @@
 const express = require('express');
-
+const { encrypt } = require('./../util');
+const messages = require('./../messages/errorMessages');
 const app = express();
+const controller = require('./../controllers/users');
+const { authenticate } = require('../middleware/auth');
 
-app.get('/', async (req, res) => {
-  try {
-    let users = await controller.getUsers();
-    res.send(users);
-  } catch (err) {
-    res.send(err);
-  }
+app.get('/', authenticate, async(req, res) => {
+    try {
+        let users = await controller.getUsers();
+        res.send(users);
+    } catch (err) {
+        res.send(err);
+    }
 });
 
+app.post('/', authenticate, async(req, res) => {
+
+    try {
+        let encrypted = encrypt(req.body.password);
+        //validate email is needed
+
+        if (encrypted == null) {
+            res.status(400).json({
+                message: messages.PASSWORD_REQUIRED
+            });
+            return;
+        }
+        req.body.password = encrypted;
+        let user = await controller.createUserWithPassword(req.body);
+        if (user === 'success') {
+            res.status(201).send(user);
+        } else {
+            res.status('500').json({
+                message: err.message,
+            });
+        }
+
+
+    } catch (err) {
+        res.status('500').json({
+            message: err.message,
+        });
+        return;
+    }
+});
 module.exports = app;

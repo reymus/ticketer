@@ -1,5 +1,5 @@
 define(['jquery', './../appViewModel', './services', 'promise'], function($, app, services, Promise) {
-
+    "use strict";
     
     const ParamTypes = {
         Path: 'Path', 
@@ -25,7 +25,7 @@ define(['jquery', './../appViewModel', './services', 'promise'], function($, app
         for (let i = 0; i < endpointParams.length; i++) {
             let paramDef = endpointParams[i];
             if (!Object.keys(params).includes(paramDef.name)) {
-                throw new Exception(`Missing required parameter '${paramDef.name}' for endpoint ${endpoint.name}.`)
+                throw new Exception(`Missing required parameter '${paramDef.name}' for endpoint ${endpoint.name}.`);
             }
         }
     };
@@ -48,13 +48,13 @@ define(['jquery', './../appViewModel', './services', 'promise'], function($, app
         for (let i = 0; i < endpointParams.length; i++) {
             let paramDef = endpointParams[i];
             if (paramDef.paramType === ParamTypes.Query && (typeof params[paramDef.name] !== 'undefined')) {
-                queryString.push(`${paramDef.name}=${params[paramDef.name]}`)
+                queryString.push(`${paramDef.name}=${params[paramDef.name]}`);
             }
         }
         return queryString.join('&');
     };
 
-    const getBody = (endpoint, params) => {
+    const getBody = (endpoint, params) => { // jshint ignore:line
         let body = {};
         let endpointParams = endpoint.params || [];
         for (let i = 0; i < endpointParams.length; i++) {
@@ -72,7 +72,7 @@ define(['jquery', './../appViewModel', './services', 'promise'], function($, app
         invoke: function(endpointPath, params) {
             let endpoint = getEndpoint(endpointPath);
             try {
-                validateParams(endpoint, params)
+                validateParams(endpoint, params);
             } catch (err) {
                 // Handle error
             }
@@ -104,19 +104,20 @@ define(['jquery', './../appViewModel', './services', 'promise'], function($, app
         
                     data: payload,
         
-                    success: function(data, textStatus, jqXhr) {
+
+                    success: function(data, textStatus, jqXhr) { // jshint ignore:line
                         
                         resolve.apply(null, arguments);
                     },
         
-                    error: function(jqXhr, textStatus, error) {
+                    error: function(jqXhr, textStatus, error) { // jshint ignore:line
                         reject.apply(null, arguments);
                     }
                 });
             });
         }
 
-    }
+    };
 
     return Client;
 

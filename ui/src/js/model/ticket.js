@@ -1,5 +1,6 @@
 
 define(['ojs/ojmodel'], function(Model) {
+  "use strict";
 
   let Ticket = Model.Model.extend({
     urlRoot: '/api/tickets/',
@@ -46,7 +47,6 @@ define(['ojs/ojmodel'], function(Model) {
         if (queryString) {
           url += '?' + queryString;
         }
-        //console.log(url)
         return url;
       },
   
@@ -60,7 +60,7 @@ define(['ojs/ojmodel'], function(Model) {
         // aren't empty yet.
         return {
           hasMore: (args || []).length > 0
-        }
+        };
       },
 
       // No url. We are using the customURL option
@@ -72,7 +72,7 @@ define(['ojs/ojmodel'], function(Model) {
       comparator: "id"
     });
     return new TicketCollection();
-  }
+  };
 
   return {
     Model: Ticket,

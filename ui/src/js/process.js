@@ -1,4 +1,5 @@
 define(["./services/client"], function(client) {
+  "use strict";
   let data = null;
   return {
     getProcess: async () => {
@@ -9,5 +10,5 @@ define(["./services/client"], function(client) {
         return data;
       }
     }
-  }
+  };
 });

@@ -7,8 +7,7 @@ const chalk = require('chalk');
 
 const config = require('./config');
 
-// Ignore log messages if they have { private: true }
-const ignorePrivate = format((info, opts) => {
+const filterDisabled = format((info, opts) => {
   if (info.silent) {
     return false;
   }
@@ -18,7 +17,7 @@ const ignorePrivate = format((info, opts) => {
 let consoleConfig = { 
   level: 'info',
   format: combine(
-    ignorePrivate(),
+    filterDisabled(),
     timestamp(),
     format.colorize(),
     printf(args => {
@@ -47,7 +46,6 @@ const logger = winston.createLogger({
         timestamp(),
         printf(args => {
           let { level, message, timestamp, name } = args;
-          //console.log('-----', args);
           return `${name} ${timestamp} ${level}: ${message}`;
         })
       ),
@@ -64,18 +62,6 @@ const getLogger = (name) => {
     childConfig.silent = false; // Always enabled
   }
   let child = logger.child(childConfig);
-  return child;
-}
-
-const getLogger1 = (name) => {
-  let child = logger.transports[name];
-  if (!child) {
-    let loggerConfig = { 
-      name,
-      silent: !config.logging.console[name]
-    };
-    child = logger.add(new winston.transports.Console(Object.assign(loggerConfig, consoleConfig)));
-  }
   return child;
 };
 
