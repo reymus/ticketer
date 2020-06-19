@@ -107,6 +107,7 @@ const createTicket = async(ticket) => {
     let model = Tickets;
     let values = [];
     let fields = Object.keys(model.fields);
+    console.log(ticket);
     for (let i = 0; i < fields.length; i++) {
         if (fields[i] != 'id' && fields[i] in ticket) {
             values.push(`'${ticket[fields[i]]}'`);
@@ -116,7 +117,6 @@ const createTicket = async(ticket) => {
     }
     
     let sql = `INSERT INTO ${model.table} VALUES(${values.join(', ')})`;
-    console.log(fields);
     console.log(sql);
     let result;
     try {
@@ -143,7 +143,6 @@ const updateTicket = async(ticket, id) => {
 
     let sql = `UPDATE ${model.table} SET ${values} WHERE ${model.table}.${model.primaryKey}='${id}'`;
     logger.info(`Updating ticket with SQL: ${sql}`);
-
     let result;
     try {
         result = await db.query(sql);
@@ -151,7 +150,7 @@ const updateTicket = async(ticket, id) => {
         let message = messages.errors(e.errno);
         throw new Error(message);
     }
-
+    
     let res = await getTicket(id);
     return res;
 };

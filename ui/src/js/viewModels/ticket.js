@@ -112,14 +112,20 @@ function(ko, client, process, ArrayDataProvider, DataCollectionEditUtils) {
         created_at: now.toISOString().replace("T"," ").replace("Z"," ")
       }
       console.log(info);
-      self.editorMode('read');
       if(self.editorMode() == "create"){
+        //Change editor so the UI changes to the "view" mode before waiting for an answer
+        self.editorMode('read');
+
         //create ticket method from client should be invoked here
         let answer = await client.invoke('Tickets.PostTicket',info);
       }else if(self.editorMode() == "edit"){
+        //Change editor so the UI changes to the "view" mode before waiting for an answer
+        self.editorMode('read');
+
         //update ticket method from client should be invoked here
         let answer = await client.invoke('Tickets.PatchTicket',info);
       }
+      
     }
 
     self.changeToEditMode = function(){
