@@ -13,11 +13,13 @@ const getProcessData = async () => {
   let resolutions = await fetchAll(model.Resolutions);
   let ticket_types = await fetchAll(model.TicketTypes);
   let severities = await fetchAll(model.Severities);
+  let users = await fetchAll(model.Users);
   return {
     status,
     resolutions,
     ticket_types,
-    severities
+    severities,
+    users
   };
 };
 

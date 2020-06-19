@@ -59,10 +59,11 @@ define(['jquery', './../appViewModel', './services', 'promise'], function($, app
         let endpointParams = endpoint.params || [];
         for (let i = 0; i < endpointParams.length; i++) {
             let paramDef = endpointParams[i];
-            if (paramDef.paramType === ParamTypes.Body) {
-                // ...
+            if (paramDef.paramType === ParamTypes.Body && (typeof params[paramDef.name] !== 'undefined')) {
+                body[paramDef.name] = params[paramDef.name];
             }
         }
+        body = JSON.stringify(body)
         return body;
     };
 

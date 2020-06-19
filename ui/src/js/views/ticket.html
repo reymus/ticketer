@@ -1,7 +1,87 @@
-<div class="oj-hybrid-padding">
-  <h1><span><oj-bind-text value="[[ title ]]"></oj-bind-text></span></h1>
+<!--
+ Copyright (c) 2014, 2020, Oracle and/or its affiliates.
+ The Universal Permissive License (UPL), Version 1.0
+ -->
+ <div class="oj-hybrid-padding">
+  <h1>
+    <oj-bind-text value='[[title]]'></oj-bind-text>
+  </h1>
+  
   <hr />
   <div id="formContainer">
+    <div id="actionButtons" style="text-align: right;">   
+      <oj-bind-if test='[[editorMode()=="create"]]'>
+        <oj-button on-oj-action='[[submitTicket]]' disabled='[[editorMode()=="read"]]'>
+          <span>Create</span>
+        </oj-button>
+      </oj-bind-if>
+      <oj-bind-if test='[[editorMode()=="read"]]'>
+        <oj-button on-oj-action='[[changeToEditMode]]' disabled='[[editorMode()=="edit"]]'>
+          <span>Edit</span>
+        </oj-button>
+      </oj-bind-if>
+      <oj-bind-if test='[[editorMode()=="edit"]]'>
+        <oj-button on-oj-action='[[submitTicket]]' disabled='[[editorMode()=="read"]]'>
+          <span>Update</span>
+        </oj-button>
+      </oj-bind-if>
+      <oj-bind-if test='[[editorMode()=="create"]]'>
+        <oj-button on-oj-action = '[[clearForm]]' disabled='[[editorMode()=="read"]]'>
+         <span>Limpiar datos</span>
+        </oj-button>
+      </oj-bind-if>
+    </div>
+    <oj-form-layout max-columns=2 class="oj-form-control-full-width">  
     
+    </oj-form-layout>
+    <br>
+    <oj-form-layout max-columns=2 class="oj-form-control-full-width">  
+      <oj-label for='summary' help.definition='Resumen'
+        show-required=true >Resumen 
+      </oj-label>
+      <oj-input-text id="summary" readonly='[[editorMode()=="read"]]'
+      value='{{summary}}'></oj-input-text>
+
+      <oj-label for='owner' show-required=true 
+      help.definition='Selecciona a quién le corresponde el ticket'>Asignar ticket a
+      </oj-label>
+      <oj-select-single id='owner' value='{{owner}}' data='[[ownerOpts]]' 
+      placeholder="" readonly='[[editorMode()=="read"]]'>
+      </oj-select-single>
+    
+      <oj-label for='ticketType' show-required=true
+      help.definition='Selecciona el tipo de ticket'>Tipo de ticket
+      </oj-label>
+      <oj-select-single id='ticketType' value='{{ticketType}}'  data='[[ticketTypeOpts]]' 
+      placeholder="" readonly='[[editorMode()=="read"]]'>
+      </oj-select-single>
+    
+      <oj-label for='ticketSeverity' show-required=true
+      help.definition='Selecciona el nivel de urgencia del ticket'>Urgencia del ticket
+      </oj-label>
+      <oj-select-single id='ticketSeverity' value='{{ticketSeverity}}' data='[[ticketSeverityOpts]]' 
+      placeholder="" readonly='[[editorMode()=="read"]]'>
+      </oj-select-single>
+
+      <oj-label for='ticketStatus' show-required=true
+      help.definition='Selecciona el status del ticket'>Estatus del ticket
+      </oj-label>
+      <oj-select-single id='ticketStatus' value='{{ticketStatus}}' data='[[ticketStatusOpts]]' 
+      placeholder="" readonly='[[editorMode()=="read"]]'>
+      </oj-select-single>
+      <oj-bind-if test='[[!(editorMode()=="create")]]'>
+        <oj-label for='creationDate' help.definition='La fecha en que se creó el ticket'>Fecha de creación
+        </oj-label>
+        <oj-input-date id='creationDate' value='{{creationDate}}' readonly=true>
+        </oj-input-date>
+     </oj-bind-if>
+    </oj-form-layout>
+    <oj-label for='description' 
+    help.definition='La descripción completa del asunto'>Descripción
+    </oj-label>
+    <oj-text-area id='description' help.instruction="Por favor describe el asunto" 
+    required=true label-edge="provided" value='{{description}}' readonly='[[editorMode()=="read"]]'
+    class="oj-form-control-full-width" max-rows="-1" rows="5">
+    </oj-text-area>
   </div>
 </div>

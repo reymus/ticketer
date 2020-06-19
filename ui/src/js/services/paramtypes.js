@@ -5,4 +5,4 @@ define([], function() {
       Query: 'Query', 
       Body: 'Body'
   };
-});
+}); 
