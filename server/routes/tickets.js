@@ -34,7 +34,7 @@ app.get('/:id', authenticate, async(req, res) => {
         res.send(result);
     } catch (err) {
         //maybe create error log file instead of send error
-
+ 
         // TODO: DO NOT assume err.errno is defined.
         let message = messages.errors(err.errno);
         res.status('500').json({
@@ -46,9 +46,12 @@ app.get('/:id', authenticate, async(req, res) => {
 
 app.post('/', authenticate, async(req, res) => {
     let body = req.body;
+    let params = getCommonParams(req);
+    console.log('Parametros: ')
+    console.log(params)
     //to do: validate body types values
     try {
-        let result = await controller.createTicket(body);
+        let result = await controller.createTicket(params.filters);
         res.status(201).send(result);
 
     } catch (err) {
@@ -62,6 +65,7 @@ app.post('/', authenticate, async(req, res) => {
 
 app.patch('/:id', authenticate, async(req, res) => {
     let body = req.body;
+    console.log(body);
     // to do validate body types values
     try {
         let exists = await controller.getTicket(req.params.id);
@@ -69,7 +73,6 @@ app.patch('/:id', authenticate, async(req, res) => {
         if (exists == null) {
             res.status('404').json({
                 message: messages.NOT_FOUND
-
             });
             return;
         }

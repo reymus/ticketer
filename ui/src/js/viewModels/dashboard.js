@@ -15,9 +15,6 @@ function(ko, client, process, ArrayDataProvider, DataCollectionEditUtils) {
 
   function DashboardViewModel() {
     let self = this;
-    process.getProcess().then((processData)=>{
-
-    });
     
     self.modeViews = [
       {id: 'create', label: 'Crear'},
@@ -72,7 +69,7 @@ function(ko, client, process, ArrayDataProvider, DataCollectionEditUtils) {
       return '';
     }
 
-    self.submitTicket = function(){
+    self.submitTicket = async function(){
       let info = {
         title: self.summary(),
         description: self.description(),
@@ -83,6 +80,7 @@ function(ko, client, process, ArrayDataProvider, DataCollectionEditUtils) {
       }
       if(self.formMode() == "create"){
         //create ticket method from client should be invoked here
+        let answer = await client.invoke('Tickets.')
       }else if(self.formMode() == "edit"){
         //update ticket method from client should be invoked here
       }
@@ -96,6 +94,7 @@ function(ko, client, process, ArrayDataProvider, DataCollectionEditUtils) {
       self.owner('');
       self.ticketSeverity('');
       self.ticketStatus('');
+      self.ticketType('');
     }
 
     self.getTicket = async function(){

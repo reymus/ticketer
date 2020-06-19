@@ -55,6 +55,65 @@ define(["./paramtypes"], function(ParamTypes) {
         }, {
           name: 'severity',
           paramType: ParamTypes.Body
+        },
+        {
+          name: 'owner',
+          paramType: ParamTypes.Body
+        },
+        {
+          name: 'status',
+          paramType: ParamTypes.Body
+        },
+        {
+          name: 'created_at',
+          paramType: ParamTypes.Body
+        },
+        {
+          name: 'created_by',
+          paramType: ParamTypes.Body
+        }
+      ]
+    },
+    PatchTicket: {
+      method: 'PATCH',
+      path: '/api/tickets/{id}',
+      params: [
+        {
+          name: 'id',
+          paramType: ParamTypes.Path,
+          required: true
+        },
+        {
+          name: 'summary',
+          paramType: ParamTypes.Body,
+        }, 
+        {
+          name: 'description',
+          paramType: ParamTypes.Body
+        }, 
+        {
+          name: 'type',
+          paramType: ParamTypes.Body,
+        }, 
+        {
+          name: 'severity',
+          paramType: ParamTypes.Body
+        },
+        {
+          name: 'owner',
+          paramType: ParamTypes.Body
+        },
+        {
+          name: 'status',
+          paramType: ParamTypes.Body
+        },
+        {
+          name: 'created_at',
+          paramType: ParamTypes.Body
+        },
+        {
+          name: 'created_by',
+          paramType: ParamTypes.Body
         }
       ]
     }
