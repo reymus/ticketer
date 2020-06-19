@@ -46,12 +46,9 @@ app.get('/:id', authenticate, async(req, res) => {
 
 app.post('/', authenticate, async(req, res) => {
     let body = req.body;
-    let params = getCommonParams(req);
-    console.log('Parametros: ')
-    console.log(params)
     //to do: validate body types values
     try {
-        let result = await controller.createTicket(params.filters);
+        let result = await controller.createTicket(body);
         res.status(201).send(result);
 
     } catch (err) {
