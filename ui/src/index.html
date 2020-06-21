@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 
 <html lang="en-us">
-  <head>
+
+<head>
     <title>Ticketer</title>
 
     <meta charset="UTF-8">
@@ -10,65 +11,64 @@
 
     <!-- This is the main css file for the default Alta theme -->
     <!-- injector:theme -->
-    <link rel="stylesheet" href="css/alta/8.3.0/web/alta.css" id="css" type="text/css"/>
+    <link rel="stylesheet" href="css/alta/8.3.0/web/alta.css" id="css" type="text/css" />
     <!-- endinjector -->
-    
+
     <!-- This contains icon fonts used by the starter template -->
-    <link rel="stylesheet" href="css/demo-alta-site-min.css" type="text/css"/>
+    <link rel="stylesheet" href="css/demo-alta-site-min.css" type="text/css" />
 
     <!-- This is where you would add any app specific styling -->
-    <link rel="stylesheet" href="css/app.css" type="text/css"/>
+    <link rel="stylesheet" href="css/app.css" type="text/css" />
 
     <!-- Fontawesome dpendencies... -->
-    <link rel="stylesheet" href="css/fontawesome/solid.css" type="text/css"/>
-    <link rel="stylesheet" href="css/fontawesome/fontawesome.css" type="text/css"/>
+    <link rel="stylesheet" href="css/fontawesome/solid.css" type="text/css" />
+    <link rel="stylesheet" href="css/fontawesome/fontawesome.css" type="text/css" />
 
-  </head>
-  <body class="oj-web-applayout-body">
+</head>
+
+<body class="oj-web-applayout-body">
 
     <!-- Template for rendering navigation items shared between nav bar and nav list -->
     <script type="text/html" id="navTemplate">
-      <li><a href="#">
-        <span :class="[[$data['iconClass']]]"></span>
-        <oj-bind-text value="[[$data['name']]]"></oj-bind-text>
-      </a></li>
+        <li>
+            <a href="#">
+                <span :class="[[$data['iconClass']]]"></span>
+                <oj-bind-text value="[[$data['name']]]"></oj-bind-text>
+            </a>
+        </li>
     </script>
 
     <div id="globalBody" class="oj-offcanvas-outer-wrapper oj-offcanvas-page">
 
-      <!-- Nav Drawer: Menu shown when in small screens -->
-      <div id="navDrawer" role="navigation" class="oj-contrast-marker oj-web-applayout-offcanvas oj-offcanvas-start">
-        <oj-navigation-list id="navDrawerList" data="[[navDataProvider]]"
-                            edge="start"
-                            item.renderer="[[KnockoutTemplateUtils.getRenderer('navTemplate', true)]]"
-                            on-click="[[toggleDrawer]]"
-                            selection="{{router.stateId}}">
-        </oj-navigation-list>
-      </div>
+        <!-- Nav Drawer: Menu shown when in small screens -->
+        <div id="navDrawer" role="navigation" class="oj-contrast-marker oj-web-applayout-offcanvas oj-offcanvas-start">
+            <oj-navigation-list id="navDrawerList" data="[[navDataProvider]]" edge="start" item.renderer="[[KnockoutTemplateUtils.getRenderer('navTemplate', true)]]" on-click="[[toggleDrawer]]" selection="{{router.stateId}}">
+            </oj-navigation-list>
+        </div>
 
-      <div id="pageContent" class="oj-web-applayout-page">
-        
-        <header role="banner" class="oj-web-applayout-header">
-          <oj-module config="[[ moduleUtils.createConfig({ name: 'header' })]]" >
-          </oj-module>
-        </header>
+        <div id="pageContent" class="oj-web-applayout-page">
 
-        <!-- Module: This is where the actual modules are inserted at runtime -->
-        <oj-module role="main" class="oj-web-applayout-max-width oj-web-applayout-content" config="[[moduleConfig]]">
-        </oj-module>
-        
-        <!-- footer -->
-        <footer class="oj-web-applayout-footer" role="contentinfo">
-          <oj-module config="[[ moduleUtils.createConfig({ name: 'footer' })]]" >
-          </oj-module>
-        </footer>
+            <header role="banner" class="oj-web-applayout-header">
+                <oj-module config="[[ moduleUtils.createConfig({ name: 'header' })]]">
+                </oj-module>
+            </header>
 
-      </div>
+            <!-- Module: This is where the actual modules are inserted at runtime -->
+            <oj-module role="main" class="oj-web-applayout-max-width oj-web-applayout-content" config="[[moduleConfig]]">
+            </oj-module>
+
+            <!-- footer -->
+            <footer class="oj-web-applayout-footer" role="contentinfo">
+                <oj-module config="[[ moduleUtils.createConfig({ name: 'footer' })]]">
+                </oj-module>
+            </footer>
+
+        </div>
     </div>
-    
-    <!-- Load require.js and it's configuration -->
-    <script type="text/javascript" src="js/libs/require/require.js" data-main="js/main.js"></script>
 
-  </body>
+    <!-- Load require.js and it's configuration -->
+    <!--<script type="text/javascript" src="js/libs/require/require.js" data-main="js/main.js"></script>-->
+
+</body>
 
 </html>
