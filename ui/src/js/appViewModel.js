@@ -11,10 +11,11 @@ define([
     'ojs/ojasyncvalidator-regexp',
     './services/client',
     './utils/cache',
+    './utils/decoder',
     'ojs/ojmessages',
     'ojs/ojmodule-element',
     'ojs/ojknockout'
-], function(config, ko, moduleUtils, KnockoutTemplateUtils, Router, ResponsiveUtils, ResponsiveKnockoutUtils, ArrayDataProvider, OffcanvasUtils, AsyncRegExpValidator, client, cache) {
+], function(config, ko, moduleUtils, KnockoutTemplateUtils, Router, ResponsiveUtils, ResponsiveKnockoutUtils, ArrayDataProvider, OffcanvasUtils, AsyncRegExpValidator, client, cache, decoder) {
     "use strict";
 
     function AppViewModel() {
@@ -155,10 +156,17 @@ define([
                 self.login.password.subscribe(() => {
                     self.login.isError(false);
                 });
-                //setTimeout(function() { self.isError(false); }, 3000);
             });
         };
 
+        self.userInformation = () => {
+            if (self.isLoggedIn()) {
+                let userInfo = decoder.parseJwt(cache.get('Authorization'));
+                return userInfo.user.first_name + ' ' + userInfo.user.last_name;
+            } else {
+                return '';
+            }
+        };
         self.isLoggedIn = () => {
             if (cache.get('Authorization')) {
                 return true;
