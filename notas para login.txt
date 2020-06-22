@@ -1,6 +1,0 @@
-
-create cache  and store token in sesion storage
-login.html -> a nivel de index 
-https://www.oracle.com/webfolder/technetwork/jet-320/jetCookbook.html?component=controlcombos&demo=loginform
-
-https://www.oracle.com/webfolder/technetwork/jet/jetCookbook.html?component=ojFormLayout&demo=colspan
