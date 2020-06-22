@@ -10,9 +10,11 @@ define([
     'ojs/ojoffcanvas',
     'ojs/ojasyncvalidator-regexp',
     './services/client',
+    './utils/cache',
+    'ojs/ojmessages',
     'ojs/ojmodule-element',
     'ojs/ojknockout'
-], function(config, ko, moduleUtils, KnockoutTemplateUtils, Router, ResponsiveUtils, ResponsiveKnockoutUtils, ArrayDataProvider, OffcanvasUtils, AsyncRegExpValidator, client) {
+], function(config, ko, moduleUtils, KnockoutTemplateUtils, Router, ResponsiveUtils, ResponsiveKnockoutUtils, ArrayDataProvider, OffcanvasUtils, AsyncRegExpValidator, client, cache) {
     "use strict";
 
     function AppViewModel() {
@@ -126,43 +128,51 @@ define([
             });
         }
         //read user and password 
-
-        self.user = ko.observable("");
-        self.password = ko.observable("");
-        self.emailPatternValidator = ko.observableArray([
-            new AsyncRegExpValidator({
-                pattern: "[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*",
-                hint: "enter a valid email format",
-                messageDetail: "Not a valid email format"
-            })
-        ]);
-        let pass;
-        let mail;
-        self.password.subscribe(function(newValue) {
-            pass = newValue;
-        });
-        self.user.subscribe(function(newValue) {
-            mail = newValue;
-        });
-
-        self.sendLoginForm = async(event) => {
-
-            let credentials = self.format(mail, pass);
-            //console.log(self.password());
-            let token = await client.invoke('Login.GetToken', credentials);
-            console.log(token);
-            // self.cleanForm();
+        self.login = {
+            user: ko.observable(""),
+            password: ko.observable(""),
+            isError: ko.observable(false),
+            errorMessage: ko.observable(""),
+            emailPatternValidator: ko.observableArray([
+                new AsyncRegExpValidator({
+                    pattern: "[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*",
+                    hint: "enter a valid email format",
+                    messageDetail: "Not a valid email format"
+                })
+            ])
+        }
+        self.sendLoginForm = async() => {
+            let credentials = self.loginFormatBody(self.login.user(), self.login.password());
+            await client.invoke('Login.Login', credentials).then((result) => {
+                cache.put('Authorization', result.token);
+                window.location = '/';
+            }).catch((result) => {
+                self.login.isError(true);
+                self.login.errorMessage(result.responseJSON.message);
+                self.login.user.subscribe(() => {
+                    self.login.isError(false);
+                });
+                self.login.password.subscribe(() => {
+                    self.login.isError(false);
+                });
+                //setTimeout(function() { self.isError(false); }, 3000);
+            });
         };
-        self.format = (email, password) => {
+
+        self.isLoggedIn = () => {
+            if (cache.get('Authorization')) {
+                return true;
+            } else {
+                return false;
+            }
+        };
+        self.loginFormatBody = (email, password) => {
             return {
                 email: email,
                 password: password
             };
         }
-        self.cleanForm = () => {
-            self.user = ko.observable("");
-            self.password = ko.observable("");
-        }
+
     }
 
     return new AppViewModel();

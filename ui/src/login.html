@@ -31,12 +31,21 @@
     <div id="globalBody" class="oj-offcanvas-outer-wrapper oj-offcanvas-page">
         <div id="loginDiv" class="centerDiv blackBorderRadious">
             <oj-label for='user' show-required=true>User</oj-label>
-            <oj-input-text id='user' class="fullWidth" required='true' value='{{user}}' validators="[[emailPatternValidator]]"></oj-input-text>
+            <oj-input-text id='user' class="fullWidth" required='true' raw-value='{{login.user}}' validators="[[login.emailPatternValidator]]"></oj-input-text>
             <oj-label for="password" show-required=true>Password</oj-label>
-            <oj-input-password id="user" class="fullWidth" value="{{password}}"></oj-input-password>
-            <br/><br/>
+            <oj-input-password id="user" class="fullWidth" raw-value="{{login.password}}"></oj-input-password>
+            <br/>
+            <oj-bind-if test="[[login.isError() === true]]">
+                <span class="errorMessage"><oj-bind-text value="[[login.errorMessage]]" ></oj-bind-text></span>
+                <!--<oj-message id='messageLayot' message="[[errorMessage]]" class="dialogMessage"></oj-message>-->
+            </oj-bind-if>
+            <br/>
             <oj-button id="send" on-oj-action="[[sendLoginForm]]">login</oj-button>
+
         </div>
+
+
+
     </div>
 
     <script type="text/javascript" src="js/libs/require/require.js" data-main="js/main.js"></script>

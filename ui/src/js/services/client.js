@@ -1,4 +1,4 @@
-define(['jquery', './../appViewModel', './services', 'promise', './../utils/cache'], function($, app, services, Promise, cache) {
+define(['jquery', './../appViewModel', './services', './../utils/cache'], function($, app, services, cache) {
     "use strict";
 
     const ParamTypes = {
@@ -7,16 +7,12 @@ define(['jquery', './../appViewModel', './services', 'promise', './../utils/cach
         Body: 'Body'
     };
 
-    const Auth = {
-        name: 'Authorization',
-        value: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjo1LCJmaXJzdF9uYW1lIjoidGVzdCBuYW1lIiwibGFzdF9uYW1lIjoidGVzdCBsYXN0IiwiZW1haWwiOiJ4eHh4QHh4YS5jb20ifSwiaWF0IjoxNTkyNjcyMjgyLCJleHAiOjE1OTI2ODY2ODJ9.YIUrLmmIw_G1f9O8v2Ao1rFWh4_7esWgfarP_Hz2KtA'
-    };
-
     const getEndpoint = (path) => {
         let segments = path.split('.');
         let endpoint = services;
         while (segments.length > 0) {
             let segment = segments.shift();
+
             endpoint = endpoint[segment];
         }
         // For better error handling, set the endpoint name 
@@ -73,20 +69,15 @@ define(['jquery', './../appViewModel', './services', 'promise', './../utils/cach
     };
 
 
-    const getAuthorizationHeader = () => {
-        let key = Auth.name;
-        let token = cache.get(key);
-        return token;
-    }
 
-    const setAuthorizationHeader = () => {
-        let key = Auth.name;
-        let value = Auth.value;
-        cache.put(key, value)
-    }
 
     const Client = {
 
+
+        getAuthorizationHeader: () => {
+            let token = cache.get('Authorization');
+            return token;
+        },
 
         invoke: function(endpointPath, params) {
             let endpoint = getEndpoint(endpointPath);
@@ -106,8 +97,8 @@ define(['jquery', './../appViewModel', './services', 'promise', './../utils/cach
 
             // Build the body payload
             let payload = getBody(endpoint, params);
-            setAuthorizationHeader();
-            let auth = getAuthorizationHeader();
+            //authorization 
+            let auth = this.getAuthorizationHeader();
 
             return new Promise(function(resolve, reject) {
 
@@ -134,6 +125,9 @@ define(['jquery', './../appViewModel', './services', 'promise', './../utils/cach
 
                     error: function(jqXhr, textStatus, error) { // jshint ignore:line
                         reject.apply(null, arguments);
+                    },
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('Authorization', auth);
                     }
                 });
             });

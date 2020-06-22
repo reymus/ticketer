@@ -1,7 +1,7 @@
 define(['./paramtypes'], function(paramTypes) {
     'use strict';
     return {
-        GetToken: {
+        Login: {
             method: 'POST',
             path: '/api/login/',
             params: [{
