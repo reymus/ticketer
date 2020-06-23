@@ -195,13 +195,12 @@ define([
         });
     };
 
+    if(self.isLoggedIn()) {
+      self.login.authenticatedUser(decoder.parseJwt(cache.get("Authorization")));
+    } 
+    
     self.getUserInformation = () => {
-      if(self.isLoggedIn()) {
-        self.login.authenticatedUser(decoder.parseJwt(cache.get("Authorization")));
-        return self.getUserFullName();
-      } else {
-        return "";
-      }
+      return self.getUserFullName();
     };
 
     self.getUserFullName=()=>{
