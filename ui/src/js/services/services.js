@@ -1,4 +1,4 @@
-define(["./paramtypes", "./tickets", "./process"], function(ParamTypes, Tickets, Process) {
+define(["./paramtypes", "./tickets", "./process", "./login"], function(ParamTypes, Tickets, Process, Login) {
     "use strict";
     const Services = {
 
@@ -6,17 +6,16 @@ define(["./paramtypes", "./tickets", "./process"], function(ParamTypes, Tickets,
 
         Process,
 
+        Login,
         // TODO: Remove after POC
         SampleInvalidPath: {
             SampleInvalidEndpoint: {
                 method: 'GET',
                 path: '/api/invalid/',
-                params: [
-                    {
-                        name: 'sortBy',
-                        paramType: ParamTypes.Query
-                    }
-                ]
+                params: [{
+                    name: 'sortBy',
+                    paramType: ParamTypes.Query
+                }]
             }
         }
     };

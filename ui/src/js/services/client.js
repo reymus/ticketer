@@ -1,9 +1,9 @@
-define(['jquery', './../appViewModel', './services', 'promise'], function($, app, services, Promise) {
+define(['jquery', './../appViewModel', './services', './../utils/cache'], function($, app, services, cache) {
     "use strict";
-    
+
     const ParamTypes = {
-        Path: 'Path', 
-        Query: 'Query', 
+        Path: 'Path',
+        Query: 'Query',
         Body: 'Body'
     };
 
@@ -12,6 +12,7 @@ define(['jquery', './../appViewModel', './services', 'promise'], function($, app
         let endpoint = services;
         while (segments.length > 0) {
             let segment = segments.shift();
+
             endpoint = endpoint[segment];
         }
         // For better error handling, set the endpoint name 
@@ -67,8 +68,16 @@ define(['jquery', './../appViewModel', './services', 'promise'], function($, app
         return body;
     };
 
+
+
+
     const Client = {
 
+
+        getAuthorizationHeader: () => {
+            let token = cache.get('Authorization');
+            return token;
+        },
 
         invoke: function(endpointPath, params) {
             let endpoint = getEndpoint(endpointPath);
@@ -88,31 +97,37 @@ define(['jquery', './../appViewModel', './services', 'promise'], function($, app
 
             // Build the body payload
             let payload = getBody(endpoint, params);
+            //authorization 
+            let auth = this.getAuthorizationHeader();
 
             return new Promise(function(resolve, reject) {
-                
+
                 $.ajax({
-                    
+
                     method: endpoint.method,
-                    
+
                     url: url,
-                    
+
                     headers: {
-                        Accept: 'application/json'
+                        Accept: 'application/json',
+                        Authorization: auth
                     },
 
                     contentType: 'application/json',
-        
+
                     data: payload,
-        
+
 
                     success: function(data, textStatus, jqXhr) { // jshint ignore:line
-                        
+
                         resolve.apply(null, arguments);
                     },
-        
+
                     error: function(jqXhr, textStatus, error) { // jshint ignore:line
                         reject.apply(null, arguments);
+                    },
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('Authorization', auth);
                     }
                 });
             });
