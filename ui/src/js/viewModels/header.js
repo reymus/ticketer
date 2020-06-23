@@ -32,7 +32,7 @@ define([
         self.appName = ko.observable(appViewModel.config.applicationName);
 
         // User Info used in Global Navigation area
-        self.userLogin = ko.observable(appViewModel.userInformation());
+        self.userLogin = ko.observable(appViewModel.getUserInformation());
 
         // Media queries for repsonsive layouts
         var smQuery = ResponsiveUtils.getFrameworkQuery(ResponsiveUtils.FRAMEWORK_QUERY_KEY.SM_ONLY);
@@ -49,7 +49,7 @@ define([
         //click listener for actions in menu
         self.clickListener = function(event) {
             switch (event.target.value) {
-                case 'out':
+                case 'logout':
                     cache.delete('Authorization');
                     window.location = '/login.html';
                     break;
