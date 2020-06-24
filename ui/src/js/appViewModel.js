@@ -195,6 +195,14 @@ define([
         });
     };
 
+    self.isLoggedIn = () => {
+      if (cache.get("Authorization")) {
+        return true;
+      } else {
+        return false;
+      }
+    };
+    
     if(self.isLoggedIn()) {
       self.login.authenticatedUser(decoder.parseJwt(cache.get("Authorization")));
     } 
@@ -205,14 +213,6 @@ define([
 
     self.getUserFullName=()=>{
       return self.login.authenticatedUser().user.first_name + " " + self.login.authenticatedUser().user.last_name;
-    };
-
-    self.isLoggedIn = () => {
-      if (cache.get("Authorization")) {
-        return true;
-      } else {
-        return false;
-      }
     };
 
     self.getLoginPayload  = () => {
