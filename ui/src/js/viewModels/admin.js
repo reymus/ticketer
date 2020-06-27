@@ -68,16 +68,16 @@
           };
 
           self.getLastId = () => {   
-          return self.userFields()[self.userFields().length-1]["id"]+1;
-          }
+          return self.userFields()[self.userFields().length-1].id+1;
+          };
           //buttons section 
           self.open=(event)=>{
             self.buttonClicked(event.currentTarget.id);
             document.getElementById("modalDialog").open();
-          }
+          };
           self.close=(event)=>{
             document.getElementById("modalDialog").close();
-          }
+          };
           
           //table  section             
           let tableData = [];
@@ -134,7 +134,7 @@
         
           self.usersDataProvider = new ArrayDataProvider(self.userFields,{keyAttributes: 'id'});
  
-      }
+      };
     
     return adminViewModel;
    });

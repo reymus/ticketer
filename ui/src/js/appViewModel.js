@@ -57,7 +57,7 @@ define([
       incidents: { label: "Incidents", title: "Ticketer | Incidents" },
       customers: { label: "Customers", title: "Ticketer | Customers" },
       about: { label: "About", title: "Ticketer | About" },
-      admin: { label: "Admin", title: "Ticketer | About" },
+      admin: { label: "Admin", title: "Ticketer | Admin" },
     });
     Router.defaults.urlAdapter = new Router.urlParamAdapter();
 
