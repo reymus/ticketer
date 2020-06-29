@@ -129,6 +129,28 @@ CREATE TABLE `passwords` (
   CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+
+DROP TABLE IF EXISTS `user_queries`;
+CREATE TABLE `user_queries` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `name` varchar(45) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_user_id_idx` (`user_id`),
+  CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+DROP TABLE IF EXISTS `user_query_filter`;
+CREATE TABLE `user_query_filter` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `query_id` int NOT NULL,
+  `field` varchar(45) NOT NULL,
+  `value` varchar(45) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `fk_query_id_idx` (`query_id`),
+  CONSTRAINT `fk_query_id` FOREIGN KEY (`query_id`) REFERENCES `user_queries` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 --- Severities
 INSERT INTO `severities` VALUES(null, 'Low');
 INSERT INTO `severities` VALUES(null, 'Medium');
@@ -151,3 +173,6 @@ INSERT INTO `users` VALUES(null, "Paco", "Perez", "pakeperez@gmail.com");
 INSERT INTO `users` VALUES(null, "Edgar", "Magana", "edgarmaganaglez@hotmail.com");
 INSERT INTO `users` VALUES(null, "Marcelo", "Ramos", "march.reymus@gmail.com");
 
+INSERT INTO `passwords` VALUES(1, "$2b$10$J5JUtCpP2haYPhsfWiFvRO/PQ7oBzYW3l5egwOIBC6XRDdORfUjVy");
+INSERT INTO `passwords` VALUES(2, "$2b$10$J5JUtCpP2haYPhsfWiFvRO/PQ7oBzYW3l5egwOIBC6XRDdORfUjVy");
+INSERT INTO `passwords` VALUES(3, "$2b$10$J5JUtCpP2haYPhsfWiFvRO/PQ7oBzYW3l5egwOIBC6XRDdORfUjVy");

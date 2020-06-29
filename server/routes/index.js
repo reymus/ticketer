@@ -2,10 +2,11 @@ const express = require('express');
 
 const app = express();
 
+app.use('/login', require('./login'));
 app.use('/users', require('./users'));
 app.use('/tickets', require('./tickets'));
 app.use('/process', require('./process'));
-app.use('/login', require('./login'));
+app.use('/queries', require('./queries'));
 
 app.all('*', (req, res) => {
     res.status(404).send({

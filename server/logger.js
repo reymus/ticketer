@@ -1,7 +1,7 @@
 
 const winston = require('winston');
 const { format } = winston;
-const { combine, timestamp, printf } = format;
+const { combine, timestamp, printf, errors } = format;
 
 const chalk = require('chalk');
 
@@ -14,20 +14,31 @@ const filterDisabled = format((info, opts) => {
   return info;
 });
 
+const errorStackFormat = format(info => {
+  if (info instanceof Error) {
+    return Object.assign({}, info, {
+      stack: info.stack,
+      message: info.message
+    });
+  }
+  return info;
+})
+
 let consoleConfig = { 
   level: 'info',
   format: combine(
+    errors({ stack: true }),
     filterDisabled(),
     timestamp(),
     format.colorize(),
+    errorStackFormat(),
     printf(args => {
       let { level, message, timestamp, name, silent } = args;
       if (!silent) {
         return `${timestamp} ${chalk.yellow(name)} - ${level}: ${message}`;
       } else {
         return null;
-      }
-      
+      }      
     })
   )
 };
@@ -44,6 +55,7 @@ const logger = winston.createLogger({
       level: 'info',
       format: combine(
         timestamp(),
+        errorStackFormat(),
         printf(args => {
           let { level, message, timestamp, name } = args;
           return `${name} ${timestamp} ${level}: ${message}`;

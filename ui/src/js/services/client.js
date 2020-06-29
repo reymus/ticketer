@@ -8,6 +8,7 @@ define(['jquery', './../appViewModel', './services', './../utils/cache'], functi
     };
 
     const getEndpoint = (path) => {
+      try {  
         let segments = path.split('.');
         let endpoint = services;
         while (segments.length > 0) {
@@ -19,6 +20,9 @@ define(['jquery', './../appViewModel', './services', './../utils/cache'], functi
         // to the param used to access it.
         endpoint.name = path;
         return endpoint;
+      } catch (e) {
+        throw new Error(`Unable to resolve endpoint with path ${path}.`);
+      }
     };
 
     const validateParams = (endpoint, params) => {
@@ -55,7 +59,10 @@ define(['jquery', './../appViewModel', './services', './../utils/cache'], functi
         return queryString.join('&');
     };
 
-    const getBody = (endpoint, params) => { // jshint ignore:line
+    const getBody = (endpoint, params) => {
+        if (!['POST', 'PUT', 'PATCH'].includes(endpoint.method)) {
+            return null;
+        }
         let body = {};
         let endpointParams = endpoint.params || [];
         for (let i = 0; i < endpointParams.length; i++) {

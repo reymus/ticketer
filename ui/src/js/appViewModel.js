@@ -202,10 +202,19 @@ define([
         return false;
       }
     };
+
+    let url = window.location.pathname;
+    let filename = url.substring(url.lastIndexOf('/') + 1);
     
-    if(self.isLoggedIn()) {
-      self.login.authenticatedUser(decoder.parseJwt(cache.get("Authorization")));
-    } 
+    if (self.isLoggedIn()) {
+      if (filename === 'login.html') {
+        window.location.href = '/';
+      } else {
+        self.login.authenticatedUser(decoder.parseJwt(cache.get("Authorization")));
+      }
+    } else if (filename !== 'login.html') {
+      window.location.href = 'login.html';
+    }
     
     self.getUserInformation = () => {
       return self.getUserFullName();

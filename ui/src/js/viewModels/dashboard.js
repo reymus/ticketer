@@ -153,18 +153,6 @@ function(ko, client, process, ArrayDataProvider, DataCollectionEditUtils) {
           flatten: true
         });
 
-        // console.log(`Tickets: `);
-        // console.table(tickets);
-
-        try {
-          let invalid = await client.invoke('SampleInvalidPath.SampleInvalidEndpoint', {
-            sortBy: 'owner'
-          });
-          // We don't expect to get this far...
-        } catch (err) {
-          console.log(`InvalidEndpoint produced error: `);
-          console.log(err);
-        }
       };
 
       /**

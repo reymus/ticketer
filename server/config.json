@@ -8,7 +8,10 @@
 
         "console": {
             "database.queryModel": true,
-            "tickets": true
+            "tickets": true,
+            "auth": true,
+            "login.controller": true,
+            "queries": true
         }
 
     },
