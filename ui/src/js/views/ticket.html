@@ -8,6 +8,17 @@
   </h1>
   
   <hr />
+  <div id="dialogWrapper">
+    <oj-dialog style="display:none" id="modalDialog1" dialog-title='[[dialogTitle]]'>
+      <div slot="body">
+        <oj-bind-text value='[[dialogMsg]]'></oj-bind-text>
+      </div>
+      <div slot="footer">
+        <oj-button id="okButton" on-oj-action="[[closeDialog]]">OK
+        </oj-button>
+      </div>
+    </oj-dialog>
+  </div>
   <div id="formContainer">
     <div id="actionButtons" style="text-align: right;">   
       <oj-bind-if test='[[editorMode()=="create"]]'>
@@ -82,4 +93,7 @@
     class="oj-form-control-full-width" max-rows="-1" rows="5">
     </oj-text-area>
   </div>
+  <oj-button on-oj-action='[[throwDialog]]'>
+    <span>Open Dialog</span>
+  </oj-button>
 </div>
