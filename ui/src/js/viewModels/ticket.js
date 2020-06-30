@@ -1,6 +1,7 @@
 define(['knockout', './../services/client','./../process' ,'ojs/ojarraydataprovider', 'ojs/ojdatacollection-utils',
 'ojs/ojbutton', 'ojs/ojinputtext','ojs/ojlabelvalue', 'ojs/ojlabel', 'ojs/ojdatetimepicker', 
-'ojs/ojtable', 'ojs/ojradioset', 'ojs/ojknockout', 'ojs/ojselectcombobox', 'ojs/ojswitch' ,'ojs/ojformlayout','ojs/ojselectsingle'],
+'ojs/ojtable', 'ojs/ojradioset', 'ojs/ojknockout', 'ojs/ojselectcombobox', 'ojs/ojswitch' ,'ojs/ojformlayout','ojs/ojselectsingle',
+'ojs/ojdialog'],
 function(ko, client, process, ArrayDataProvider, DataCollectionEditUtils) {
   "use strict";
 
@@ -10,7 +11,8 @@ function(ko, client, process, ArrayDataProvider, DataCollectionEditUtils) {
 
     self.editorMode = ko.observable('create');
     self.title = ko.observable();
-    
+    self.dialogTitle = ko.observable('');
+    self.dialogMsg = ko.observable('');
     self.getTicket = async function(ticketId){
       //let answer = prompt('Por favor ingresa el número de ticket');
       let ticket = await client.invoke('Tickets.GetTicket', {
@@ -24,7 +26,9 @@ function(ko, client, process, ArrayDataProvider, DataCollectionEditUtils) {
       self.ticketStatus(ticket.status.id);
       self.ticketType(ticket.type.id);
       self.owner(ticket.owner.id);
-      self.creationDate(ticket.created_at)
+      self.creationDate(ticket.created_at);
+      
+
     }
 
     if (viewParams.id) {
@@ -98,6 +102,14 @@ function(ko, client, process, ArrayDataProvider, DataCollectionEditUtils) {
       return '';
     }
 
+    self.showDialog = function(){
+      document.getElementById('modalDialog1').open();
+    };
+
+    self.closeDialog = function(){
+      document.getElementById('modalDialog1').close();
+    };
+
     self.submitTicket = async function(){
       let now = new Date();
       let info = {
@@ -110,27 +122,49 @@ function(ko, client, process, ArrayDataProvider, DataCollectionEditUtils) {
         owner: self.owner(),
         created_by: self.owner(),
         created_at: now.toISOString().replace("T"," ").replace("Z"," ")
-      }
+      };
       console.log(info);
       if(self.editorMode() == "create"){
-        //Change editor so the UI changes to the "view" mode before waiting for an answer
-        self.editorMode('read');
-
-        //create ticket method from client should be invoked here
-        let answer = await client.invoke('Tickets.PostTicket',info);
+        try{
+          //create ticket method from client should be invoked here
+          let answer = await client.invoke('Tickets.PostTicket',info);
+          console.log(answer);
+          //Change editor so the UI changes to the "view" mode before waiting for an answer
+          self.editorMode('read');
+        }catch(e){
+          console.log(e);
+          self.dialogTitle('Error al crear el ticket');
+          if(e.message !== undefined){
+            self.dialogMsg(e.message);
+          }else{
+            let message = `${e.status} ${e.statusText}`;
+            self.dialogMsg(message);
+          }
+          self.showDialog();
+        }
       }else if(self.editorMode() == "edit"){
-        //Change editor so the UI changes to the "view" mode before waiting for an answer
-        self.editorMode('read');
-
-        //update ticket method from client should be invoked here
-        let answer = await client.invoke('Tickets.PatchTicket',info);
+        try{
+          //create ticket method from client should be invoked here
+          let answer = await client.invoke('Tickets.PatchTicket',info);
+          console.log(answer);
+          //Change editor so the UI changes to the "view" mode before waiting for an answer
+          self.editorMode('read');
+        }catch(e){
+          self.dialogTitle('Error al actualizar el ticket');
+          if(e.message !== undefined){
+            self.dialogMsg(e.message);
+          }else{
+            let message = `${e.status} ${e.statusText}`;
+            self.dialogMsg(message);
+          }
+          self.showDialog();
+        }
       }
-      
     }
 
     self.changeToEditMode = function(){
       self.editorMode('edit');
-    }
+    };
 
     self.clearForm = function(){
       self.summary('');
@@ -139,7 +173,7 @@ function(ko, client, process, ArrayDataProvider, DataCollectionEditUtils) {
       self.ticketSeverity('');
       self.ticketStatus('');
       self.ticketType('');
-    }
+    };
 
     self.connected = async function() {
       let processData = await process.getProcess();
@@ -163,14 +197,6 @@ function(ko, client, process, ArrayDataProvider, DataCollectionEditUtils) {
         self.owners.push({value: row.id, label: (row.first_name+' '+row.last_name)});
       });
       self.owners.sort(function(x,y){return x.label-y.label});
-
-      let tickets = await client.invoke('Tickets.GetAllTickets', {
-        fields: ['id', 'owner', 'summary', 'type', 'created_by', 'status', 'severity'],
-        sortBy: ['owner.email', 'id:DESC'],
-        limit: 25,
-        // We want to be able to show the results in a table nicely
-        flatten: true
-      });
 
       //  try {
       //   let invalid = await client.invoke('SampleInvalidPath.SampleInvalidEndpoint', {
