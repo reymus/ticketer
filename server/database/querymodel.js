@@ -23,11 +23,14 @@ let queryModel = new QueryModel(Tickets);
 const logger = require("./../logger").getLogger("database.queryModel");
 
 const QueryModel = function(model) {
-    this.model = model;
+  if (!model) {
+    throw new Error("Model cannot be null.");
+  }
+  this.model = model;
 
-    this.fields = [];
-    this.orderByList = [];
-    this.whereList = [];
+  this.fields = [];
+  this.orderByList = [];
+  this.whereList = [];
 };
 
 QueryModel.prototype.select = function(fields) {

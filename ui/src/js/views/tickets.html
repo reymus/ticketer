@@ -103,11 +103,32 @@
       <oj-collapsible expanded="true">
         <h5 slot="header" class="oj-header-border">Views</h5>
         <ul class="tickets-view-list">
-          <li><span class="fas fa-filter"></span><a href="#" on-click="[[ handleOpenView.bind(null, 'allOpen') ]]">All Open Tickets</a></li>
-          <li><span class="fas fa-filter"></span><a href="#" on-click="[[ handleOpenView.bind(null, 'myTickets') ]]">My Tickets</a></li>
-          <li><span class="fas fa-filter"></span><a href="#" on-click="[[ handleOpenView.bind(null, 'other1') ]]">Other view 1</a></li>
-          <li><span class="fas fa-filter"></span><a href="#" on-click="[[ handleOpenView.bind(null, 'other2') ]]">Other view 2</a></li>
-          <li><span class="fas fa-filter"></span><a href="#" on-click="[[ handleOpenView.bind(null, 'other3') ]]">Other view 3</a></li>
+          <oj-bind-for-each data="[[ views().system ]]">
+            <template>
+              <li>
+                <span class="fas fa-filter"></span>
+                <a href="#" on-click="[[ handleOpenView.bind(null, $current.data.name) ]]">
+                  <oj-bind-text value="[[ $current.data.name ]]"></oj-bind-text>
+                </a>
+              </li>
+            </template>
+          </oj-bind-foreach>
+        </ul>
+      </oj-collapsible>
+
+      <oj-collapsible expanded="true">
+        <h5 slot="header" class="oj-header-border">Saved Views</h5>
+        <ul class="tickets-view-list">
+          <oj-bind-for-each data="[[ views().user ]]">
+            <template>
+              <li>
+                <span class="fas fa-filter"></span>
+                <a href="#" on-click="[[ handleOpenView.bind(null, $current.data.name) ]]" class="view-name">
+                  <oj-bind-text value="[[ $current.data.name ]]"></oj-bind-text>
+                </a>
+              </li>
+            </template>
+          </oj-bind-foreach>
         </ul>
       </oj-collapsible>
 

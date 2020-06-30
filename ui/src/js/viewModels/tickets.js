@@ -3,6 +3,8 @@ define([
   './../appViewModel',
   './../model/ticket',
   './../process',
+  './../services/client',
+
   'ojs/ojarraydataprovider', 
   'ojs/ojbootstrap', 
   'ojs/ojknockout', 
@@ -19,14 +21,17 @@ define([
   'ojs/ojoption', 
   'ojs/ojmenuselectmany',
   'ojs/ojcollapsible'
-], function (ko, app, Ticket, process, ArrayDataProvider) {
+], function (ko, app, Ticket, process, client, ArrayDataProvider) {
   "use strict";
 
   const ViewModel = function() {
     let self = this;
     
-    self.connected = function() {
+    self.connected = async function() {
       self.refreshDataSource();
+
+      let views = await client.invoke("Queries.GetQueries");
+      self.views(views);
     };
 
     self.handleNewTicketClick = function() {
@@ -75,23 +80,39 @@ define([
     };
 
     
-    self.views = {
-      allOpen: {
-        name: "All Open Tickets",
-        status: [1, 2, 3]
-      }
-    };
+    self.views = ko.observable({
+      system: [],
+      user: []
+    });
 
     self.selectedView = ko.observable();
 
+    self.findQuery = function(viewId) {
+      let views = self.views();
+      let idx = views.system.findIndex(view => view.name === viewId);
+      if (idx !== -1) {
+        return views.system[idx];
+      }
+      idx = views.user.findIndex(view => view.name === viewId);
+      if (idx !== -1) {
+        return views.user[idx];
+      }
+      return null;
+    };
+
     self.handleOpenView = function(viewId) {
-      let view = self.views[viewId];
+      let view = self.findQuery(viewId);
+      console.log(`Selected view: `, view);
+
+      const toArray = val => Array.isArray(val) ? val : [val];
+
       if (view) {
         self.selectedView(view);
-        self.selectedStatus(view.status);
-        self.selectedSeverity(view.severity);
-        self.selectedType(view.type);
-        self.filterText(view.filtetText);
+        self.selectedStatus(toArray(view.filters.status));
+        self.selectedSeverity(toArray(view.filters.severity));
+        self.selectedType(toArray(view.filters.type));
+        self.filterText(view.filters.filtetText);
+        // Others...
       }
     };
 
@@ -105,7 +126,7 @@ define([
     };
 
     let findInOptions = (id, options) => {
-      let idx = options.findIndex(option => option.value === id);
+      let idx = options.findIndex(option => option.value == id);
       return options[idx];
     };
 
@@ -138,7 +159,12 @@ define([
       }
       return selection.map(statusId => {
         let status = findInOptions(statusId, options);
-        return status.label;
+        if (status) {
+          return status.label;
+        } else {
+          console.log(`Status not found: ${statusId}`);
+          return "";
+        }
       }).join(', ');
     });
 

@@ -4,6 +4,8 @@ const mysql = require('mysql');
 // Load database configuration
 const { database: config } = require('../config');
 
+const logger = require("./../logger").getLogger("database");
+
 // Get a connection pool to the database
 var pool  = mysql.createPool(Object.assign({
   connectionLimit : 10
@@ -61,6 +63,8 @@ const query = async (sql, params) => {
       }
       return resolve(results);
     };
+
+    logger.info(`database.query - Executing SQL: ${sql}`);
 
     // Whether or not a params object was passed, 
     // use the right form of the query function
