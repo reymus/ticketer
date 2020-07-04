@@ -11,8 +11,8 @@
   }
 
   .filter {
-    min-width: 200px;;
-    margin-right: 15px;;
+    min-width: 200px;
+    margin-right: 15px;
   }
 
   .filter-double {
@@ -37,22 +37,21 @@
   }
 
   .tickets-side-panel {
-    min-width: 180px;
-    margin-top: 20px;
+    width: 220px;
+    margin-top: 13px;
   }
 
   .tickets-view-panel {
-    
     padding: 10px;
     margin-right: 10px;
   }
 
   .tickets-view-list li {
     list-style-type: none;
-    line-height: 1.5;
+    line-height: 1.8;
   }
 
-  .tickets-view-list li span,
+  .tickets-view-list li .fas,
   .tickets-view-list li a {
     margin-left: 8px;
   }
@@ -62,8 +61,23 @@
   }
 
   .tickets-create-button {
-    width: 80%;
+    width: 90%;
     text-align: center;
+    cursor: pointer;
+  }
+
+  .tickets-create-button .oj-button-text {
+    line-height: 3em;
+    font-weight: 500;
+  }
+
+  .tickets-create-button .oj-button-button,
+  .tickets-create-button .oj-button-button .oj-hover {
+    border-radius: 5px;
+  }
+
+  .tickets-create-button .oj-button-label {
+    cursor: pointer;
   }
 
   .tickets-create-button span {
@@ -87,6 +101,12 @@
     cursor: pointer;
   }
 
+  .tickets-list-item {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
 </style>
 
 <div class="tickets-page-content">
@@ -105,11 +125,11 @@
         <ul class="tickets-view-list">
           <oj-bind-for-each data="[[ views().system ]]">
             <template>
-              <li>
+              <li class="tickets-list-item">
                 <span class="fas fa-filter"></span>
-                <a href="#" on-click="[[ handleOpenView.bind(null, $current.data.name) ]]">
-                  <oj-bind-text value="[[ $current.data.name ]]"></oj-bind-text>
-                </a>
+                <span on-click="[[ handleOpenView.bind(null, $current.data.name) ]]">
+                  <a href="#" :title="[[ $current.data.name ]]"><oj-bind-text value="[[ $current.data.name ]]"></oj-bind-text></a>
+                </span>
               </li>
             </template>
           </oj-bind-foreach>
@@ -121,11 +141,11 @@
         <ul class="tickets-view-list">
           <oj-bind-for-each data="[[ views().user ]]">
             <template>
-              <li>
+              <li class="tickets-list-item">
                 <span class="fas fa-filter"></span>
-                <a href="#" on-click="[[ handleOpenView.bind(null, $current.data.name) ]]" class="view-name">
-                  <oj-bind-text value="[[ $current.data.name ]]"></oj-bind-text>
-                </a>
+                <span on-click="[[ handleOpenView.bind(null, $current.data.name) ]]" class="view-name">
+                  <a href="#" :title="[[ $current.data.name ]]"><oj-bind-text value="[[ $current.data.name ]]"></oj-bind-text></a>
+                </span>
               </li>
             </template>
           </oj-bind-foreach>
@@ -137,31 +157,39 @@
 
   <div class="tickets-view-listing">
     <h1>
+      <!-- Page header: Tickets - { viewName } -->
       <oj-bind-text value="[[ 'Tickets' + (selectedView() ? ' - ' + selectedView().name : '' ) ]]"></oj-bind-text>
     </h1>
     <hr />
+
+    <!-- Filters Area -->
     <div class="filter-bar">
       
+      <!-- Free text input search. Filters on summary -->
       <div class="filter filter-double ">
         <oj-label for="filter-text">Filter</oj-label>
         <oj-input-text id="filter-text" value="{{filterText}}" class="filter-text" on-value-changed="[[handleColumnsSelected]]"></oj-input-text>
       </div>
 
+      <!-- Status Filter -->
       <div class="filter">
         <oj-label for="selectedStatus">Status</oj-label>
         <oj-combobox-many id="selectedStatus" value="{{selectedStatus}}" options="[[statusOptions]]" class="filter-selector" on-value-changed="[[handleColumnsSelected]]"></oj-combobox-many>
       </div>
 
+      <!-- Severity Filter -->
       <div class="filter">
         <oj-label for="selectedSeverity">Severity</oj-label>
         <oj-combobox-many id="selectedSeverity" value="{{selectedSeverity}}" options="[[severityOptions]]" class="filter-selector" on-value-changed="[[handleColumnsSelected]]"></oj-combobox-many>
       </div>
 
+      <!-- Ticket Type -->
       <div class="filter">
         <oj-label for="selectedTicketType">Ticket Type</oj-label>
         <oj-combobox-many id="selectedTicketType" value="{{selectedType}}" options="[[ticketTypeOptions]]" class="filter-selector" on-value-changed="[[handleColumnsSelected]]"></oj-combobox-many>
       </div>
 
+      <!-- Column Selector Button -->
       <div class="tickets-column-selector-button">
         <oj-menu-button id="tickets-column-selector-button" chroming="borderless" display="icons">
           <span class="fas fa-columns" slot="endIcon"></span>
@@ -172,7 +200,7 @@
       </div>
     </div>
 
-    
+    <!-- Tickets Table -->
     <oj-table id="tickets-table" data="[[datasource]]" 
       scroll-policy="loadMoreOnScroll"
       class="tickets-table"

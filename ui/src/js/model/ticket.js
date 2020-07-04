@@ -19,8 +19,12 @@ define(['ojs/ojmodel', './../services/client'], function(Model, client) {
                 // knockout observable
                 value = value();
             }
-            if (Array.isArray(value) && value.length) {
-                return `${param}:in=${value}`;
+            if (Array.isArray(value)) {
+                if (value.length) {
+                    return `${param}:in=${value}`;
+                } else {
+                    return null;
+                }
             } else if (value) {
                 return `${param}=${value}`;
             } else {
