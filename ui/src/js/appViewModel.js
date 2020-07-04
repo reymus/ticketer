@@ -158,13 +158,15 @@ define([
         document.getElementById("drawerToggleButton").focus();
       });
     }
+
+    self.authenticatedUser = ko.observable({});
+
     //read user and password    
     self.login = {
       user: ko.observable(""),
       password: ko.observable(""),
       isError: ko.observable(false),
       errorMessage: ko.observable(""),
-      authenticatedUser: ko.observable({}),
       emailPatternValidator: ko.observableArray([
         new AsyncRegExpValidator({
           pattern:
@@ -210,7 +212,8 @@ define([
       if (filename === 'login.html') {
         window.location.href = '/';
       } else {
-        self.login.authenticatedUser(decoder.parseJwt(cache.get("Authorization")));
+        let jwtPayload = decoder.parseJwt(cache.get("Authorization"));
+        self.authenticatedUser(jwtPayload.user);
       }
     } else if (filename !== 'login.html') {
       window.location.href = 'login.html';
@@ -220,11 +223,12 @@ define([
       return self.getUserFullName();
     };
 
-    self.getUserFullName=()=>{
-      return self.login.authenticatedUser().user.first_name + " " + self.login.authenticatedUser().user.last_name;
+    self.getUserFullName = () => {
+      let user = self.authenticatedUser();
+      return user.first_name + " " + user.last_name;
     };
 
-    self.getLoginPayload  = () => {
+    self.getLoginPayload = () => {
       return {
         email: self.login.user(),
         password:  self.login.password(),
