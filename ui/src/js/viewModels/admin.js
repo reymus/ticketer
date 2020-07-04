@@ -1,5 +1,4 @@
 define([
-  "css!./../../css/modules/admin.css",
   "knockout",
   "ojs/ojarraydataprovider",
   "./../services/client",
@@ -7,124 +6,125 @@ define([
   "ojs/ojtable",
   "ojs/ojbutton",
   "ojs/ojdialog",
-], function (css, ko, ArrayDataProvider, client, keyset) {
+  "css!./../../css/modules/admin.css"
+], function (ko, ArrayDataProvider, client, keyset) {
   "use strict";
   const adminViewModel = function () {
     let self = this;
     //
-    let information = {
+    let paramProperties = {
       users: {
         create: {
-          payload: function () {
-            let payloadVariable = {};
-            payloadVariable.first_name = self.nameSelected();
-            payloadVariable.last_name = self.lastNameSelected();
-            payloadVariable.email = self.emailSelected();
-            payloadVariable.password = self.passwordSelected();
-            return payloadVariable;
+         getPayload: function () {
+            let payload = {};
+            payload.first_name = self.nameSelected();
+            payload.last_name = self.lastNameSelected();
+            payload.email = self.emailSelected();
+            payload.password = self.passwordSelected();
+            return payload;
           },
           uri: "Users.PostUser",
         },
-        edit: {
-          payload: function () {
-            let payloadVariable = {};
-            payloadVariable.id = self.idSelected();
-            self.selectedValue().first_name !== self.nameSelected() ? (payloadVariable.first_name = self.nameSelected()) : "";
-            self.selectedValue().last_name !== self.lastNameSelected() ? (payloadVariable.last_name = self.lastNameSelected()) : "";
-            self.selectedValue().email !== self.emailSelected() ? (payloadVariable.email = self.emailSelected()) : "";
-            return payloadVariable;
+        update: {
+         getPayload: function () {
+            let payload = {};
+            payload.id = self.idSelected();
+            payload.first_name = self.selectedValue().first_name !== self.nameSelected() ? self.nameSelected() : undefined;
+            payload.last_name = self.selectedValue().last_name !== self.lastNameSelected() ?  self.lastNameSelected() : undefined;
+            payload.email = self.selectedValue().email !== self.emailSelected() ? self.emailSelected() : undefined;
+            return payload;
           },
-          uri: "Users.EditUser",
+          uri: "Users.UpdateUser",
         }
       },
 
       groups: {
         create: {
-          payload: function () {
-            let payloadVariable = {};
-            payloadVariable.first_name = self.nameSelected();
-            return payloadVariable;
+         getPayload: function () {
+            let payload = {};
+            payload.name = self.nameSelected();
+            return payload;
           },
           uri: "Groups.CreateGroup",
         },
 
-        edit: {
-          payload: function () {
-            let payloadVariable = {};
-            payloadVariable.id = self.idSelected();
-            self.selectedValue().first_name !== self.nameSelected() ? (payloadVariable.first_name = self.nameSelected()) : "";
-            return payloadVariable;
+        update: {
+         getPayload: function () {
+            let payload = {};
+            payload.id = self.idSelected();
+            payload.name = self.selectedValue().first_name !== self.nameSelected() ?  self.nameSelected() : undefined;
+            return payload;
           },
           uri: "Groups.UpdateGroup",
         }
       },
 
       status: {
-        create: {
-          payload: function () {
-            let payloadVariable = {};
-            payloadVariable.first_name = self.nameSelected();
-            return payloadVariable;
-          },
-          uri: "Status.CreateStatus",
-        },
-
-        edit: {
-          payload: function () {
-            let payloadVariable = {};
-            payloadVariable.id = self.idSelected();
-            self.selectedValue().first_name !== self.nameSelected() ? (payloadVariable.first_name = self.nameSelected()) : "";
-            return payloadVariable;
-          },
+          create: {
+            getPayload: function () {
+               let payload = {};
+               payload.name = self.nameSelected();
+               return payload;
+             },
+             uri: "Status.CreateStatus",
+           },
+   
+           update: {
+            getPayload: function () {
+               let payload = {};
+               payload.id = self.idSelected();
+               payload.name = self.selectedValue().first_name !== self.nameSelected() ?  self.nameSelected() : undefined;
+               return payload;
+             },
           uri: "Status.UpdateStatus",
         }
       },
 
       resolutions: {
         create: {
-          payload: function () {
-            let payloadVariable = {};
-            payloadVariable.first_name = self.nameSelected();
-            return payloadVariable;
-          },
-          uri: "Resolutions.CreateResolution",
-        },
-
-        edit: {
-          payload: function () {
-            let payloadVariable = {};
-            payloadVariable.id = self.idSelected();
-            self.selectedValue().first_name !== self.nameSelected() ? (payloadVariable.first_name = self.nameSelected()) : "";
-            return payloadVariable;
-          },
+          getPayload: function () {
+             let payload = {};
+             payload.name = self.nameSelected();
+             return payload;
+           },
+           uri: "Resolutions.CreateResolution",
+         },
+ 
+         update: {
+          getPayload: function () {
+             let payload = {};
+             payload.id = self.idSelected();
+             payload.name = self.selectedValue().first_name !== self.nameSelected() ?  self.nameSelected() : undefined;
+             return payload;
+           },
           uri: "Resolutions.UpdateResolution",
         }
       },
 
       severities: {
         create: {
-          payload: function () {
-            let payloadVariable = {};
-            payloadVariable.first_name = self.nameSelected();
-            return payloadVariable;
-          },
-          uri: "Severities.Createseverity",
-        },
-
-        edit: {
-          payload: function () {
-            let payloadVariable = {};
-            payloadVariable.id = self.idSelected();
-            self.selectedValue().first_name !== self.nameSelected() ? (payloadVariable.first_name = self.nameSelected()) : "";
-            return payloadVariable;
-          },
-          uri: "Severities.Updateseverity",
+          getPayload: function () {
+             let payload = {};
+             payload.name = self.nameSelected();
+             return payload;
+           },
+           uri: "Severities.CreateSeverity",
+         },
+ 
+         update: {
+          getPayload: function () {
+             let payload = {};
+             payload.id = self.idSelected();
+             payload.name = self.selectedValue().first_name !== self.nameSelected() ?  self.nameSelected() : undefined;
+             return payload;
+           },
+          uri: "Severities.UpdateSeverity",
         }
       }
     };
 
     //menu definition
-    let data = [
+    let menuData = [
       {
         name: "Groups",
         id: "groups",
@@ -157,16 +157,15 @@ define([
       },
     ];
 
-    self.dataProvider = new ArrayDataProvider(data, { keyAttributes: "id" });
+    self.menuDataProvider = new ArrayDataProvider(menuData, { keyAttributes: "id" });
 
     //observable definition
     self.selectedItem = ko.observable("users");
     self.buttonClicked = ko.observable("");
-    self.userFields = ko.observableArray();
+    self.arrayTableFields = ko.observableArray();
     self.dataResult = ko.observable({});
     self.selectedValue = ko.observable({});
-    self.tempSelectedValue = ko.observable({});
-    self.searchByName = ko.observable("");
+    //self.searchByName = ko.observable("");
     self.nameSelected = ko.observable("");
     self.lastNameSelected = ko.observable("");
     self.emailSelected = ko.observable("");
@@ -193,7 +192,7 @@ define([
       return self.dataResult()[segment];
     };
 
-    self.open = (event) => {
+    self.openDialog = (event) => {
       self.buttonClicked(event.currentTarget.id);
       self.setAttributes();
       document.getElementById("modalDialog").open();
@@ -203,14 +202,10 @@ define([
       document.getElementById("modalDialog").close();
     };
 
-    self.openInner = (event) => {
-      document.getElementById("innerDialog").open();
-    };
-
     //inputs atributes
     self.setAttributes = () => {
       self.errorMessage("");
-      if (self.buttonClicked() === "edit") {
+      if (self.buttonClicked() === "update") {
         if (self.selectedItem() !== "users") {
           self.nameSelected(self.selectedValue().name);
         } else {
@@ -234,7 +229,7 @@ define([
       client.invoke("Process.GetProcessData").then((result) => {
         self.dataResult = ko.observable(result);
         tableData = self.getData("users");
-        self.userFields(tableData);
+        self.arrayTableFields(tableData);
       });
     };
 
@@ -245,32 +240,32 @@ define([
       switch (self.selectedItem()) {
         case "users":
           tableData = self.getData("users");
-          self.userFields(tableData);
+          self.arrayTableFields(tableData);
           break;
         case "groups":
           tableData = self.getData("groups");
-          self.userFields(tableData);
+          self.arrayTableFields(tableData);
           break;
         case "status":
           tableData = self.getData("status");
-          self.userFields(tableData);
+          self.arrayTableFields(tableData);
           break;
         case "resolutions":
           tableData = self.getData("resolutions");
-          self.userFields(tableData);
+          self.arrayTableFields(tableData);
           break;
         case "ticket types":
           tableData = self.getData("ticket_types");
-          self.userFields(tableData);
+          self.arrayTableFields(tableData);
           break;
         case "severities":
           tableData = self.getData("severities");
-          self.userFields(tableData);
+          self.arrayTableFields(tableData);
           break;
       }
     });
 
-    self.usersDataProvider = new ArrayDataProvider(self.userFields, {
+    self.tableArrayDataProvider = new ArrayDataProvider(self.arrayTableFields, {
       keyAttributes: "id",
     });
 
@@ -280,15 +275,12 @@ define([
     };
 
     //function to create a new element
-    self.create = async () => {
-      let functionality = self.buttonClicked();
+    self.sendInfo = async () => {
+      let action = self.buttonClicked();
       let selected = self.selectedItem();
-      let objectToSend = information[selected][functionality].payload();
-
-      //self.nameSelected()
-      console.log(information[selected][functionality].uri);
+      let objectToSend = paramProperties[selected][action].getPayload();
       try {
-        await client.invoke(information[selected].create.uri, objectToSend);
+        await client.invoke(paramProperties[selected].create.uri, objectToSend);
         self.refresh();
         self.close();
       } catch (error) {
@@ -297,7 +289,7 @@ define([
     };
 
     //search functionality
-    self.resultSet = ko.observableArray([]);
+    /*self.resultSet = ko.observableArray([]);
     self.searchByName.subscribe(() => {
       let nameSearch = "name";
       if (self.selectedItem() === "users") {
@@ -311,7 +303,7 @@ define([
         })
       );
       console.log(self.resultSet());
-    });
+    });*/
   };
 
   return adminViewModel;
