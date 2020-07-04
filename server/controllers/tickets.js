@@ -1,30 +1,9 @@
 const QueryModel = require('./../database/querymodel');
 const { Tickets } = require('./../database/model');
+const { Comments } = require('./../database/model');
 const messages = require('../messages/errorMessages');
-
+const {processResults, processSingleResult} = require('./../util');
 const db = require('./../database');
-
-const processSingleResult = (ticket) => {
-    let newTicket = {};
-    Object.keys(ticket).forEach(key => {
-        if (key.indexOf(".") !== -1) {
-            let segments = key.split(".");
-            let newKey = segments[0];
-            let subKey = segments[1];
-            if (!newTicket[newKey]) {
-                newTicket[newKey] = {};
-            }
-            newTicket[newKey][subKey] = ticket[key];
-        } else {
-            newTicket[key] = ticket[key];
-        }
-    });
-    return newTicket;
-};
-
-const processResults = (tickets) => {
-    return tickets.map(processSingleResult);
-};
 
 let logger = require('./../logger').getLogger('tickets');
 
@@ -96,7 +75,6 @@ const getTicket = async(id, params = { flatten: false }) => {
         if (!params.flatten) {
             ticket = processSingleResult(ticket);
         }
-
         return ticket;
     } else {
         return null
@@ -155,9 +133,22 @@ const updateTicket = async(ticket, id) => {
     return res;
 };
 
+const getAllCommentsFromTicket = async(ticketId, params)=>{
+    let queryModel = new QueryModel(Comments);
+    queryModel.select('comment', 'created_at', 'created_by');
+    let query =  queryModel.where('ticket').equals(ticketId).build();
+    let comments = await db.query(query);
+    
+    if (!params.flatten) {
+        comments = processResults(comments);
+    }
+    return comments;
+};
+
 module.exports = {
     getTickets,
     getTicket,
     createTicket,
-    updateTicket
-};
+    updateTicket,
+    getAllCommentsFromTicket
+}; 

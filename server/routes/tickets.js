@@ -9,6 +9,8 @@ const logger = require('./../logger').getLogger("tickets");
 
 const app = express();
 
+//app.use('/:id/comments', require('./comments'));
+
 app.get('/', authenticate, async(req, res) => {
     logger.info("GET /tickets/?", req.query);
     try {
@@ -86,4 +88,23 @@ app.patch('/:id', authenticate, async(req, res) => {
         return;
     }
 });
-module.exports = app;
+
+app.get('/:id/comments', authenticate, async(req, res)=>{
+    logger.info("GET/comments/", req.query);
+    try {
+        let params = getCommonParams(req);
+        let ticketId = fromPath(req, 'id');
+        let ticket = await controller.getTicket(ticketId);
+        if (ticket == null) {
+            res.status('404').json({
+                message: messages.NOT_FOUND
+            });
+            return;
+        }
+        let comments = await controller.getAllCommentsFromTicket(ticketId, params);
+        res.send(comments);
+    } catch (error) {
+        res.send(error);  
+    }
+});
+module.exports = app; 

@@ -55,7 +55,7 @@ const getCommonParams = (req) => {
     let offset = fromQuery(req, 'offset') || 0;
     let limit = fromQuery(req, 'limit') || 100;
     let flatten = fromQuery(req, 'flatten') || false;
-
+    flatten = flatten === 'true';
     let filters = getFilterParams(req);
 
     return {
@@ -73,13 +73,38 @@ const encrypt = (data) => {
     } else {
         return null;
     }
+};
 
-}
+const processSingleResult = (element) => {
+    let newElement = {};
+    Object.keys(element).forEach(key => {
+        if (key.indexOf(".") !== -1) {
+            let segments = key.split(".");
+            let newKey = segments[0];
+            let subKey = segments[1];
+            if (!newElement[newKey]) {
+                newElement[newKey] = {};
+            }
+            newElement[newKey][subKey] = element[key];
+        } else {
+            newElement[key] = element[key];
+        }
+    });
+    return newElement;
+};
+
+const processResults = (data) => {
+    return data.map(processSingleResult);
+};
+
+
 module.exports = {
     fromQuery,
     fromPath,
     fromBody,
     getFilterParams,
     getCommonParams,
-    encrypt
+    encrypt,
+    processResults,
+    processSingleResult
 };

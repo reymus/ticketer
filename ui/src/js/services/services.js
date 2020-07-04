@@ -2,14 +2,16 @@ define([
   "./tickets", 
   "./process", 
   "./login",
-  "./queries"
-], function(Tickets, Process, Login, Queries) {
+  "./queries",
+  "./comments"
+], function(Tickets, Process, Login, Queries, Comments) {
   "use strict";
   const Services = {
     Tickets,
     Process,
     Login,
-    Queries
+    Queries,
+    Comments
   };
   return Services;
 });

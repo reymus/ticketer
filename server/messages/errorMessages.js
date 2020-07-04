@@ -1,4 +1,4 @@
-const NOT_FOUND = 'Reosurce not found';
+const NOT_FOUND = 'Resource not found';
 const WRONG_PROPERTY = 'Incorrect property name in request';
 const WRONG_VALUE = 'Incorrect property value in request';
 const PASSWORD_REQUIRED = 'Password is required';

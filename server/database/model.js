@@ -105,6 +105,18 @@ const UserQueryFilters = {
   primaryKey: "id"
 };
 
+const Comments = {
+  table: "comments",
+  fields: {
+    "id": { type: Types.INT },
+    "comment": { type: Types.VARCHAR},
+    "ticket": { type: Types.INT},
+    "created_by": { type: Types.INT, reference: Users},
+    "created_at": { type: Types.TIMESTAMP },
+  },
+  primaryKey: "id"
+};
+
 module.exports = {
   Types, 
   Status,
@@ -115,5 +127,6 @@ module.exports = {
   Severities,
   Tickets,
   UserQueries,
-  UserQueryFilters
+  UserQueryFilters,
+  Comments
 }

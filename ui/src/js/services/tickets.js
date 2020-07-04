@@ -116,6 +116,26 @@ define(["./paramtypes"], function(ParamTypes) {
           paramType: ParamTypes.Body
         }
       ]
+    },
+    GetAllCommentsFromTicket: {
+      method: 'GET',
+      path: '/api/tickets/{ticket}/comments',
+      params: [
+        {
+          name: 'ticket',
+          paramType: ParamTypes.Path,
+          required: true
+        }, {
+          name: 'limit',
+          paramType: ParamTypes.Query
+        }, {
+          name: 'sortBy',
+          paramType: ParamTypes.Query
+        }, {
+          name: 'flatten',
+          paramType: ParamTypes.Query
+        }
+      ]
     }
-  };
+  }
 });
