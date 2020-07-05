@@ -2,6 +2,7 @@ const QueryModel = require('./../database/querymodel');
 const { Users, Passwords } = require('./../database/model');
 const db = require('./../database');
 const messages = require('../messages/errorMessages');
+const logger = require('../logger');
 
 const getUsers = async() => {
     let queryModel = new QueryModel(Users);
@@ -17,27 +18,50 @@ const getUserByEmail = async(email) => {
     return result[0];
 };
 
+const getUserById = async(id) => {
+    let queryModel = new QueryModel(Users);
+    let query = queryModel.select("*").where('id').equals(id).build();
+    try {
+        let result = await db.query(query);
+        return result[0];
+    } catch (e) {
+        let message = messages.errors(e.errno);
+        throw new Error(message);   
+    }
+};
+
+const validateEmail = async (email) => {
+    let queryModel =new QueryModel(Users);
+
+    let query = queryModel.select("email").where('email').equals(email).build();
+    try {
+      let exist;  
+      let result = await db.query(query);
+      exist = result.length ? true : false ;
+      return exist;
+    } catch (e) {
+        let message = messages.errors(e.errno);
+        throw new Error(message);  
+    }
+}
 
 const createUserWithPassword = async(user) => {
-
     try {
         let password = "'" + user.password + "'";
         let userResult = await createUser(user);
         let passwordResult = await createPassword(password, userResult);
         if (passwordResult.affectedRows === 1) {
-            //return user created is needed
-            return 'success';
+             let userCreated = await getUserById(userResult);
+            return userCreated;
         } else {
             let message = messages.UNABLE_TO_CREATE;
             throw new Error(message);;
-
         }
-
     } catch (e) {
         let message = messages.errors(e.errno);
         throw new Error(message);
     }
-}
+};
 
 const createUser = async(user) => {
     let model = Users;
@@ -89,8 +113,32 @@ const createPassword = async(password, userId) => {
         throw new Error(message);
     }
 };
+
+const updateUser = async (user, iduser) =>{
+    let model = Users;
+    let fields = Object.keys(user);
+
+    let values = fields.map((key)=>{
+        return `${model.table}.${key} ='${user[key]}'`
+    });
+
+    let sql = `UPDATE ${model.table} SET ${values} WHERE ${model.table}.${model.primaryKey}='${iduser}'`;
+
+    try {
+      let updateResult = await db.query(sql);
+      let result = await getUserById(iduser) ;
+      return result;
+    } catch (e) {
+        let message = messages.errors(e.errno);
+        throw new Error(message); 
+    }
+};
+
 module.exports = {
     createUserWithPassword,
     getUserByEmail,
+    getUserById,
+    validateEmail,
+    updateUser,
     getUsers
 };
