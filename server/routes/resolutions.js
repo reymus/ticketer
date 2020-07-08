@@ -7,7 +7,7 @@ const app = express();
 app.get('/:id', authenticate, async (req, res)=>{
   try {
      let resolution = await controller.getResolution(req.params.id);
-     if (resolution == null) {
+     if (resolution === null) {
            res.status('404').json({
           message: messages.NOT_FOUND
         });
@@ -50,7 +50,7 @@ app.patch('/:id', authenticate, async (req, res)=>{
       }
       
       let resolution = await controller.updateResolution(req.body, req.params.id);
-      res.status(201).send(resolution)
+      res.status(201).send(resolution);
     } catch (e) {
       let message = messages.errors(e.errno);
       res.status('500').json({

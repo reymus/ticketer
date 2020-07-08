@@ -2,7 +2,6 @@ const QueryModel = require('./../database/querymodel');
 const { Resolutions } = require('./../database/model');
 const db = require('./../database');
 const messages = require('../messages/errorMessages');
-const logger = require('../logger');
 
 const getResolution = async(id) =>{
   let querymodel = new QueryModel(Resolutions);
@@ -23,9 +22,9 @@ const getResolution = async(id) =>{
 const createResolution = async(resolution) => {
   let model = Resolutions;
   let values= [];
-  let entries = Object.entries(model.fields)
+  let entries = Object.entries(model.fields);
   entries.forEach(([key]) => {
-    if(key != 'id' && key in resolution){
+    if(key !== 'id' && key in resolution){
        values.push(`'${resolution[key]}'`);
     }else{
       values.push('null');
@@ -36,7 +35,7 @@ const createResolution = async(resolution) => {
   try {
     let resolutionInserted;
     let result = await db.query(query);
-    if(result.insertId != null){
+    if(result.insertId !== null){
        resolutionInserted = await getResolution(result.insertId);
     }
     return resolutionInserted;
@@ -48,10 +47,10 @@ const createResolution = async(resolution) => {
 
 const updateResolution = async(resolution, id) =>{
   let model = Resolutions;
-  let entries = Object.entries(model.fields)
+  let entries = Object.entries(model.fields);
   let values= [];
   entries.forEach(([key]) => {
-    if(key != 'id' && key in resolution){
+    if(key !== 'id' && key in resolution){
        values.push(`${model.table}.${key} = '${resolution[key]}'`);
     }
   });
@@ -72,4 +71,4 @@ module.exports = {
   getResolution,
   createResolution,
   updateResolution
-}
+};

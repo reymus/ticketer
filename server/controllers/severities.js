@@ -2,7 +2,7 @@ const QueryModel = require('./../database/querymodel');
 const { Severities } = require('./../database/model');
 const db = require('./../database');
 const messages = require('../messages/errorMessages');
-const logger = require('../logger');
+
 
 const getSeverity = async(id) =>{
   let querymodel = new QueryModel(Severities);
@@ -23,9 +23,9 @@ const getSeverity = async(id) =>{
 const createSeverity = async(severity) => {
   let model = Severities;
   let values= [];
-  let entries = Object.entries(model.fields)
+  let entries = Object.entries(model.fields);
   entries.forEach(([key]) => {
-    if(key != 'id' && key in severity){
+    if(key !== 'id' && key in severity){
        values.push(`'${severity[key]}'`);
     }else{
       values.push('null');
@@ -36,7 +36,7 @@ const createSeverity = async(severity) => {
   try {
     let severityInserted;
     let result = await db.query(query);
-    if(result.insertId != null){
+    if(result.insertId !== null){
        severityInserted = await getSeverity(result.insertId);
     }
     return severityInserted;
@@ -48,10 +48,10 @@ const createSeverity = async(severity) => {
 
 const updateSeverity = async(severity, id) =>{
   let model = Severities;
-  let entries = Object.entries(model.fields)
+  let entries = Object.entries(model.fields);
   let values= [];
   entries.forEach(([key]) => {
-    if(key != 'id' && key in severity){
+    if(key !== 'id' && key in severity){
        values.push(`${model.table}.${key} = '${severity[key]}'`);
     }
   });
@@ -72,4 +72,4 @@ module.exports = {
   getSeverity,
   createSeverity,
   updateSeverity
-}
+};

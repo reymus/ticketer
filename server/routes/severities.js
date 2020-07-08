@@ -7,7 +7,7 @@ const app = express();
 app.get('/:id', authenticate, async (req, res)=>{
   try {
      let severity = await controller.getSeverity(req.params.id);
-     if (severity == null) {
+     if (severity === null) {
            res.status('404').json({
           message: messages.NOT_FOUND
         });
@@ -50,7 +50,7 @@ app.patch('/:id', authenticate, async (req, res)=>{
       }
       
       let severity = await controller.updateSeverity(req.body, req.params.id);
-      res.status(201).send(severity)
+      res.status(201).send(severity);
     } catch (e) {
       let message = messages.errors(e.errno);
       res.status('500').json({

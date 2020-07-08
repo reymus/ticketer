@@ -7,7 +7,7 @@ const app = express();
 app.get('/:id', authenticate, async (req, res)=>{
   try {
      let ticketType = await controller.getTicketType(req.params.id);
-     if (ticketType == null) {
+     if (ticketType === null) {
            res.status('404').json({
           message: messages.NOT_FOUND
         });
@@ -50,7 +50,7 @@ app.patch('/:id', authenticate, async (req, res)=>{
       }
       
       let ticketType = await controller.updateTicketType(req.body, req.params.id);
-      res.status(201).send(ticketType)
+      res.status(201).send(ticketType);
     } catch (e) {
       let message = messages.errors(e.errno);
       res.status('500').json({

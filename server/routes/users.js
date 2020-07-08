@@ -18,7 +18,7 @@ app.post('/', authenticate, async(req, res) => {
     try {
         let encrypted = "";
         let emailExist = false;
-        if(req.body.password != "" && req.body.password != undefined && req.body.password != null){
+        if(req.body.password !== "" && req.body.password !== undefined && req.body.password !== null){
              encrypted = encrypt(req.body.password);    
         }else{
             res.status(400).json({
@@ -27,7 +27,7 @@ app.post('/', authenticate, async(req, res) => {
             return;
         }
 
-        if(req.body.email != "" && req.body.email != undefined && req.body.email != null){
+        if(req.body.email !== "" && req.body.email !== undefined && req.body.email !== null){
              emailExist = await controller.validateEmail(req.body.email);
         }
 
@@ -41,7 +41,7 @@ app.post('/', authenticate, async(req, res) => {
             req.body.password = encrypted;
             let user = await controller.createUserWithPassword(req.body);
             res.status(201).send(user);
-        } catch (error) {
+        } catch (err) {
             res.status('500').json({
                 message: err.message,
             }); 

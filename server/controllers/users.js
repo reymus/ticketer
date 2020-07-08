@@ -69,7 +69,7 @@ const createUser = async(user) => {
 
     let fields = Object.keys(model.fields);
     for (let i = 0; i < fields.length; i++) {
-        if (fields[i] != 'id' && fields[i] in user) {
+        if (fields[i] !== 'id' && fields[i] in user) {
             values.push(`'${user[fields[i]]}'`);
         } else {
             values.push('null');
@@ -78,7 +78,6 @@ const createUser = async(user) => {
 
     let query = `INSERT INTO ${model.table} VALUES(${values.join(', ')})`;
     let result;
-    let userId;
     try {
         result = await db.query(query);
     } catch (e) {
@@ -86,14 +85,13 @@ const createUser = async(user) => {
         throw new Error(message);
     }
 
-    if (result.insertId != null) {
-        //return the object created
+    if (result.insertId !== null) {
         return result.insertId;
     } else {
         let message = messages.UNABLE_TO_CREATE;
         throw new Error(message);
     }
-}
+};
 
 const createPassword = async(password, userId) => {
 
@@ -106,7 +104,7 @@ const createPassword = async(password, userId) => {
         let message = messages.errors(e.errno);
         throw new Error(message);
     }
-    if (result.insertId != null) {
+    if (result.insertId !== null) {
         return result;
     } else {
         let message = messages.UNABLE_TO_CREATE;
@@ -120,7 +118,7 @@ const updateUser = async (user, iduser) =>{
     let values= [];
     
     entries.forEach(([key])=>{
-        if(key != 'id' && key in user){
+        if(key !== 'id' && key in user){
         values.push(`${model.table}.${key} ='${user[key]}'`);
         }
     });

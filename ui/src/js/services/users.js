@@ -45,5 +45,5 @@ define(["./paramtypes"], function(ParamTypes) {
         },
       ]
     }
-  }
+  };
 });

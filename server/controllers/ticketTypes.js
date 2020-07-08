@@ -2,7 +2,7 @@ const QueryModel = require('./../database/querymodel');
 const { TicketTypes } = require('./../database/model');
 const db = require('./../database');
 const messages = require('../messages/errorMessages');
-const logger = require('../logger');
+
 
 const getTicketType = async(id) =>{
   let querymodel = new QueryModel(TicketTypes);
@@ -25,7 +25,7 @@ const createTicketType = async(ticketType) => {
   let values= [];
   let entries = Object.entries(model.fields)
   entries.forEach(([key]) => {
-    if(key != 'id' && key in ticketType){
+    if(key !== 'id' && key in ticketType){
        values.push(`'${ticketType[key]}'`);
     }else{
       values.push('null');
@@ -36,7 +36,7 @@ const createTicketType = async(ticketType) => {
   try {
     let ticketTypeInserted;
     let result = await db.query(query);
-    if(result.insertId != null){
+    if(result.insertId !== null){
        ticketTypeInserted = await getTicketType(result.insertId);
     }
     return ticketTypeInserted;
@@ -48,10 +48,10 @@ const createTicketType = async(ticketType) => {
 
 const updateTicketType = async(ticketType, id) =>{
   let model = TicketTypes;
-  let entries = Object.entries(model.fields)
+  let entries = Object.entries(model.fields);
   let values= [];
   entries.forEach(([key]) => {
-    if(key != 'id' && key in ticketType){
+    if(key !== 'id' && key in ticketType){
        values.push(`${model.table}.${key} = '${ticketType[key]}'`);
     }
   });
@@ -72,4 +72,4 @@ module.exports = {
    getTicketType,
    createTicketType,
    updateTicketType
-}
+};

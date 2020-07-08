@@ -77,7 +77,7 @@ define(['jquery', './../appViewModel', './services', './../utils/cache'], functi
         body[paramDef.name] = params[paramDef.name];
       }
     }
-    body = JSON.stringify(body)
+    body = JSON.stringify(body);
     return body;
   };
 

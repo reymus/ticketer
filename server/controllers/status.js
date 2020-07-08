@@ -2,7 +2,7 @@ const QueryModel = require('./../database/querymodel');
 const { Status } = require('./../database/model');
 const db = require('./../database');
 const messages = require('../messages/errorMessages');
-const logger = require('../logger');
+
 
 const getStatus = async(id) =>{
   let querymodel = new QueryModel(Status);
@@ -23,9 +23,9 @@ const getStatus = async(id) =>{
 const createStatus = async(status) => {
   let model = Status;
   let values= [];
-  let entries = Object.entries(model.fields)
+  let entries = Object.entries(model.fields);
   entries.forEach(([key]) => {
-    if(key != 'id' && key in status){
+    if(key !== 'id' && key in status){
        values.push(`'${status[key]}'`);
     }else{
       values.push('null');
@@ -36,7 +36,7 @@ const createStatus = async(status) => {
   try {
     let statusInserted;
     let result = await db.query(query);
-    if(result.insertId != null){
+    if(result.insertId !== null){
        statusInserted = await getStatus(result.insertId);
     }
     return statusInserted;
@@ -48,10 +48,10 @@ const createStatus = async(status) => {
 
 const updateStatus = async(status, id) =>{
   let model = Status;
-  let entries = Object.entries(model.fields)
+  let entries = Object.entries(model.fields);
   let values= [];
   entries.forEach(([key]) => {
-    if(key != 'id' && key in status){
+    if(key !== 'id' && key in status){
        values.push(`${model.table}.${key} = '${status[key]}'`);
     }
   });
@@ -72,4 +72,4 @@ module.exports = {
   getStatus,
   createStatus,
   updateStatus
-}
+};
