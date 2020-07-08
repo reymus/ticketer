@@ -1,4 +1,15 @@
-define(["./paramtypes", "./tickets", "./process", "./login","./users","./severities","./resolutions","./status","./ticketTypes"], function(ParamTypes, Tickets, Process, Login, Users, Severities, Resolutions, Status, TicketTypes) {
+define(
+  ["./paramtypes",
+   "./tickets",
+    "./process",
+    "./login",
+    "./users",
+    "./severities",
+    "./resolutions",
+    "./status",
+    "./ticketTypes",
+    "./queries"
+  ], function(ParamTypes, Tickets, Process, Login, Users, Severities, Resolutions, Status, TicketTypes, Queries) {
     "use strict";
     const Services = {
 
@@ -10,17 +21,7 @@ define(["./paramtypes", "./tickets", "./process", "./login","./users","./severit
         Status,
         TicketTypes,
         Login,
-        // TODO: Remove after POC
-        SampleInvalidPath: {
-            SampleInvalidEndpoint: {
-                method: 'GET',
-                path: '/api/invalid/',
-                params: [{
-                    name: 'sortBy',
-                    paramType: ParamTypes.Query
-                }]
-            }
-        }
+        Queries        
     };
     return Services;
 });
