@@ -55,7 +55,7 @@ const createUserWithPassword = async(user) => {
             return userCreated;
         } else {
             let message = messages.UNABLE_TO_CREATE;
-            throw new Error(message);;
+            throw new Error(message);
         }
     } catch (e) {
         let message = messages.errors(e.errno);
@@ -116,10 +116,13 @@ const createPassword = async(password, userId) => {
 
 const updateUser = async (user, iduser) =>{
     let model = Users;
-    let fields = Object.keys(user);
-
-    let values = fields.map((key)=>{
-        return `${model.table}.${key} ='${user[key]}'`
+    let entries = Object.entries(model.fields);
+    let values= [];
+    
+    entries.forEach(([key])=>{
+        if(key != 'id' && key in user){
+        values.push(`${model.table}.${key} ='${user[key]}'`);
+        }
     });
 
     let sql = `UPDATE ${model.table} SET ${values} WHERE ${model.table}.${model.primaryKey}='${iduser}'`;
