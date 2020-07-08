@@ -9,6 +9,7 @@ const TOKEN_UNAVAILABLE = 'Can\'t create token';
 const INVALID_TOKEN = 'Invalid token ';
 const UNABLE_TO_CREATE = 'Unable to create';
 const UNABLE_TO_OBTAIN = 'Unable to obtain';
+const DUPLICATED_ENTRY = 'Duplicate entry';
 
 const errors = (code) => {
     let message = '';
@@ -22,6 +23,9 @@ const errors = (code) => {
             break;
         case 1452:
             message = VALUE_NOT_EXIST;
+            break;
+        case 1062:
+            message = DUPLICATED_ENTRY;
             break;
         default:
             message = UNKNOWN_ERROR;

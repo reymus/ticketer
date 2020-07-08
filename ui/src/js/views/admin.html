@@ -1,6 +1,9 @@
 <div class="oj-hybrid-padding">
     <div id="tittle" class="tittle">
         <h1>Admninistration Panel</h1>
+        <!--<div >
+            <oj-input-text id="search" raw-value="{{searchByName}}"></oj-input-text>
+        </div>-->
         <div id="buttonssection" class="buttonsSection clearfix">
 
             <oj-button id="create" display="icons" on-oj-action="[[open]]">
@@ -10,41 +13,46 @@
                 <span slot="startIcon" class="fa fa-pen"></span>
             </oj-button>
 
-            <oj-dialog style="display:none" id="modalDialog" cancel-behavior="icon">
+            <oj-dialog style="display:none" id="modalDialog" cancel-behavior="icon" modality="modeless">
                 <!-- dinamyc header dialog -->
                 <span slot="header"><oj-bind-text value="[[buttonClicked]]"></oj-bind-text> <oj-bind-text value="[[selectedItem]]"></oj-bind-text></span>
                 <div slot="body">
                     <oj-bind-if test="[[selectedItem()==='users']]">
-                        <oj-label for="iduser" show-required=true> id </oj-label>
-                        <oj-input-text id="iduser" value="[[lastId]]" readonly="true"></oj-input-text>
+                       <!-- <oj-label for="iduser" show-required=true> id </oj-label>
+                        <oj-bind-if test="[[buttonClicked()==='create']]">
+                            <oj-input-text id="iduser" value="{{lastId}}" readonly="[[readOnly]]"></oj-input-text>
+                        </oj-bind-if>
+                        <oj-bind-if test="[[buttonClicked()==='edit']]">
+                            <oj-input-text id="iduser" value="{{selectedValue().id}}" readonly="[[readOnly]]"></oj-input-text>
+                        </oj-bind-if>-->
 
                         <oj-label for="firstname" show-required=true>First Name</oj-label>
-                        <oj-input-text id="firstname"></oj-input-text>
+                        <oj-input-text id="firstname" value="{{nameSelected}}"></oj-input-text>
 
                         <oj-label for="lastname" show-required=true>Last Name</oj-label>
-                        <oj-input-text id="lastname"></oj-input-text>
+                        <oj-input-text id="lastname" value="{{lastNameSelected}}"></oj-input-text>
 
                         <oj-label for='email' show-required=true>E-mail</oj-label>
-                        <oj-input-text id='email' required='true'></oj-input-text>
+                        <oj-input-text id='email' required='true' value="{{emailSelected}}"></oj-input-text>
 
                         <oj-label for="password" show-required=true>Password</oj-label>
-                        <oj-input-password id="password"></oj-input-password>
+                        <oj-input-password id="password" value="{{passwordSelected}}"></oj-input-password>
                     </oj-bind-if>
 
                     <oj-bind-if test="[[selectedItem()!=='users']]">
-                        <oj-label for="id" show-required=true> id </oj-label>
-                        <oj-input-text id="id" value="[[lastId]]" readonly="true"></oj-input-text>
+                        <!--<oj-label for="id" show-required=true> id </oj-label>
+                        <oj-input-text id="id" value="[[lastId]]" readonly="[[readOnly]]"></oj-input-text>-->
 
                         <oj-label for="name" show-required=true><span><oj-bind-text value="[[selectedItem]]"> </oj-bind-text> Name </span></oj-label>
-                        <oj-input-text id="name"></oj-input-text>
+                        <oj-input-text id="name" value="{{nameSelected}}"></oj-input-text>
                     </oj-bind-if>
+                    <oj-bind-text value="[[errorMessage]]"></oj-bind-text>
                 </div>
-
+                
                 <div slot="footer">
-                    <oj-button id="okButton" on-oj-action="[[close]]">ok</oj-button>
+                    <oj-button id="okButton" on-oj-action="[[create]]"><span><oj-bind-text value="[[buttonClicked]]"></oj-bind-text></span></oj-button>
                 </div>
             </oj-dialog>
-
         </div>
     </div>
 
@@ -60,22 +68,24 @@
       </template>
         </oj-navigation-list>
     </div>
+
     <div id="tablecontainer" class="tablecontainer">
         <oj-bind-if test="[[selectedItem()==='users']] ">
-            <oj-table id="Contettable" columns="[[userColumns]]" data="[[usersDataProvider]]" style="width: 100%; height: 400px;" scroll-policy="loadMoreOnScroll" scroll-policy-options='{"fetchSize": "10"}'></oj-table>
+            <oj-table id="Contettable" columns="[[userColumns]]" data="[[usersDataProvider]]" style="width: 100%; height: 400px;" scroll-policy="loadMoreOnScroll" scroll-policy-options='{"fetchSize": "10"}' selection-mode='{"row":"single"}' on-first-selected-row-changed="{{selectedListener}}" selected="{{selectedRow}}"></oj-table>
         </oj-bind-if>
         <oj-bind-if test="[[selectedItem()==='status']] ">
-            <oj-table id="statustable" columns="[[twoColumns]]" data="[[usersDataProvider]]" style="width: 100%;" scroll-policy="loadMoreOnScroll" scroll-policy-options='{"fetchSize": "10"}'></oj-table>
+            <oj-table id="statustable" columns="[[twoColumns]]" data="[[usersDataProvider]]" style="width: 100%;" scroll-policy="loadMoreOnScroll" scroll-policy-options='{"fetchSize": "10"}'  selection-mode='{"row":"single"}' on-first-selected-row-changed="{{selectedListener}}" selected="{{selectedRow}}"></oj-table>
         </oj-bind-if>
         <oj-bind-if test="[[selectedItem()==='resolutions']] ">
-            <oj-table id="statustable" columns="[[twoColumns]]" data="[[usersDataProvider]]" style="width: 100%;" scroll-policy="loadMoreOnScroll" scroll-policy-options='{"fetchSize": "10"}'></oj-table>
+            <oj-table id="resolutionstable" columns="[[twoColumns]]" data="[[usersDataProvider]]" style="width: 100%;" scroll-policy="loadMoreOnScroll" scroll-policy-options='{"fetchSize": "10"}'  selection-mode='{"row":"single"}' on-first-selected-row-changed="{{selectedListener}}" selected="{{selectedRow}}"></oj-table>
         </oj-bind-if>
         <oj-bind-if test="[[selectedItem()==='ticket types']] ">
-            <oj-table id="statustable" columns="[[twoColumns]]" data="[[usersDataProvider]]" style="width: 100%;" scroll-policy="loadMoreOnScroll" scroll-policy-options='{"fetchSize": "10"}'></oj-table>
+            <oj-table id="tickettypestable" columns="[[twoColumns]]" data="[[usersDataProvider]]" style="width: 100%;" scroll-policy="loadMoreOnScroll" scroll-policy-options='{"fetchSize": "10"}' selection-mode='{"row":"single"}' on-first-selected-row-changed="{{selectedListener}}" selected="{{selectedRow}}"></oj-table>
         </oj-bind-if>
         <oj-bind-if test="[[selectedItem()==='severities']] ">
-            <oj-table id="statustable" columns="[[twoColumns]]" data="[[usersDataProvider]]" style="width: 100%;" scroll-policy="loadMoreOnScroll" scroll-policy-options='{"fetchSize": "10"}'></oj-table>
+            <oj-table id="severitiestable" columns="[[twoColumns]]" data="[[usersDataProvider]]" style="width: 100%;" scroll-policy="loadMoreOnScroll" scroll-policy-options='{"fetchSize": "10"}' selection-mode='{"row":"single"}' on-first-selected-row-changed="{{selectedListener}}" selected="{{selectedRow}}"></oj-table>
         </oj-bind-if>
-        <oj-bind-text value="[[selectedItem]]"></oj-bind-text>
+        
     </div>
+    
 </div>
