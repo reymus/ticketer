@@ -11,7 +11,7 @@
                 <span slot="startIcon" class="fa fa-pen"></span>
             </oj-button>
             <!-- dialogs -->
-            <oj-dialog style="display:none" id="modalDialog" cancel-behavior="icon" modality="modeless">
+            <oj-dialog style="display:none" id="modalDialog" cancel-behavior="icon" >
                 <!-- dinamyc header dialog -->
                 <span slot="header"><oj-bind-text value="[[buttonClicked]]"></oj-bind-text> <oj-bind-text value="[[selectedItem]]"></oj-bind-text></span>
                 <div slot="body">
@@ -24,15 +24,16 @@
                         <oj-input-text id="lastname" value="{{lastNameSelected}}"></oj-input-text>
 
                         <oj-label for='email' show-required=true>E-mail</oj-label>
-                        <oj-input-text id='email' required='true' value="{{emailSelected}}"></oj-input-text>
-
-                        <oj-label for="password" show-required=true>Password</oj-label>
-                        <oj-input-password id="password" value="{{passwordSelected}}"></oj-input-password>
+                        <oj-input-text id='email' required = "true" value="{{emailSelected}}" validators="[[emailPatternValidator]]"></oj-input-text>
+                        <oj-bind-if test="[[buttonClicked()==='create']]">
+                            <oj-label for="password" show-required=true>Password</oj-label>
+                            <oj-input-password id="password" value="{{passwordSelected}}"></oj-input-password>
+                        </oj-bind-if>
                     </oj-bind-if>
 
                     <oj-bind-if test="[[selectedItem()!=='users']]">
                         <oj-label for="name" show-required=true><span><oj-bind-text value="[[selectedItem]]"> </oj-bind-text> Name </span></oj-label>
-                        <oj-input-text id="name" value="{{nameSelected}}"></oj-input-text>
+                        <oj-input-text id="name" value="{{nameSelected}}" required="true"></oj-input-text>
                     </oj-bind-if>
                     <oj-bind-text value="[[errorMessage]]"></oj-bind-text>
                 </div>

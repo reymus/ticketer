@@ -3,11 +3,12 @@ define([
   "ojs/ojarraydataprovider",
   "./../services/client",
   "ojs/ojkeyset",
+  "ojs/ojasyncvalidator-regexp",
   "ojs/ojtable",
   "ojs/ojbutton",
   "ojs/ojdialog",
   "css!./../../css/modules/admin.css"
-], function (ko, ArrayDataProvider, client, keyset) {
+], function (ko, ArrayDataProvider, client, keyset, AsyncRegExpValidator) {
   "use strict";
   const adminViewModel = function () {
     let self = this;
@@ -23,7 +24,7 @@ define([
             payload.password = self.passwordSelected();
             return payload;
           },
-          uri: "Users.PostUser",
+          endpoint: "Users.CreateUser",
         },
         update: {
          getPayload: function () {
@@ -34,7 +35,7 @@ define([
             payload.email = self.selectedValue().email !== self.emailSelected() ? self.emailSelected() : undefined;
             return payload;
           },
-          uri: "Users.UpdateUser",
+          endpoint: "Users.UpdateUser",
         }
       },
 
@@ -45,7 +46,7 @@ define([
             payload.name = self.nameSelected();
             return payload;
           },
-          uri: "Groups.CreateGroup",
+          endpoint: "Groups.CreateGroup",
         },
 
         update: {
@@ -55,7 +56,7 @@ define([
             payload.name = self.selectedValue().first_name !== self.nameSelected() ?  self.nameSelected() : undefined;
             return payload;
           },
-          uri: "Groups.UpdateGroup",
+          endpoint: "Groups.UpdateGroup",
         }
       },
 
@@ -66,7 +67,7 @@ define([
                payload.name = self.nameSelected();
                return payload;
              },
-             uri: "Status.CreateStatus",
+             endpoint: "Status.CreateStatus",
            },
    
            update: {
@@ -76,7 +77,7 @@ define([
                payload.name = self.selectedValue().first_name !== self.nameSelected() ?  self.nameSelected() : undefined;
                return payload;
              },
-          uri: "Status.UpdateStatus",
+          endpoint: "Status.UpdateStatus",
         }
       },
 
@@ -87,7 +88,7 @@ define([
              payload.name = self.nameSelected();
              return payload;
            },
-           uri: "Resolutions.CreateResolution",
+           endpoint: "Resolutions.CreateResolution",
          },
  
          update: {
@@ -97,7 +98,7 @@ define([
              payload.name = self.selectedValue().first_name !== self.nameSelected() ?  self.nameSelected() : undefined;
              return payload;
            },
-          uri: "Resolutions.UpdateResolution",
+          endpoint: "Resolutions.UpdateResolution",
         }
       },
 
@@ -108,7 +109,7 @@ define([
              payload.name = self.nameSelected();
              return payload;
            },
-           uri: "Severities.CreateSeverity",
+           endpoint: "Severities.CreateSeverity",
          },
  
          update: {
@@ -118,7 +119,27 @@ define([
              payload.name = self.selectedValue().first_name !== self.nameSelected() ?  self.nameSelected() : undefined;
              return payload;
            },
-          uri: "Severities.UpdateSeverity",
+          endpoint: "Severities.UpdateSeverity",
+        }
+      },
+      ticket_types:{
+        create: {
+          getPayload: function () {
+             let payload = {};
+             payload.name = self.nameSelected();
+             return payload;
+           },
+           endpoint: "TicketTypes.CreateTicketType",
+         },
+ 
+         update: {
+          getPayload: function () {
+             let payload = {};
+             payload.id = self.idSelected();
+             payload.name = self.selectedValue().first_name !== self.nameSelected() ?  self.nameSelected() : undefined;
+             return payload;
+           },
+          endpoint: "TicketTypes.UpdateTicketType",
         }
       }
     };
@@ -164,8 +185,7 @@ define([
     self.buttonClicked = ko.observable("");
     self.arrayTableFields = ko.observableArray();
     self.dataResult = ko.observable({});
-    self.selectedValue = ko.observable({});
-    //self.searchByName = ko.observable("");
+    self.selectedValue = ko.observable({});    
     self.nameSelected = ko.observable("");
     self.lastNameSelected = ko.observable("");
     self.emailSelected = ko.observable("");
@@ -185,6 +205,15 @@ define([
     self.twoColumns = ko.observableArray([
       { headerText: "id", field: "id" },
       { headerText: "Name", field: "name" },
+    ]);
+
+    self.emailPatternValidator = ko.observableArray([
+      new AsyncRegExpValidator({
+        pattern:
+          "[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*",
+        hint: "enter a valid email format",
+        messageDetail: "Not a valid email format",
+      })
     ]);
 
     // fuctions for data
@@ -207,7 +236,8 @@ define([
       self.errorMessage("");
       if (self.buttonClicked() === "update") {
         if (self.selectedItem() !== "users") {
-          self.nameSelected(self.selectedValue().name);
+            self.idSelected(self.selectedValue().id);
+            self.nameSelected(self.selectedValue().name);
         } else {
           self.idSelected(self.selectedValue().id);
           self.nameSelected(self.selectedValue().first_name);
@@ -228,7 +258,7 @@ define([
     self.refresh = () => {
       client.invoke("Process.GetProcessData").then((result) => {
         self.dataResult = ko.observable(result);
-        tableData = self.getData("users");
+        tableData = self.getData(self.selectedItem() === "ticket types" ? "ticket_types" : self.selectedItem());
         self.arrayTableFields(tableData);
       });
     };
@@ -272,21 +302,25 @@ define([
     //selected row
     self.selectedListener = function (event) {
       self.selectedValue(event.detail.value.data);
+      event.detail.value.key = null;
+      event.detail.value.data = null;
     };
 
-    //function to create a new element
+    //function to send new element
     self.sendInfo = async () => {
       let action = self.buttonClicked();
-      let selected = self.selectedItem();
+      let selected = self.selectedItem().replace(/\s/,'_');
       let objectToSend = paramProperties[selected][action].getPayload();
       try {
-        await client.invoke(paramProperties[selected].create.uri, objectToSend);
+        await client.invoke(paramProperties[selected][action].endpoint, objectToSend);
         self.refresh();
+        self.selectedValue({});
         self.close();
       } catch (error) {
         self.errorMessage(error.responseJSON.message);
       }
     };
+    
 
     //search functionality
     /*self.resultSet = ko.observableArray([]);

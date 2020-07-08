@@ -1,7 +1,7 @@
 define(["./paramtypes"], function(ParamTypes) {
   'use strict';
   return{
-    PostUser: {
+    CreateUser: {
       method: 'POST',
       path: '/api/users/',
       params: [
@@ -22,6 +22,27 @@ define(["./paramtypes"], function(ParamTypes) {
           paramType: ParamTypes.Body,
           required: true
         }
+      ]
+    },
+    UpdateUser: {
+      method: 'PATCH',
+      path: '/api/users/{id}',
+      params: [
+        {
+          name: 'id',
+          paramType: ParamTypes.Path,
+          required: true
+        },
+        {
+          name: 'first_name',
+          paramType: ParamTypes.Body,
+        }, {
+          name: 'last_name',
+          paramType: ParamTypes.Body,
+        }, {
+          name: 'email',
+          paramType: ParamTypes.Body,
+        },
       ]
     }
   }
