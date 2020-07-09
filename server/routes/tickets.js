@@ -19,14 +19,14 @@ app.get('/', authenticate, async(req, res) => {
     } catch (err) {
         res.send(err);
     }
-})
+});
 
 app.get('/:id', authenticate, async(req, res) => {
     let id = fromPath(req, 'id');
     try {
         let params = getCommonParams(req);
         let result = await controller.getTicket(id, params);
-        if (result == null) {
+        if (result === null) {
             res.status('404').json({
                 message: messages.NOT_FOUND
             });
@@ -62,12 +62,11 @@ app.post('/', authenticate, async(req, res) => {
 
 app.patch('/:id', authenticate, async(req, res) => {
     let body = req.body;
-    console.log(body);
     // to do validate body types values
     try {
         let exists = await controller.getTicket(req.params.id);
         logger.info(exists);
-        if (exists == null) {
+        if (exists === null) {
             res.status('404').json({
                 message: messages.NOT_FOUND
             });

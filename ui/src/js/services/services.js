@@ -1,15 +1,27 @@
-define([
-  "./tickets", 
-  "./process", 
-  "./login",
-  "./queries"
-], function(Tickets, Process, Login, Queries) {
-  "use strict";
-  const Services = {
-    Tickets,
-    Process,
-    Login,
-    Queries
-  };
-  return Services;
+define(
+  ["./paramtypes",
+   "./tickets",
+    "./process",
+    "./login",
+    "./users",
+    "./severities",
+    "./resolutions",
+    "./status",
+    "./ticketTypes",
+    "./queries"
+  ], function(ParamTypes, Tickets, Process, Login, Users, Severities, Resolutions, Status, TicketTypes, Queries) {
+    "use strict";
+    const Services = {
+
+        Tickets,
+        Process,
+        Users,
+        Severities,
+        Resolutions,
+        Status,
+        TicketTypes,
+        Login,
+        Queries        
+    };
+    return Services;
 });

@@ -57,6 +57,7 @@ define([
       incidents: { label: "Incidents", title: "Ticketer | Incidents" },
       customers: { label: "Customers", title: "Ticketer | Customers" },
       about: { label: "About", title: "Ticketer | About" },
+      admin: { label: "Admin", title: "Ticketer | Admin" },
     });
     Router.defaults.urlAdapter = new Router.urlParamAdapter();
 
@@ -141,6 +142,12 @@ define([
         id: "about",
         iconClass:
           "oj-navigationlist-item-icon demo-icon-font-24 demo-info-icon-24",
+      },
+      {
+        name: "Admin",
+        id: "admin",
+        iconClass:
+          "fa fa-briefcase oj-navigationlist-item-icon demo-icon-font-24",
       },
     ];
     self.navDataProvider = new ArrayDataProvider(navData, {

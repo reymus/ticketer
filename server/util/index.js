@@ -68,13 +68,9 @@ const getCommonParams = (req) => {
     };
 }
 const encrypt = (data) => {
-    if (data != "" && data != undefined && data != null) {
-        return bcrypt.hashSync(data, 10);
-    } else {
-        return null;
-    }
-
+    return bcrypt.hashSync(data, 10);
 }
+
 module.exports = {
     fromQuery,
     fromPath,
