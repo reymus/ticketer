@@ -11,6 +11,7 @@ const UNABLE_TO_CREATE = 'Unable to create';
 const UNABLE_TO_OBTAIN = 'Unable to obtain';
 const DUPLICATED_ENTRY = 'Duplicate entry';
 const EMAIL_EXIST = 'The email already exist';
+const EMAIL_REQUIRED ='mail is required';
 
 const errors = (code) => {
     let message = '';
@@ -43,5 +44,6 @@ module.exports = {
     UNABLE_TO_CREATE,
     UNABLE_TO_OBTAIN,
     EMAIL_EXIST,
+    EMAIL_REQUIRED,
     errors
 }

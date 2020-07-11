@@ -5,7 +5,7 @@ const messages = require('../messages/errorMessages');
 
 const getResolution = async(id) =>{
   let querymodel = new QueryModel(Resolutions);
-  let query = querymodel.select('*').where('id').equals(id).build();
+  let query = querymodel.select('*').byPrimaryKey(id).build();
   try {
     let result = await db.query(query);
     if(result.length>0){

@@ -13,7 +13,15 @@
             <!-- dialogs -->
             <oj-dialog style="display:none" id="modalDialog" cancel-behavior="icon" >
                 <!-- dinamyc header dialog -->
-                <span slot="header"><oj-bind-text value="[[buttonClicked]]"></oj-bind-text> <oj-bind-text value="[[selectedItem]]"></oj-bind-text></span>
+                <span slot="header">
+                    <oj-bind-if test="[[selectedItem()=== 'ticket_types']]">
+                    <oj-bind-text value="[[buttonClicked]]"></oj-bind-text> 
+                        <oj-bind-text value="ticket types"></oj-bind-text>
+                    </oj-bind-if>
+                    <oj-bind-if test="[[selectedItem()!== 'ticket_types']]">
+                        <oj-bind-text value="[[selectedItem]]"></oj-bind-text>
+                    </oj-bind-if>
+                </span>
                 <div slot="body">
                     <oj-bind-if test="[[selectedItem()==='users']]">
                        
@@ -31,9 +39,14 @@
                         </oj-bind-if>
                     </oj-bind-if>
 
-                    <oj-bind-if test="[[selectedItem()!=='users']]">
+                    <oj-bind-if test="[[selectedItem()!=='users' && selectedItem()!=='ticket_types']]">
                         <oj-label for="name" show-required=true><span><oj-bind-text value="[[selectedItem]]"> </oj-bind-text> Name </span></oj-label>
                         <oj-input-text id="name" value="{{nameSelected}}" required="true"></oj-input-text>
+                    </oj-bind-if>
+                    <oj-bind-if test="[[selectedItem()!=='users' && selectedItem()==='ticket_types']]">
+                        <oj-label for="name" show-required=true><span><oj-bind-text value="ticket types"> </oj-bind-text> Name </span></oj-label>
+                        <oj-input-text id="name" value="{{nameSelected}}" required="true"></oj-input-text>
+
                     </oj-bind-if>
                     <oj-bind-text value="[[errorMessage]]"></oj-bind-text>
                 </div>
@@ -58,7 +71,7 @@
         </oj-navigation-list>
     </div>
     <!-- table -->
-    <div id="tablecontainer" class="tablecontainer">
+    <div id="tablecontainer" class="table-container">
         <oj-bind-if test="[[selectedItem()==='users']] ">
             <oj-table id="Contettable" columns="[[userColumns]]" data="[[tableArrayDataProvider]]" style="width: 100%; height: 400px;" scroll-policy="loadMoreOnScroll" scroll-policy-options='{"fetchSize": "10"}' selection-mode='{"row":"single"}' on-first-selected-row-changed="{{selectedListener}}" selected="{{selectedRow}}"></oj-table>
         </oj-bind-if>
@@ -68,7 +81,7 @@
         <oj-bind-if test="[[selectedItem()==='resolutions']] ">
             <oj-table id="resolutionstable" columns="[[twoColumns]]" data="[[tableArrayDataProvider]]" style="width: 100%;" scroll-policy="loadMoreOnScroll" scroll-policy-options='{"fetchSize": "10"}'  selection-mode='{"row":"single"}' on-first-selected-row-changed="{{selectedListener}}" selected="{{selectedRow}}"></oj-table>
         </oj-bind-if>
-        <oj-bind-if test="[[selectedItem()==='ticket types']] ">
+        <oj-bind-if test="[[selectedItem()==='ticket_types']] ">
             <oj-table id="tickettypestable" columns="[[twoColumns]]" data="[[tableArrayDataProvider]]" style="width: 100%;" scroll-policy="loadMoreOnScroll" scroll-policy-options='{"fetchSize": "10"}' selection-mode='{"row":"single"}' on-first-selected-row-changed="{{selectedListener}}" selected="{{selectedRow}}"></oj-table>
         </oj-bind-if>
         <oj-bind-if test="[[selectedItem()==='severities']] ">

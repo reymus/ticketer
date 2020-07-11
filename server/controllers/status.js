@@ -6,7 +6,7 @@ const messages = require('../messages/errorMessages');
 
 const getStatus = async(id) =>{
   let querymodel = new QueryModel(Status);
-  let query = querymodel.select('*').where('id').equals(id).build();
+  let query = querymodel.select('*').byPrimaryKey(id).build();
   try {
     let result = await db.query(query);
     if(result.length>0){
