@@ -12,8 +12,8 @@ define([
   "use strict";
   const adminViewModel = function () {
     let self = this;
-    //
-    let paramProperties = {
+    
+    let ActionRegistry = {
       users: {
         create: {
          getPayload: function () {
@@ -158,7 +158,7 @@ define([
       },
       {
         name: "Ticket types",
-        id: "ticket types",
+        id: "ticket_types",
         icon: "fa fa-file",
       },
       {
@@ -211,14 +211,15 @@ define([
       new AsyncRegExpValidator({
         pattern:
           "[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*",
-        hint: "enter a valid email format",
+        hint: "enter a valid email ",
         messageDetail: "Not a valid email format",
       })
     ]);
 
     // fuctions for data
     self.getData = (segment) => {
-      return self.dataResult()[segment];
+      let res = self.dataResult()[segment];
+      return res;
     };
 
     self.openDialog = (event) => {
@@ -227,18 +228,19 @@ define([
       document.getElementById("modalDialog").open();
     };
 
-    self.close = (event) => {
+    self.closeDialog = (event) => {
       document.getElementById("modalDialog").close();
     };
 
     //inputs atributes
     self.setAttributes = () => {
       self.errorMessage("");
-      if (self.buttonClicked() === "update") {
-        if (self.selectedItem() !== "users") {
+      if (self.buttonClicked() === "update") {// validates if it's an update to get id
+        if (self.selectedItem() !== "users") {// if it's different to users use the value name, otherwise use first and last name
             self.idSelected(self.selectedValue().id);
             self.nameSelected(self.selectedValue().name);
         } else {
+          //equals to update and equals to users
           self.idSelected(self.selectedValue().id);
           self.nameSelected(self.selectedValue().first_name);
           self.lastNameSelected(self.selectedValue().last_name);
@@ -246,6 +248,7 @@ define([
           self.passwordSelected(self.selectedValue().password);
         }
       } else {
+        //different to update (create)
         self.nameSelected("");
         self.lastNameSelected("");
         self.emailSelected("");
@@ -258,7 +261,7 @@ define([
     self.refresh = () => {
       client.invoke("Process.GetProcessData").then((result) => {
         self.dataResult = ko.observable(result);
-        tableData = self.getData(self.selectedItem() === "ticket types" ? "ticket_types" : self.selectedItem());
+        tableData = self.getData(self.selectedItem());
         self.arrayTableFields(tableData);
       });
     };
@@ -267,32 +270,9 @@ define([
     self.refresh();
 
     self.selectedItem.subscribe(() => {
-      switch (self.selectedItem()) {
-        case "users":
-          tableData = self.getData("users");
-          self.arrayTableFields(tableData);
-          break;
-        case "groups":
-          tableData = self.getData("groups");
-          self.arrayTableFields(tableData);
-          break;
-        case "status":
-          tableData = self.getData("status");
-          self.arrayTableFields(tableData);
-          break;
-        case "resolutions":
-          tableData = self.getData("resolutions");
-          self.arrayTableFields(tableData);
-          break;
-        case "ticket types":
-          tableData = self.getData("ticket_types");
-          self.arrayTableFields(tableData);
-          break;
-        case "severities":
-          tableData = self.getData("severities");
-          self.arrayTableFields(tableData);
-          break;
-      }
+      let segment=self.selectedItem();
+      tableData = self.getData(segment);
+      self.arrayTableFields(tableData)
     });
 
     self.tableArrayDataProvider = new ArrayDataProvider(self.arrayTableFields, {
@@ -310,34 +290,17 @@ define([
     self.sendInfo = async () => {
       let action = self.buttonClicked();
       let selected = self.selectedItem().replace(/\s/,'_');
-      let objectToSend = paramProperties[selected][action].getPayload();
+      let objectToSend = ActionRegistry[selected][action].getPayload();
       try {
-        await client.invoke(paramProperties[selected][action].endpoint, objectToSend);
+        await client.invoke(ActionRegistry[selected][action].endpoint, objectToSend);
         self.refresh();
         self.selectedValue({});
-        self.close();
+        self.closeDialog();
       } catch (error) {
         self.errorMessage(error.responseJSON.message);
       }
     };
     
-
-    //search functionality
-    /*self.resultSet = ko.observableArray([]);
-    self.searchByName.subscribe(() => {
-      let nameSearch = "name";
-      if (self.selectedItem() === "users") {
-        nameSearch = "first_name";
-      }
-      self.resultSet(
-        tableData.filter((item) => {
-          return (
-            item[nameSearch].toLowerCase().indexOf(self.searchByName()) >= 0
-          );
-        })
-      );
-      console.log(self.resultSet());
-    });*/
   };
 
   return adminViewModel;

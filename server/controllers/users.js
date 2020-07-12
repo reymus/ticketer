@@ -20,7 +20,7 @@ const getUserByEmail = async(email) => {
 
 const getUserById = async(id) => {
     let queryModel = new QueryModel(Users);
-    let query = queryModel.select("*").where('id').equals(id).build();
+    let query = queryModel.select('*').byPrimaryKey(id).build();
     try {
         let result = await db.query(query);
         return result[0];
