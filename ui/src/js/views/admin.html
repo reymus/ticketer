@@ -43,10 +43,9 @@
                         <oj-label for="name" show-required=true><span><oj-bind-text value="[[selectedItem]]"> </oj-bind-text> Name </span></oj-label>
                         <oj-input-text id="name" value="{{nameSelected}}" required="true"></oj-input-text>
                     </oj-bind-if>
-                    <oj-bind-if test="[[selectedItem()!=='users' && selectedItem()==='ticket_types']]">
+                    <oj-bind-if test="[[selectedItem()==='ticket_types']]">
                         <oj-label for="name" show-required=true><span><oj-bind-text value="ticket types"> </oj-bind-text> Name </span></oj-label>
                         <oj-input-text id="name" value="{{nameSelected}}" required="true"></oj-input-text>
-
                     </oj-bind-if>
                     <oj-bind-text value="[[errorMessage]]"></oj-bind-text>
                 </div>

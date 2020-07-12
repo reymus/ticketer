@@ -12,7 +12,7 @@ define([
   "use strict";
   const adminViewModel = function () {
     let self = this;
-    //
+    
     let ActionRegistry = {
       users: {
         create: {

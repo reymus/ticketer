@@ -23,6 +23,11 @@ app.get('/:id', authenticate, async (req, res)=>{
 });
 
 app.post('/', authenticate, async (req, res)=>{
+    if(req.body.name === "" || req.body.name === undefined || req.body.name === null){
+      res.status('400').json({
+        message: messages.NAME_REQUIRED
+      });
+    }
     try {
           if(Object.keys(req.body).length === 0){
             res.status('400').json({
@@ -41,6 +46,11 @@ app.post('/', authenticate, async (req, res)=>{
 });
 
 app.patch('/:id', authenticate, async (req, res)=>{
+  if(req.body.name === "" || req.body.name === undefined || req.body.name === null){
+    res.status('400').json({
+      message: messages.NAME_REQUIRED
+    });
+  }
     try {
       if(Object.keys(req.body).length === 0){
         res.status('400').json({

@@ -16,6 +16,11 @@ app.get('/', authenticate, async(req, res) => {
 
 app.post('/', authenticate, async(req, res) => {
     try {
+        if(!req.body.first_name || !req.body.last_name){
+            res.status('400').json({
+              message: messages.NAME_REQUIRED
+            });
+          }
         if(req.body.password === "" || req.body.password === undefined || req.body.password === null){
             res.status(400).json({
                 message: messages.PASSWORD_REQUIRED
@@ -28,8 +33,6 @@ app.post('/', authenticate, async(req, res) => {
             });
             return;
         }
-        
-
         
         try {
 
