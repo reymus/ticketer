@@ -136,12 +136,12 @@ CREATE TABLE `user_queries` (
   `user_id` int NOT NULL,
   `name` varchar(45) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_user_id_idx` (`user_id`),
-  CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+  KEY `fk_queries_user_id_idx` (`user_id`),
+  CONSTRAINT `fk_queries_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-DROP TABLE IF EXISTS `user_query_filter`;
-CREATE TABLE `user_query_filter` (
+DROP TABLE IF EXISTS `user_query_filters`;
+CREATE TABLE `user_query_filters` (
   `id` int NOT NULL AUTO_INCREMENT,
   `query_id` int NOT NULL,
   `field` varchar(45) NOT NULL,
@@ -179,9 +179,9 @@ INSERT INTO `passwords` VALUES(3, "$2b$10$J5JUtCpP2haYPhsfWiFvRO/PQ7oBzYW3l5egwO
 --- User Queries
 INSERT INTO `user_queries` VALUES (1,3,'Sample Test Query 1');
 INSERT INTO `user_queries` VALUES (6,3,'Sample Test Query 2');
-INSERT INTO `user_queries` VALUES (7,3,'Sample Test Query 3')
-INSERT INTO `user_queries` VALUES (8,3,'Sample Test Query 4')
-INSERT INTO `user_queries` VALUES (9,3,'Sample Test Query 5')
+INSERT INTO `user_queries` VALUES (7,3,'Sample Test Query 3');
+INSERT INTO `user_queries` VALUES (8,3,'Sample Test Query 4');
+INSERT INTO `user_queries` VALUES (9,3,'Sample Test Query 5');
 INSERT INTO `user_queries` VALUES (12,3,'Sample Test Query 6');
 --- User Query Filters
 INSERT INTO `user_query_filters` VALUES (1,1,'severity','1');
