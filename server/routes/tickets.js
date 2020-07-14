@@ -107,4 +107,32 @@ app.get('/:id/comments', authenticate, async(req, res)=>{
         res.send(error);  
     }
 });
+
+app.post('/:id/comments', authenticate, async(req, res)=>{
+    logger.info("POST/comments/", req.query);
+    try {
+        let now =new Date();
+        let params = fromBody(req);
+        
+        //Params validation must be done here
+
+        let ticketId = fromPath(req, 'id');
+        params["created_at"] = now.toISOString().replace("T"," ").replace("Z"," ");
+        //The ticket is searched in order to prove that it exists
+        let ticket = await controller.getTicket(ticketId);
+        if (ticket == null) {
+            res.status('404').json({
+                message: messages.NOT_FOUND
+            });
+            return;
+        }
+        
+        let comment = await controller.createComment(ticketId, params);
+        res.status(201).send(comment);
+    } catch (error) {
+
+        //error message and status should be customized and sent
+        res.send(error);  
+    }
+});
 module.exports = app; 

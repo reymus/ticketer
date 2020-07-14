@@ -136,6 +136,27 @@ define(["./paramtypes"], function(ParamTypes) {
           paramType: ParamTypes.Query
         }
       ]
+    },
+    PostComment: {
+      method: 'POST',
+      path: '/api/tickets/{ticket}/comments',
+      params: [
+        {
+          name: 'ticket',
+          paramType: ParamTypes.Path,
+          required: true
+        }, {
+          name: 'comment',
+          paramType: ParamTypes.Body,
+          required: true
+        }, {
+          name: 'created_by',
+          paramType: ParamTypes.Body
+        }, {
+          name: 'created_at',
+          paramType: ParamTypes.Body
+        }
+      ]
     }
   }
 });

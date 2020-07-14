@@ -145,10 +145,55 @@ const getAllCommentsFromTicket = async(ticketId, params)=>{
     return comments;
 };
 
+const getCommentById = async(commentId)=>{
+    let queryModel = new QueryModel(Comments);
+    queryModel.select('comment', 'created_at', 'created_by');
+    let query =  queryModel.where('id').equals(commentId).build();
+    
+    //try-catch block needed
+    
+    let commentList = await db.query(query);
+    
+    return commentList[0];
+};
+
+
+const createComment = async(ticketId, params)=>{
+    let model = Comments;
+    let values = [];
+    let fields = Object.keys(model.fields);
+    params["ticket"] = ticketId;
+
+    for (let i = 0; i < fields.length; i++) {
+        if (fields[i] != 'id' && fields[i] in params) {
+            values.push(`'${params[fields[i]]}'`);
+        } else {
+            values.push('null');
+        }
+    }
+    
+    let sql = `INSERT INTO ${model.table} VALUES(${values.join(', ')})`;
+    console.log(sql);
+    let result;
+    try {
+        result = await db.query(sql);
+    } catch (e) {
+        logger.error(e.message||e);
+        let message = messages.errors(e.errno);
+        throw new Error(message);
+    }
+    if(result !== null){
+        let comment =  await getCommentById(result.insertId);
+        return comment;
+    }
+    return result;
+};
+
 module.exports = {
     getTickets,
     getTicket,
     createTicket,
     updateTicket,
-    getAllCommentsFromTicket
+    getAllCommentsFromTicket,
+    createComment
 }; 
