@@ -71,6 +71,28 @@ const encrypt = (data) => {
     return bcrypt.hashSync(data, 10);
 }
 
+const processSingleResult = (ticket) => {	
+    let newTicket = {};	
+    Object.keys(ticket).forEach(key => {	
+        if (key.indexOf(".") !== -1) {	
+            let segments = key.split(".");	
+            let newKey = segments[0];	
+            let subKey = segments[1];	
+            if (!newTicket[newKey]) {	
+                newTicket[newKey] = {};	
+            }	
+            newTicket[newKey][subKey] = ticket[key];	
+        } else {	
+            newTicket[key] = ticket[key];	
+        }	
+    });	
+    return newTicket;	
+};	
+
+const processResults = (tickets) => {	
+    return tickets.map(processSingleResult);	
+};
+
 module.exports = {
     fromQuery,
     fromPath,

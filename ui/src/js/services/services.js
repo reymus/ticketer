@@ -9,8 +9,7 @@ define(
     "./status",
     "./ticketTypes",
     "./queries",
-    "./comments"
-  ], function(ParamTypes, Tickets, Process, Login, Users, Severities, Resolutions, Status, TicketTypes, Queries, Comments) {
+  ], function(ParamTypes, Tickets, Process, Login, Users, Severities, Resolutions, Status, TicketTypes, Queries) {
     "use strict";
     const Services = {
 
@@ -22,8 +21,7 @@ define(
         Status,
         TicketTypes,
         Login,
-        Queries,
-        Comments        
+        Queries        
     };
     return Services;
 });
