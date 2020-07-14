@@ -14,7 +14,13 @@ app.use('/api', routes);
 app.use(express.static(path.resolve(__dirname, 'public')));
 
 app.listen(config.server.port, () => {
-    console.log(`Server started listening port ${config.server.port}`);
+  logger.info(`
+    __  _     __       __         
+   / /_(_)___/ /_____ / /____ ____
+  / __/ / __/  '_/ -_) __/ -_) __/
+  \\__/_/\\__/_/\\_\\\\__/\\__/\\__/_/   
+  `);
+  logger.info(`Server started listening port ${config.server.port}`);
 });
 
 process.on('uncaughtException', function(error) {
@@ -24,5 +30,4 @@ process.on('uncaughtException', function(error) {
 process.on('unhandledRejection', function(reason, p) {
     logger.error(reason);
 });
-
 

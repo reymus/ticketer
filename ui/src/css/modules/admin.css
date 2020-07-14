@@ -1,0 +1,24 @@
+.navlistcontainer{
+  width: 15%;
+  float: left;
+}
+.table-container{
+    float: left;
+    width: 70%;
+    padding: 20px;
+    margin-left: 50px;
+}
+.tittle{
+  width:100%;
+  
+}
+.buttonsSection{
+  float: right;
+  position: relative;
+  bottom: 50px;
+}
+.clearfix::after {
+  content: "";
+  clear: both;
+  display: table;
+}

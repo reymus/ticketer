@@ -136,12 +136,12 @@ CREATE TABLE `user_queries` (
   `user_id` int NOT NULL,
   `name` varchar(45) NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk_user_id_idx` (`user_id`),
-  CONSTRAINT `fk_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+  KEY `fk_queries_user_id_idx` (`user_id`),
+  CONSTRAINT `fk_queries_user_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-DROP TABLE IF EXISTS `user_query_filter`;
-CREATE TABLE `user_query_filter` (
+DROP TABLE IF EXISTS `user_query_filters`;
+CREATE TABLE `user_query_filters` (
   `id` int NOT NULL AUTO_INCREMENT,
   `query_id` int NOT NULL,
   `field` varchar(45) NOT NULL,
@@ -172,7 +172,45 @@ INSERT INTO `status` VALUES(null, 'Closed');
 INSERT INTO `users` VALUES(null, "Paco", "Perez", "pakeperez@gmail.com");
 INSERT INTO `users` VALUES(null, "Edgar", "Magana", "edgarmaganaglez@hotmail.com");
 INSERT INTO `users` VALUES(null, "Marcelo", "Ramos", "march.reymus@gmail.com");
-
+--- Passwords
 INSERT INTO `passwords` VALUES(1, "$2b$10$J5JUtCpP2haYPhsfWiFvRO/PQ7oBzYW3l5egwOIBC6XRDdORfUjVy");
 INSERT INTO `passwords` VALUES(2, "$2b$10$J5JUtCpP2haYPhsfWiFvRO/PQ7oBzYW3l5egwOIBC6XRDdORfUjVy");
 INSERT INTO `passwords` VALUES(3, "$2b$10$J5JUtCpP2haYPhsfWiFvRO/PQ7oBzYW3l5egwOIBC6XRDdORfUjVy");
+--- User Queries
+INSERT INTO `user_queries` VALUES (1,3,'Sample Test Query 1');
+INSERT INTO `user_queries` VALUES (6,3,'Sample Test Query 2');
+INSERT INTO `user_queries` VALUES (7,3,'Sample Test Query 3');
+INSERT INTO `user_queries` VALUES (8,3,'Sample Test Query 4');
+INSERT INTO `user_queries` VALUES (9,3,'Sample Test Query 5');
+INSERT INTO `user_queries` VALUES (12,3,'Sample Test Query 6');
+--- User Query Filters
+INSERT INTO `user_query_filters` VALUES (1,1,'severity','1');
+INSERT INTO `user_query_filters` VALUES (2,1,'status','2');
+INSERT INTO `user_query_filters` VALUES (3,1,'status','3');
+INSERT INTO `user_query_filters` VALUES (4,1,'status','4');
+INSERT INTO `user_query_filters` VALUES (13,6,'type','2');
+INSERT INTO `user_query_filters` VALUES (14,6,'owner','3');
+INSERT INTO `user_query_filters` VALUES (15,6,'severity','1');
+INSERT INTO `user_query_filters` VALUES (16,6,'status','3');
+INSERT INTO `user_query_filters` VALUES (17,7,'type','2');
+INSERT INTO `user_query_filters` VALUES (18,7,'owner','3');
+INSERT INTO `user_query_filters` VALUES (19,7,'severity','1');
+INSERT INTO `user_query_filters` VALUES (20,7,'status','3');
+INSERT INTO `user_query_filters` VALUES (21,8,'type','2');
+INSERT INTO `user_query_filters` VALUES (22,8,'owner','3');
+INSERT INTO `user_query_filters` VALUES (23,8,'severity','1');
+INSERT INTO `user_query_filters` VALUES (24,8,'status','1');
+INSERT INTO `user_query_filters` VALUES (25,8,'status','2');
+INSERT INTO `user_query_filters` VALUES (26,8,'status','3');
+INSERT INTO `user_query_filters` VALUES (27,9,'type','2');
+INSERT INTO `user_query_filters` VALUES (28,9,'owner','3');
+INSERT INTO `user_query_filters` VALUES (29,9,'severity','1');
+INSERT INTO `user_query_filters` VALUES (30,9,'status','1');
+INSERT INTO `user_query_filters` VALUES (31,9,'status','2');
+INSERT INTO `user_query_filters` VALUES (32,9,'status','3');
+INSERT INTO `user_query_filters` VALUES (33,12,'type','2');
+INSERT INTO `user_query_filters` VALUES (34,12,'owner','3');
+INSERT INTO `user_query_filters` VALUES (35,12,'severity','1');
+INSERT INTO `user_query_filters` VALUES (36,12,'status','1');
+INSERT INTO `user_query_filters` VALUES (37,12,'status','2');
+INSERT INTO `user_query_filters` VALUES (38,12,'status','3');

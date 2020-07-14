@@ -8,11 +8,15 @@ const getSystemQueries = async () => {
   return [
     {
       name: "All Open Tickets",
-      status: [1, 2, 3]
+      filters: {
+        status: [1, 2, 3]
+      }
     }, {
       name: "My Open Tickets",
-      owner: "$current_user",
-      status: [1, 2, 3]
+      filters: {
+        owner: "$current_user",
+        status: [1, 2, 3]
+      }
     }
   ]
 };

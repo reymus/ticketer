@@ -37,6 +37,9 @@ QueryModel.prototype.select = function(fields) {
   if (fields) {
     this.fields = Array.isArray(fields) ? fields : Array.from(arguments);
   }
+  if (this.fields.length === 1 && this.fields[0] === '*') {
+    this.fields = Object.keys(this.model.fields);
+  }
   // validate fields exist
   return this;
 };
@@ -154,10 +157,16 @@ QueryModel.prototype.build = function() {
     
     if (this.fields.length === 0) {
       fields = Object.keys(this.model.fields);
-    } else if (this.fields.length === 1 && this.fields[0] === '*') {
-      fields = Object.keys(this.model.fields);
     } else {
-      fields = Object.keys(this.model.fields).filter(field => this.fields.indexOf(field) !== -1);
+      fields = [];
+      for (let i = 0; i < this.fields.length; i++) {
+        let field = this.fields[i];
+        let referenceField = field.split('.')[0];
+        
+        if (this.model.fields[referenceField]) {
+          fields.push(referenceField);
+        }
+      }
     }
 
     // Add fields needed in WHERE claused
@@ -169,19 +178,44 @@ QueryModel.prototype.build = function() {
     });
 
     let selectFields = [];
-    for (let i = 0; i < fields.length; i++) {
-        let fieldName = fields[i];
+    let joinedTables = {};
+    for (let i = 0; i < this.fields.length; i++) {
+        let fieldName = this.fields[i];
         let field = this.model.fields[fieldName];
-        if (field.reference) {
+        
+        // Field not found. It's probably a subfield, like owner.name
+        if (!field) {
+          let segments = fieldName.split('.');
+          if (segments.length > 1) {
+            let selectedFieldName = segments[0];
+            field = this.model.fields[selectedFieldName];
+            if (!field) {
+              logger.error(`Field ${fieldName} not found in model for table ${this.model.table}`);
+              continue;
+            }
+            //                 field.subField AS 'field.subField' 
+            selectFields.push(`${fieldName} AS '${fieldName}'`);
+            let join = field.nullable ? 'LEFT JOIN' : 'INNER JOIN';
+            froms.push(`${join} ${field.reference.table} AS ${selectedFieldName} ON ${this.model.table}.${selectedFieldName} = ${selectedFieldName}.${field.reference.primaryKey}`);
+            
+            // Mark the table as joined. Avoid emitting multiple repeated joins
+            joinedTables[field.reference.table] = true;
+          } else {
+            logger.error(`Field ${fieldName} not found in model for table ${this.model.table}`);
+            continue;
+          }
+        } else if (field.reference) {
             let refFields = Object.keys(field.reference.fields);
             for (let j = 0; j < refFields.length; j++) {
                 let refFieldName = refFields[j];
-                //let refField = field.reference.fields[refFieldName];
 
                 selectFields.push(`${fieldName}.${refFieldName} AS '${fieldName}.${refFieldName}'`);
             }
-            let join = field.nullable ? 'LEFT JOIN' : 'INNER JOIN';
-            froms.push(`${join} ${field.reference.table} AS ${fieldName} ON ${this.model.table}.${fieldName} = ${fieldName}.${field.reference.primaryKey}`);
+            if (!joinedTables[field.reference.tableName]) {
+              let join = field.nullable ? 'LEFT JOIN' : 'INNER JOIN';
+              froms.push(`${join} ${field.reference.table} AS ${fieldName} ON ${this.model.table}.${fieldName} = ${fieldName}.${field.reference.primaryKey}`);
+              joinedTables[field.reference.table] = true;
+            }
         } else {
             selectFields.push(`${this.model.table}.${fieldName}`);
         }
@@ -277,7 +311,6 @@ QueryModel.prototype.formatList = (array = []) => {
   let lineLength = 0;
   let line = [];
   let output = "";
-  logger.info(array);
   array.forEach((elem, idx) => {
     if ((elem.length + lineLength + 2) <= maxLineLength) {
       line.push(elem);

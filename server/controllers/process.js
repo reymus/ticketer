@@ -6,7 +6,7 @@ const db = require('./../database');
 const getProcessData = async () => {
   const fetchAll = async (model) => {
     let queryModel = new QueryModel(model);
-    let query = queryModel.select("*").build();
+    let query = queryModel.select("*").orderBy("id").build();
     return await db.query(query);
   };
   let status = await fetchAll(model.Status);

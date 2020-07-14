@@ -104,7 +104,7 @@ define([
       let view = self.findQuery(viewId);
       console.log(`Selected view: `, view);
 
-      const toArray = val => Array.isArray(val) ? val : [val];
+      const toArray = val => Array.isArray(val) ? val : (val ? [val] : val);
 
       if (view) {
         self.selectedView(view);
@@ -112,7 +112,16 @@ define([
         self.selectedSeverity(toArray(view.filters.severity));
         self.selectedType(toArray(view.filters.type));
         self.filterText(view.filters.filtetText);
+
+        if (view.filters.owner === '$current_user') {
+          let user = app.authenticatedUser();
+          self.selectedOwner(user.id);
+        } else {
+          self.selectedOwner(view.filters.owner);
+        }
         // Others...
+      } else {
+        console.log(`Couldn't find view ${viewId}`);
       }
     };
 
@@ -143,6 +152,9 @@ define([
 
     // Text filter input
     self.filterText = ko.observable();
+
+    // Owner selector... To be completed
+    self.selectedOwner = ko.observable();
 
     // Status selector
     self.selectedStatus = ko.observable();
@@ -199,6 +211,7 @@ define([
         status: self.selectedStatus,
         severity: self.selectedSeverity,
         type: self.selectedType,
+        owner: self.selectedOwner,
         'summary:like': self.filterText
       })));
     };

@@ -11,7 +11,11 @@ const getTickets = async(params) => {
 
     logger.info(`params: ${JSON.stringify(params)}`);
     let queryModel = new QueryModel(Tickets);
-    queryModel.select(params.fields);
+    if (params.fields && params.fields.length > 0) {
+        queryModel.select(params.fields);
+    } else {
+        queryModel.select('*');
+    }
 
     params.sortBy = params.sortBy || [];
     params.sortBy.forEach(orderBy => {

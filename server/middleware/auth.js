@@ -12,7 +12,7 @@ let authenticate = (req, res, next) => {
   if (token && token !== 'null') {
     jwt.verify(token, config.jwt.secret, (err, decoded) => {
       if (err) {
-        logger.info(err);
+        logger.info(err.message); 
         res.status('401').json(err);
       } else {
         req.user = decoded.user;

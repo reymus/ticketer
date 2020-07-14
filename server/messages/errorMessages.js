@@ -9,6 +9,10 @@ const TOKEN_UNAVAILABLE = 'Can\'t create token';
 const INVALID_TOKEN = 'Invalid token ';
 const UNABLE_TO_CREATE = 'Unable to create';
 const UNABLE_TO_OBTAIN = 'Unable to obtain';
+const DUPLICATED_ENTRY = 'Duplicate entry';
+const EMAIL_EXIST = 'The email already exist';
+const EMAIL_REQUIRED ='Mail is required';
+const NAME_REQUIRED ='Name is required';
 
 const errors = (code) => {
     let message = '';
@@ -22,6 +26,9 @@ const errors = (code) => {
             break;
         case 1452:
             message = VALUE_NOT_EXIST;
+            break;
+        case 1062:
+            message = DUPLICATED_ENTRY;
             break;
         default:
             message = UNKNOWN_ERROR;
@@ -37,5 +44,8 @@ module.exports = {
     TOKEN_UNAVAILABLE,
     UNABLE_TO_CREATE,
     UNABLE_TO_OBTAIN,
+    EMAIL_EXIST,
+    EMAIL_REQUIRED,
+    NAME_REQUIRED,
     errors
 }

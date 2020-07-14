@@ -68,35 +68,8 @@ const getCommonParams = (req) => {
     };
 }
 const encrypt = (data) => {
-    if (data != "" && data != undefined && data != null) {
-        return bcrypt.hashSync(data, 10);
-    } else {
-        return null;
-    }
-};
-
-const processSingleResult = (element) => {
-    let newElement = {};
-    Object.keys(element).forEach(key => {
-        if (key.indexOf(".") !== -1) {
-            let segments = key.split(".");
-            let newKey = segments[0];
-            let subKey = segments[1];
-            if (!newElement[newKey]) {
-                newElement[newKey] = {};
-            }
-            newElement[newKey][subKey] = element[key];
-        } else {
-            newElement[key] = element[key];
-        }
-    });
-    return newElement;
-};
-
-const processResults = (data) => {
-    return data.map(processSingleResult);
-};
-
+    return bcrypt.hashSync(data, 10);
+}
 
 module.exports = {
     fromQuery,
